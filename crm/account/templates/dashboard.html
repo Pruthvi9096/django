@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% endblock%}
+
+{% block javascript %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
+<div class="row">
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center box-element text-white  mb-3" id="total-orders">
+                <div class="card-header">
+                    <h5 class="card-title">Total Orders</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{total_orders}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center box-element text-white  mb-3" id="orders-delivered">
+                <div class="card-header">
+                    <h5 class="card-title">Orders Delivered</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{delivered_orders}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="col-md">
+            <div class="card text-center box-element text-white  mb-3" id="orders-pending">
+                <div class="card-header">
+                    <h5 class="card-title">Orders Pending</h5>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{pending_orders}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-5">
+        <h5 class="text-left">CUSTOMERS:</h5>
+        <hr>
+        <div class="card box-element px-4 pt-4">
+            <a class="btn btn-primary  btn-sm btn-block" data-toggle="modal" data-target="#createCustomerModal" href="">Create Customer</a>
+            {% if customers %}
+            <table class="table table-sm">
+                <tbody>
+                    <tr>
+                        <th></th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                    </tr>
+                    {% for customer in customers %}
+                    <tr>
+                        <td><a class="btn btn-sm btn-info" href="/customer/2/">View</a></td>
+                        <td>{{customer.name}}</td>
+                        <td>{{customer.phone}}</td>
+                    </tr>
+                   {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                There is no Customer.
+              </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-7">
+        <h5 class="text-left">LAST 5 ORDERS:</h5>
+        <hr>
+        <div class="card box-element px-4 pt-4">
+            {% if orders %}
+            <table class="table table-sm">
+                <tbody>
+                    <tr>
+                        <th>Product</th>
+                        <th>Date Orderd</th>
+                        <th>Status</th>
+                        <th>Update</th>
+                        <th>Remove</th>
+                    </tr>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{order.product.name}}</td>
+                        <td>{{order.date_ordered}}</td>
+                        <td>{{order.get_status_display}}</td>
+                        <td><a class="btn btn-sm btn-info" onclick="updateOrder({{order.id}})" data-toggle="modal" data-target="#updateorderModal" href="">Update</a></td>
+                        <td><a class="btn btn-sm btn-danger" href="/delete_order/3/">Delete</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                There is no orders.
+              </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createCustomerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Customer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post">
+          {% csrf_token %}
+      <div class="modal-body">
+          {{form|crispy}}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+        
+    </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="updateorderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Order</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+           <form id="orderForm" action="" method="post">
+               {% csrf_token %}
+            <div id="order">
+            </div>
+            <input id="order-id" type="hidden" value="">
+            <div class="text-center">
+                <button type="button" onclick="submitOrder()" class="btn btn-primary">Update</button>
+            </div>
+           </form>
+          </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
