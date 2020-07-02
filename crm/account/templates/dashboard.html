@@ -101,7 +101,9 @@
                         <td>{{order.date_ordered}}</td>
                         <td>{{order.get_status_display}}</td>
                         <td><a class="btn btn-sm btn-info" onclick="updateOrder({{order.id}})" data-toggle="modal" data-target="#updateorderModal" href="">Update</a></td>
-                        <td><a class="btn btn-sm btn-danger" href="/delete_order/3/">Delete</a></td>
+                        <td><a class="btn btn-sm btn-danger" onclick="deleteOrder({id:'{{order.id}}',product:'{{order.product.name}}',
+                                date_ordered: '{{order.date_ordered}}', status: '{{order.status}}'})"
+                            data-toggle="modal" data-target="#deleteOrderModal"   href="">Delete</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -159,6 +161,26 @@
             </div>
            </form>
           </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Delete Order</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="order-content">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+        </div>
       </div>
     </div>
   </div>

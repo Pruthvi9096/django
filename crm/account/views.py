@@ -38,7 +38,6 @@ def updateOrder(request):
     return JsonResponse({'form':html_form,'id':order.id})
 
 def saveOrder(request):
-    print(request.GET)
     dict = {}
     order = Order.objects.get(id=int(request.GET.get('id')))
     if request.method == 'POST':
@@ -48,4 +47,11 @@ def saveOrder(request):
             dict['is_form_valid'] = True
         else:
             dict['is_form_valid'] = False
+    return JsonResponse(dict)
+
+def deleteOrder(request,id):
+    dict = {}
+    order = Order.objects.get(id=id)
+    order.delete()
+    dict['deleted'] = True
     return JsonResponse(dict)

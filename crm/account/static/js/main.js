@@ -24,3 +24,25 @@ function submitOrder(){
         }
     });
 }
+
+function deleteOrder(order){
+    console.log(order)
+    var content = "<h4>Are you sure to delete this order ?</h4><br/>"
+    var table = `<table class='table table-sm'><tbody><tr><th>Product</th><th>Date Orderd</th><th>Status</th></tr><tr><td>${order.product}</td><td>${order.date_ordered}</td><td>${order.status}</td></tr></tbody></table>`
+    var input = `<input type='hidden' id='delete-order-id' value=${order.id} />`
+    $('#order-content').html(content+ table + input);
+}
+
+function confirmDelete(){
+    $.ajax({
+        url: "/delete_order/"+$('#delete-order-id').val(),
+        data: "",
+        success: function (response) {
+            if(response['deleted']){
+                $('#deleteOrderModal').modal('toggle');
+                window.location.reload();
+            }
+        }
+    });
+
+}
