@@ -1,8 +1,7 @@
 function updateOrder(id){
-    console.log(id)
     $.ajax({
-        url: "/update/",
-        data: {'id':id},
+        url: "/update/"+id,
+        data: "",
         success: function (response) {
             $('#order').html(response['form'])
             $('#order-id').val(response['id']);
@@ -14,7 +13,7 @@ function submitOrder(){
     var form = $('#orderForm')
     $.ajax({
         type:form.attr("method"),
-        url: "/saveorder/?id="+$('#order-id').val(),
+        url: "/saveorder/"+$('#order-id').val(),
         data: form.serialize(),
         success: function (response) {
             if(response['is_form_valid']){
@@ -27,10 +26,10 @@ function submitOrder(){
 
 function deleteOrder(order){
     console.log(order)
-    var content = "<h4>Are you sure to delete this order ?</h4><br/>"
-    var table = `<table class='table table-sm'><tbody><tr><th>Product</th><th>Date Orderd</th><th>Status</th></tr><tr><td>${order.product}</td><td>${order.date_ordered}</td><td>${order.status}</td></tr></tbody></table>`
-    var input = `<input type='hidden' id='delete-order-id' value=${order.id} />`
-    $('#order-content').html(content+ table + input);
+    $('#product').text(order.product)
+    $('#date_ordered').text(order.date_ordered)
+    $('#status').text(order.status)
+    $('#delete-order-id').val(order.id)
 }
 
 function confirmDelete(){

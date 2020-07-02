@@ -175,7 +175,22 @@
           </button>
         </div>
         <div class="modal-body" id="order-content">
-          
+            <h4>Are you sure to delete this order ?</h4><br/>
+            <table class='table table-sm'>
+                <tbody>
+                    <tr>
+                        <th>Product</th>
+                        <th>Date Orderd</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td id="product"></td>
+                        <td id="date_ordered"></td>
+                        <td id="status"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type='hidden' id='delete-order-id' value='' />
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

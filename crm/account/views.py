@@ -26,8 +26,7 @@ def DashboardView(request):
         'pending_orders':pending_orders,
         'delivered_orders':delivered_orders})
 
-def updateOrder(request):
-    id = int(request.GET.get('id')[0])
+def updateOrder(request,id):
     order = Order.objects.get(id=id)
     form = OrderForm(instance=order)
     context = {'orderform': form}
@@ -37,9 +36,9 @@ def updateOrder(request):
     )
     return JsonResponse({'form':html_form,'id':order.id})
 
-def saveOrder(request):
+def saveOrder(request,id):
     dict = {}
-    order = Order.objects.get(id=int(request.GET.get('id')))
+    order = Order.objects.get(id=id)
     if request.method == 'POST':
         form = OrderForm(request.POST,instance=order)
         if form.is_valid():
