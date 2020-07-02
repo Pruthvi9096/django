@@ -46,6 +46,12 @@ function confirmDelete(){
 
 }
 
+function removeItem(btn){
+    var total = $('#id_order_set-TOTAL_FORMS').val();
+    total--;
+    $('#id_order_set-TOTAL_FORMS').val(total);
+    var item = btn.closest('.table').remove()
+}
 
 function cloneMore(selector, type) {
     var newElement = $(selector).clone(true);
@@ -62,6 +68,7 @@ function cloneMore(selector, type) {
     total++;
     $('#id_' + type + '-TOTAL_FORMS').val(total);
     $(selector).after(newElement);
+    newElement.find('.col-sm-1').html('<a href="#" onclick="removeItem(this)" class="close">')
 }
 
 // another way for dynamic formset
