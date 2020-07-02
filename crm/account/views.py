@@ -71,7 +71,7 @@ def customerView(request,id):
 
 def createOrderView(request,id):
     customer = Customer.objects.get(id=id)
-    OrderFormSet = inlineformset_factory(Customer,Order,fields=('product','status'),field_classes=['form-control'],extra=2)
+    OrderFormSet = inlineformset_factory(Customer,Order,fields=('product','status'),field_classes=['form-control'],extra=1)
     formset = OrderFormSet(queryset=Order.objects.none(),instance=customer)
     if request.method == 'POST':
         formset = OrderFormSet(request.POST,instance=customer)

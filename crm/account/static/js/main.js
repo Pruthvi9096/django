@@ -46,13 +46,6 @@ function confirmDelete(){
 
 }
 
-// $(document).ready(function () {
-//     $('.link-formset').formset({
-//         addText: 'add link',
-//         deleteText: 'remove',
-//         prefix: '{{ formset.prefix }}'
-//     });
-// });
 
 function cloneMore(selector, type) {
     var newElement = $(selector).clone(true);
@@ -70,3 +63,27 @@ function cloneMore(selector, type) {
     $('#id_' + type + '-TOTAL_FORMS').val(total);
     $(selector).after(newElement);
 }
+
+// another way for dynamic formset
+/* <h3>My Services</h3>
+{{ serviceFormset.management_form }}
+<div id="form_set">
+    {% for form in serviceFormset.forms %}
+        <table class='no_error'>
+            {{ form.as_table }}
+        </table>
+    {% endfor %}
+</div>
+<input type="button" value="Add More" id="add_more">
+<div id="empty_form" style="display:none">
+    <table class='no_error'>
+        {{ serviceFormset.empty_form.as_table }}
+    </table>
+</div>
+<script>
+    $('#add_more').click(function() {
+        var form_idx = $('#id_form-TOTAL_FORMS').val();
+        $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+        $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    });
+</script> */
