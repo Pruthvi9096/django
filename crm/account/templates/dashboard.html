@@ -11,7 +11,7 @@
 <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}
 <div class="row">
-    <div class="col">
+    <div class="col-lg-4">
         <div class="col-md">
             <div class="card text-center box-element text-white  mb-3" id="total-orders">
                 <div class="card-header">
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="col">
+    <div class="col-lg-4">
         <div class="col-md">
             <div class="card text-center box-element text-white  mb-3" id="orders-delivered">
                 <div class="card-header">
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <div class="col">
+    <div class="col-lg-4">
         <div class="col-md">
             <div class="card text-center box-element text-white  mb-3" id="orders-pending">
                 <div class="card-header">
@@ -67,7 +67,7 @@
                     </tr>
                     {% for customer in customers %}
                     <tr>
-                        <td><a class="btn btn-sm btn-info" href="/customer/2/">View</a></td>
+                        <td><a class="btn btn-sm btn-info" href="{% url 'customer-detail' customer.id %}">View</a></td>
                         <td>{{customer.name}}</td>
                         <td>{{customer.phone}}</td>
                     </tr>
@@ -86,7 +86,7 @@
         <hr>
         <div class="card box-element px-4 pt-4">
             {% if orders %}
-            <table class="table table-sm">
+            <table class="table tabel-responsive">
                 <tbody>
                     <tr>
                         <th>Product</th>
@@ -102,7 +102,7 @@
                         <td>{{order.get_status_display}}</td>
                         <td><a class="btn btn-sm btn-info" onclick="updateOrder({{order.id}})" data-toggle="modal" data-target="#updateorderModal" href="">Update</a></td>
                         <td><a class="btn btn-sm btn-danger" onclick="deleteOrder({id:'{{order.id}}',product:'{{order.product.name}}',
-                                date_ordered: '{{order.date_ordered}}', status: '{{order.status}}'})"
+                                date_ordered: '{{order.date_ordered}}', status: '{{order.get_status_display}}'})"
                             data-toggle="modal" data-target="#deleteOrderModal"   href="">Delete</a></td>
                     </tr>
                     {% endfor %}

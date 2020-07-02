@@ -4,6 +4,8 @@ from .models import Customer,Product,Order
 from django.views import generic
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from .filters import OrderFilter
+from django.forms import inlineformset_factory
 
 def DashboardView(request):
     if request.method == 'POST':
@@ -54,3 +56,26 @@ def deleteOrder(request,id):
     order.delete()
     dict['deleted'] = True
     return JsonResponse(dict)
+
+def customerView(request,id):
+    customer = Customer.objects.get(id=id)
+    orders = customer.order_set.all()
+    order_count = orders.count()
+    orderFilter = OrderFilter(request.GET,orders)
+    orders = orderFilter.qs
+    context = {
+        'customer':customer,'orders':orders,
+        'order_count':order_count,
+        'orderFilter':orderFilter}
+    return render(request,'customer.html',context=context)
+
+def createOrderView(request,id):
+    customer = Customer.objects.get(id=id)
+    OrderFormSet = inlineformset_factory(Customer,Order,fields=('product','status'),field_classes=['form-control'],extra=2)
+    formset = OrderFormSet(queryset=Order.objects.none(),instance=customer)
+    if request.method == 'POST':
+        formset = OrderFormSet(request.POST,instance=customer)
+        if formset.is_valid():
+            formset.save()
+            return redirect('/')
+    return render(request,'account/create_order.html',{'formset':formset})
