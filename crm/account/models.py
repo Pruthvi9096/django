@@ -16,8 +16,6 @@ class Customer(models.Model):
 def customer_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
-    else:
-        instance.slug = unique_slug_generator(instance,instance.slug)
 
 pre_save.connect(customer_pre_save_receiver, sender=Customer)
 
