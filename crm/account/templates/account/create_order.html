@@ -9,45 +9,48 @@
 {% block javascript %}
 <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}
-
-<form action="" method="post">
-    {% csrf_token %}
-    <h3>Create Orders</h3>
-    {{formset.management_form}}
-{% for form in formset.forms %}
-    <div class='table'>
-    <table class='no_error'>
-        <div class="row">
-            <div class="col-md-2">
-                {{ form.product.label_tag }}
-                {{ form.product|add_css:"form-control" }}
-                {% if form.product.errors %}
-                    {% for error in form.product.errors %}
-                        {{ error|escape }}
-                    {% endfor %}
-                {% endif %}
+<div class="row">
+    <div class="box-element" style="width:800px; margin:0 auto; padding: 3%;">
+        <form action="" method="post">
+            {% csrf_token %}
+            <h3>Create Orders</h3>
+            {{formset.management_form}}
+            {% for form in formset.forms %}
+            <div class='table'>
+                <table class='no_error'>
+                    <div class="row">
+                        <div class="col-md-5">
+                            {{ form.product.label_tag }}
+                            {{ form.product|add_css:"form-control" }}
+                            {% if form.product.errors %}
+                            {% for error in form.product.errors %}
+                            {{ error|escape }}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-5">
+                            {{ form.status.label_tag }}
+                            {{ form.status|add_css:"form-control" }}
+                            {% if form.status.errors %}
+                            {% for error in form.status.errors %}
+                            {{ error|escape }}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-1">
+                        </div>
+                    </div>
+                    <hr />
+                </table>
             </div>
-            <div class="col-md-2">
-                {{ form.status.label_tag }}
-                {{ form.status|add_css:"form-control" }}
-                {% if form.status.errors %}
-                    {% for error in form.status.errors %}
-                        {{ error|escape }}
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="col-sm-1">
-            </div>
-        </div>
-        <hr/>
-    </table>
+            {% endfor %}
+            <input type="button" value="Add More" id="add_more" class="btn btn-success">
+            <button type="submit" class="btn btn-primary">submit</button>
+        </form>
     </div>
-{% endfor %}
-<input type="button" value="Add More" id="add_more" class="btn btn-success">
-<button type="submit" class="btn btn-primary">submit</button>
-</form>
+</div>
 <script>
-    $('#add_more').click(function() {
+    $('#add_more').click(function () {
         cloneMore('div.table:last', 'order_set');
     });
 </script>
