@@ -57,8 +57,8 @@ def deleteOrder(request,id):
     dict['deleted'] = True
     return JsonResponse(dict)
 
-def customerView(request,id):
-    customer = Customer.objects.get(id=id)
+def customerView(request,slug):
+    customer = Customer.objects.get(slug=slug)
     orders = customer.order_set.all()
     order_count = orders.count()
     orderFilter = OrderFilter(request.GET,orders)
