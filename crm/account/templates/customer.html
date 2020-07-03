@@ -15,7 +15,8 @@
         <div class="card card-body box-element" style="padding-bottom: 7%;">
             <h5>Customer:</h5>
             <hr>
-            <a class="btn btn-outline-info  btn-sm btn-block" href="">Update Customer</a>
+            <a class="btn btn-outline-info  btn-sm btn-block" onclick="updateCustomer({{customer.id}})"
+            data-toggle="modal" data-target="#createCustomerModal" href="">Update Customer</a>
             <a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'create-order' customer.id %}">Place Order</a>
 
         </div>
@@ -165,5 +166,29 @@
         </div>
       </div>
     </div>
-  </di
+</div>
+<div class="modal fade" id="createCustomerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create Customer</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="customerForm" action="" method="post">
+            {% csrf_token %}
+        <div class="modal-body customer">
+            
+          </div>
+          <input type="hidden" name="custmer-id" id="customer_id" value="">
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" onclick="saveCustomer()">Save</a>
+          </div>
+          
+      </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}

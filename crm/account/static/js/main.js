@@ -46,6 +46,32 @@ function confirmDelete(){
 
 }
 
+function updateCustomer(id) {
+    $.ajax({
+        url: "/update_customer/"+id,
+        data: "",
+        success: function (response) {
+            console.log(response)
+            $('.customer').html(response['form'])
+            $('#customer_id').val(response['id']);
+        }
+    });
+}
+
+function saveCustomer() {
+    var form = $('#customerForm');
+    $.ajax({
+        type:form.attr('method'),
+        url: "/save_customer/"+$('#customer_id').val(),
+        data: form.serialize(),
+        success: function (response) {
+            if(response['form_is_valid']) {
+                console.log("SUCCESS",response);
+            }
+        }
+    });
+}
+
 function removeItem(btn){
     var total = $('#id_order_set-TOTAL_FORMS').val();
     total--;
@@ -68,7 +94,7 @@ function cloneMore(selector, type) {
     total++;
     $('#id_' + type + '-TOTAL_FORMS').val(total);
     $(selector).after(newElement);
-    newElement.find('.col-sm-1').html('<a href="#" onclick="removeItem(this)" class="close">')
+    newElement.find('.col-sm-1').html('<a href="#" onclick="removeItem(this)" class="closecustom">')
 }
 
 // another way for dynamic formset

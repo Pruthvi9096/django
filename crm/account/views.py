@@ -77,5 +77,25 @@ def createOrderView(request,id):
         formset = OrderFormSet(request.POST,instance=customer)
         if formset.is_valid():
             formset.save()
-            return redirect('/')
+            return redirect('dashboard')
     return render(request,'account/create_order.html',{'formset':formset})
+
+def updateCustomerView(request,id):
+    customer = Customer.objects.get(id=id)
+    form = CustomerForm(instance=customer)
+    context = {'customerform':form}
+    html_form = render_to_string('account/customer_form.html',context=context,request=request)
+    return JsonResponse({'form':html_form,'id':customer.id})
+
+def saveCustomerView(request,id):
+    dict = {}
+    customer = Customer.objects.get(id=id)
+    print(request.method)
+    if request.method == 'POST':
+        form = CustomerForm(request.POST,instance=customer)
+        if form.is_valid():
+            form.save()
+            dict['form_is_valid'] = True
+        else:
+            dict['form_is_valid'] = False
+    return JsonResponse(dict)
