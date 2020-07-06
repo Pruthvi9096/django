@@ -10,4 +10,6 @@ urlpatterns = [
    path('create_order/<int:id>',views.createOrderView,name='create-order'),
    path('update_customer/<int:id>',views.updateCustomerView,name='update-customer'),
    path('save_customer/<int:id>',views.saveCustomerView,name='save-customer'),
+   path('products/',views.ProductListView.as_view(),name='product-list'),
+   path('products/create/',views.ProductCreateView.as_view(),name='product-create')
 ]

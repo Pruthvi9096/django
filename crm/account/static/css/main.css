@@ -54,3 +54,24 @@ body{
     list-style: none;
     float: right;
   }
+
+  .results_on_deck > div {
+    margin: 0.5em 2px !important;
+    color: #fff;
+    background-color: #17a2b8;
+    border-radius: 10rem;
+    display: inline-block;
+    padding: 2%;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 2.25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.results_on_deck .ui-icon-trash {
+  margin: -3px 3px;
+}

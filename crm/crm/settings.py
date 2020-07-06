@@ -39,9 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'crispy_forms',
-    'django_filters'
+    'django_filters',
+    'ajax_select'
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+AJAX_LOOKUP_CHANNELS = {
+    'tags':{'model':'account.tag','search_field':'name'},
+    'categories':{'model':'account.category','search_field':'name'}
+}
+AJAX_SELECT_BOOTSTRAP = True
+AJAX_SELECT_INLINES = 'inline'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
-from .forms import CustomerForm, OrderForm
+from .forms import CustomerForm, OrderForm,ProductForm
 from .models import Customer, Product, Order
 from django.views import generic
+from django.urls import reverse
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .filters import OrderFilter
 from django.forms import inlineformset_factory
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-
+from django.views.generic import ListView,DetailView
 
 def DashboardView(request):
     if request.method == "POST":
@@ -31,10 +32,8 @@ def DashboardView(request):
             "orders": orders,
             "total_orders": total_orders,
             "pending_orders": pending_orders,
-            "delivered_orders": delivered_orders,
-        },
-    )
-
+            "delivered_orders":delivered_orders
+        })
 
 def updateOrder(request, id):
     order = Order.objects.get(id=id)
@@ -56,9 +55,7 @@ def saveOrder(request, id):
             dict["is_form_valid"] = False
     return JsonResponse(dict)
 
-
-def deleteOrder(request, id):
-    dict = {}
+def deleteOrder(request,id):
     order = Order.objects.get(id=id)
     order.delete()
     dict["deleted"] = True
@@ -133,3 +130,15 @@ def saveCustomerView(request, id):
         else:
             dict["form_is_valid"] = False
     return JsonResponse(dict)
+
+class ProductListView(ListView):
+    model = Product
+    queryset = Product.objects.all().order_by('-id')
+    template_name = 'product_list.html'
+    paginate_by = 10
+
+class ProductCreateView(generic.edit.CreateView):
+    model = Product
+    template_name = 'account/product.html'
+    form_class = ProductForm
+    success_url = '/products/'

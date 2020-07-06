@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="row">
+    <div class="col-md-8" style="width: 800px;margin: 0 auto;">
+        <a class="btn btn-primary" href="{% url 'product-create' %}">Create</a>
+        <div class="card box-element">
+        {% if product_list %}
+            <table class="table tabel-responsive">
+                <thead style="background-color: lightblue;">
+                    <tr>
+                        <th>Product</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Tags</th>
+                        <th>Price</th>
+                        <!-- <th>Update</th>
+                            <th>Remove</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in product_list %}
+                    <tr>
+                        <td>{{product.name}}</td>
+                        <td>{{product.description}}</td>
+                        <td>{{product.category.name}}</td>
+                        <td>
+                            {% for tag in product.tags.all %}
+                            <span class="badge badge-pill badge-info">{{tag.name}}</span>
+                            {% endfor %}
+                        </td>
+                        <td>{{product.price}}</td>
+                        <!-- <td><a class="btn btn-sm btn-info" onclick="updateOrder({{order.id}})" data-toggle="modal" data-target="#updateorderModal" href="">Update</a></td>
+                        <td><a class="btn btn-sm btn-danger" onclick="deleteOrder({id:'{{order.id}}',product:'{{order.product.name}}',
+                                date_ordered: '{{order.date_ordered}}', status: '{{order.get_status_display}}'})"
+                            data-toggle="modal" data-target="#deleteOrderModal"   href="">Delete</a></td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                There is no Products.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

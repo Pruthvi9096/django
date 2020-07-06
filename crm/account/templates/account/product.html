@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="row">
+    <div style="width: 700px; margin: 0 auto;">
+    <div class="box-element" style="padding: 2%;">
+        <h3>Create Product</h3>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{form.media}}
+            {{form|crispy}}
+        </div><br>
+        <div class="box-element">
+            <button style="width: -webkit-fill-available;" type="submit" class="btn btn-success">Create</button>
+        </div>
+        </form>
+</div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#hint_id_tags').hide()
+        $('#id_tags_text').attr('placeholder','Search Tags')
+    });
+</script>
+{% endblock %}
