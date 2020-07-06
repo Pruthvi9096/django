@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .filters import OrderFilter
 from django.forms import inlineformset_factory
+from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 
 def DashboardView(request):
     if request.method == 'POST':
@@ -59,10 +60,18 @@ def deleteOrder(request,id):
 
 def customerView(request,slug):
     customer = Customer.objects.get(slug=slug)
-    orders = customer.order_set.all()
+    orders = customer.order_set.all().order_by('-date_ordered')
     order_count = orders.count()
     orderFilter = OrderFilter(request.GET,orders)
     orders = orderFilter.qs
+    page = request.GET.get('page')
+    paginator = Paginator(orders,5)
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(orders.num_pages)
     context = {
         'customer':customer,'orders':orders,
         'order_count':order_count,

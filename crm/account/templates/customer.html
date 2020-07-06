@@ -105,6 +105,20 @@
                 There is no orders.
             </div>
             {% endif %}
+            <div class = "col-md-12">
+                <div class="text-center">
+                    {% if orders.has_previous %}
+                    <a class="btn btn-outline-dark" href="?page={{ orders.previous_page_number }}">Previous</a>
+                    {% else %}
+                   <button type="button" disabled class="btn btn-outline-dark" title = "No Orders available">Previous</button>
+                    {% endif %}
+                    {% if orders.has_next %}
+                    <a disabled class="btn btn-outline-dark" href="?page={{ orders.next_page_number }}">Next</a>
+                    {% else %}
+                    <button disabled type="button" class="btn btn-outline-dark" title = "No Orders available">Next</button>
+                    {% endif %}
+                </div>
+              </div>
         </div>
     </div>
 </div>

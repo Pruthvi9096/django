@@ -44,3 +44,13 @@ body{
   .closecustom:after {
     transform: rotate(-45deg);
   }
+
+  .previous {
+    list-style: none;
+    float: left;
+  }
+
+  .next {
+    list-style: none;
+    float: right;
+  }
