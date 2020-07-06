@@ -59,9 +59,12 @@ def deleteOrder(request,id):
     return JsonResponse(dict)
 
 def customerView(request,slug):
+    query = False
     customer = Customer.objects.get(slug=slug)
     orders = customer.order_set.all().order_by('-date_ordered')
     order_count = orders.count()
+    if request.GET:
+        query = str(request.GET.urlencode())
     orderFilter = OrderFilter(request.GET,orders)
     orders = orderFilter.qs
     page = request.GET.get('page')
@@ -75,7 +78,8 @@ def customerView(request,slug):
     context = {
         'customer':customer,'orders':orders,
         'order_count':order_count,
-        'orderFilter':orderFilter}
+        'orderFilter':orderFilter,
+        'query':query}
     return render(request,'customer.html',context=context)
 
 def createOrderView(request,id):
