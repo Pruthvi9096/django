@@ -104,7 +104,7 @@ function cloneMore(selector, type) {
     {% for form in serviceFormset.forms %}
         <table class='no_error'>
             {{ form.as_table }}
-        </table>
+        </tablea>
     {% endfor %}
 </div>
 <input type="button" value="Add More" id="add_more">
@@ -120,3 +120,13 @@ function cloneMore(selector, type) {
         $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
     });
 </script> */
+
+function getProductsByCategory() {
+    $.ajax({
+        url:'/category-products/',
+        data:"",
+        success: function(response) {
+            $('#product-table').html(response['content'])
+        }
+    });
+}

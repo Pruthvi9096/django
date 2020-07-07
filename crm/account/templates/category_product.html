@@ -1,0 +1,38 @@
+<div id="accordion">
+    {% for category in categories %}
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-light" data-toggle="collapse" data-target="#{{category.id}}" aria-expanded="true" aria-controls="collapseOne">
+            {{category.name}}
+          </button>
+        </h5>
+      </div>
+      <div id="{{category.id}}" class="collapse{% if forloop.first %} show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Description</th>
+                        <th>Tags</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in category.product_set.all %}
+                    <tr>
+                        <td>{{product.name}}</td>
+                        <td>{{product.description}}</td>
+                        <td>{% for tag in product.tags.all %} <span class="badge badge-pill badge-info">{{tag.name}}</span>{%endfor%}</td>
+                        <td>{{product.price}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</div>
+    

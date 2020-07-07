@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import CustomerForm, OrderForm,ProductForm
-from .models import Customer, Product, Order
+from .models import Customer, Product, Order,Category,Tag
 from django.views import generic
 from django.urls import reverse
 from django.http import JsonResponse
@@ -142,3 +142,8 @@ class ProductCreateView(generic.edit.CreateView):
     template_name = 'account/product.html'
     form_class = ProductForm
     success_url = '/products/'
+
+def category_product_api_view(request):
+    categories = Category.objects.all()
+    content = render_to_string('category_product.html',context={'categories':categories},request=request)
+    return JsonResponse({'content':content})

@@ -79,6 +79,9 @@
                 <tbody>
                     <tr>
                         <th>Product</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Tags</th>
                         <th>Date Orderd</th>
                         <th>Status</th>
                         <th>Update</th>
@@ -87,7 +90,10 @@
                     {% for order in orders %}
                     <tr>
                         <td>{{order.product.name}}</td>
-                        <td>{{order.date_ordered}}</td>
+                        <td>{{order.product.description}}</td>
+                        <td>{{order.product.category.name}}</td>
+                        <td>{% for tag in order.product.tags.all%}<span class="badge badge-pill badge-info">{{tag.name}}</span>{% endfor %}</td>
+                        <td>{{order.date_ordered|date}}</td>
                         <td>{{order.get_status_display}}</td>
                         <td><a class="btn btn-sm btn-info" onclick="updateOrder({{order.id}})" data-toggle="modal" data-target="#updateorderModal" href="">Update</a></td>
                         <td><a class="btn btn-sm btn-danger" onclick="deleteOrder({id:'{{order.id}}',product:'{{order.product.name}}',
