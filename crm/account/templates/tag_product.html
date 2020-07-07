@@ -1,31 +1,31 @@
 <div id="accordion">
-    <h4 style="padding:2%">Category wise Products</h4>
-    {% for category in categories %}
+    <h4 style="padding:2%">Tag wise Products</h4>
+    {% for tag in tags %}
     <div class="card mt-2">
       <div class="card-header" id="headingOne">
         <h5 class="mb-0">
-          <button class="btn btn-light" data-toggle="collapse" data-target="#{{category.id}}" aria-expanded="true" aria-controls="collapseOne">
-            {{category.name}}
+          <button class="btn btn-light" data-toggle="collapse" data-target="#{{tag.id}}" aria-expanded="true" aria-controls="collapseOne">
+            {{tag.name|title}}
           </button>
         </h5>
       </div>
-      <div id="{{category.id}}" class="collapse{% if forloop.first %} show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
+      <div id="{{tag.id}}" class="collapse{% if forloop.first %} show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
         <div class="card-body">
             <table class="table table-sm">
                 <thead>
                     <tr>
                         <th>Product</th>
                         <th>Description</th>
-                        <th>Tags</th>
+                        <th>Category</th>
                         <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for product in category.product_set.all %}
+                    {% for product in tag.product_set.all %}
                     <tr>
                         <td>{{product.name}}</td>
                         <td>{{product.description}}</td>
-                        <td>{% for tag in product.tags.all %} <span class="badge badge-pill badge-info">{{tag.name}}</span>{%endfor%}</td>
+                        <td>{{product.category.name}}</td>
                         <td>{{product.price}}</td>
                     </tr>
                     {% endfor %}

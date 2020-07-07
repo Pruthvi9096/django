@@ -121,9 +121,16 @@ function cloneMore(selector, type) {
     });
 </script> */
 
-function getProductsByCategory() {
+function getProductsByCategoryOrTags(type) {
+    var url = '';
+    if (type == 'category') {
+        url = '/category-products/';
+    }
+    if (type == 'tag') {
+        url = '/tag-products/';
+    }
     $.ajax({
-        url:'/category-products/',
+        url:url,
         data:"",
         success: function(response) {
             $('#product-table').html(response['content'])

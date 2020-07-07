@@ -147,3 +147,8 @@ def category_product_api_view(request):
     categories = Category.objects.all()
     content = render_to_string('category_product.html',context={'categories':categories},request=request)
     return JsonResponse({'content':content})
+
+def tag_product_api_view(request):
+    tags = Tag.objects.all()
+    content = render_to_string('tag_product.html',context={'tags':tags},request=request)
+    return JsonResponse({'content':content})

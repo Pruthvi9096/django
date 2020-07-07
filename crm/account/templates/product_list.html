@@ -8,8 +8,8 @@
     <div class="col-md-8" style="width: 800px;margin: 0 auto;">
         <div class="mb-2">
             <a class="btn btn-outline-dark box-element" href="{% url 'product-create' %}">New Product</a>
-            <button class="btn btn-outline-dark box-element" onclick="getProductsByCategory()">Products by Category</button>
-            <a class="btn btn-outline-dark box-element" href="{% url 'product-create' %}">Products by Tag</a>
+            <button class="btn btn-outline-dark box-element" onclick="getProductsByCategoryOrTags('category')">Products by Category</button>
+            <button class="btn btn-outline-dark box-element" onclick="getProductsByCategoryOrTags('tag')">Products by Tag</button>
         </div>
         <div class="card" id="product-table">
         {% if product_list %}
