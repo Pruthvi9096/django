@@ -1,13 +1,11 @@
 <div id="accordion">
     <h4 style="padding:2%">Category wise Products</h4>
     {% for category in categories %}
-    <div class="card mt-2">
+    <div class="card mt-2" data-toggle="collapse" data-target="#categ-{{category.id}}" aria-expanded="true" aria-controls="collapseOne">
       <div class="card-header" id="headingOne">
-        <h5 class="mb-0">
-          <button class="btn btn-light" data-toggle="collapse" data-target="#categ-{{category.id}}" aria-expanded="true" aria-controls="collapseOne">
+        <strong class="mb-0">
             {{category.name}}
-          </button>
-        </h5>
+        </strong>
       </div>
       <div id="categ-{{category.id}}" class="collapse{% if forloop.first %} show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
         <div class="card-body">
