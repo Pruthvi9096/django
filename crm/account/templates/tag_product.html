@@ -1,15 +1,15 @@
-<div id="accordion">
+<div id="accordion2">
     <h4 style="padding:2%">Tag wise Products</h4>
     {% for tag in tags %}
     <div class="card mt-2">
       <div class="card-header" id="headingOne">
         <h5 class="mb-0">
-          <button class="btn btn-light" data-toggle="collapse" data-target="#{{tag.id}}" aria-expanded="true" aria-controls="collapseOne">
+          <button class="btn btn-light" data-toggle="collapse" data-target="#tag-{{tag.id}}" aria-expanded="true" aria-controls="collapseOne">
             {{tag.name|title}}
           </button>
         </h5>
       </div>
-      <div id="{{tag.id}}" class="collapse{% if forloop.first %} show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
+      <div id="tag-{{tag.id}}" class="collapse{% if forloop.first %} show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion2">
         <div class="card-body">
             <table class="table table-sm">
                 <thead>

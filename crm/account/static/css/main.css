@@ -75,3 +75,11 @@ body{
 .results_on_deck .ui-icon-trash {
   margin: -3px 3px;
 }
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  color: #fff;
+  background: linear-gradient(to right, #67b26b, #4ca2cb) !important;
+}
+.nav-item>a{
+  color: #000000
+}

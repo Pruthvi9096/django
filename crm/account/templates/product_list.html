@@ -6,13 +6,21 @@
 {% endblock %}
 <div class="row">
     <div class="col-md-8" style="width: 800px;margin: 0 auto;">
-        <div class="mb-2">
-            <a class="btn btn-outline-dark box-element" href="{% url 'product-create' %}">New Product</a>
-            <button class="btn btn-outline-dark box-element" onclick="getProductsByCategoryOrTags('category')">Products by Category</button>
-            <button class="btn btn-outline-dark box-element" onclick="getProductsByCategoryOrTags('tag')">Products by Tag</button>
-        </div>
-        <div class="card" id="product-table">
-        {% if product_list %}
+
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-products-tab" data-toggle="pill" href="#pills-products" role="tab" aria-controls="pills-products" aria-selected="true">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-category-tab" data-toggle="pill" href="#pills-category" role="tab" aria-controls="pills-category" aria-selected="false">Category wise Product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-tag-tab" data-toggle="pill" href="#pills-tag" role="tab" aria-controls="pills-tag" aria-selected="false">Tag wise Product</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-products" role="tabpanel" aria-labelledby="pills-products-tab">
+                {% if product_list %}
             <table class="table tabel-responsive box-element">
                 <thead style="background-color: lightblue;">
                     <tr>
@@ -50,7 +58,14 @@
                 There is no Products.
             </div>
             {% endif %}
-        </div>
+            </div>
+            <div class="tab-pane fade" id="pills-category" role="tabpanel" aria-labelledby="pills-category-tab">
+                {% include 'category_product.html' with categories=categories%}
+            </div>
+            <div class="tab-pane fade" id="pills-tag" role="tabpanel" aria-labelledby="pills-tag-tab">
+                {% include 'tag_product.html' with tags=tags%}
+            </div>
+          </div>
     </div>
 </div>
 {% endblock %}

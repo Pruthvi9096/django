@@ -137,6 +137,12 @@ class ProductListView(ListView):
     template_name = 'product_list.html'
     paginate_by = 10
 
+    def get_context_data(self,**kwargs):
+        context = super(ProductListView,self).get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        context['tags'] = Tag.objects.all()
+        return context
+
 class ProductCreateView(generic.edit.CreateView):
     model = Product
     template_name = 'account/product.html'
