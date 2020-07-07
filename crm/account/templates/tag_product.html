@@ -34,4 +34,23 @@
     </div>
     {% endfor %}
 </div>
-    
+<div class = "col-md-12">
+    <div class="text-center">
+        {% if tags.has_previous %}
+        <a class="btn btn-outline-dark" href="?tagpage={{ tags.previous_page_number }}">Previous</a>
+        {% endif %}
+        {% if tags.has_next %}
+        <a disabled class="btn btn-outline-dark" href="?tagpage={{ tags.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        if(qs('tagpage')){
+            $('#pills-products-tab').removeClass('active')
+            $('#pills-products').removeClass('fade active show')
+            $('#pills-tag-tab').addClass('active')
+            $('#pills-tag').addClass('fade active show')
+        }
+    });
+</script>

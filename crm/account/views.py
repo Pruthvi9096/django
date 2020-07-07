@@ -139,8 +139,23 @@ class ProductListView(ListView):
 
     def get_context_data(self,**kwargs):
         context = super(ProductListView,self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['tags'] = Tag.objects.all()
+        categories = Category.objects.all().order_by('-id')
+        tags = Tag.objects.all().order_by('-id')
+        categ_paginator = Paginator(categories,10)
+        categ_page = self.request.GET.get('categpage')
+        tag_paginator = Paginator(tags,10)
+        tag_page = self.request.GET.get('tagpage')
+        try:
+            categories = categ_paginator.page(categ_page)
+            tags = tag_paginator.page(tag_page)
+        except PageNotAnInteger:
+            categories = categ_paginator.page(1)
+            tags = tag_paginator.page(1)
+        except EmptyPage:
+            categories = categ_paginator.page(categories.num_pages)
+            tags = tag_paginator.page(tags.num_pages)
+        context['categories'] = categories
+        context['tags'] = tags
         return context
 
 class ProductCreateView(generic.edit.CreateView):
