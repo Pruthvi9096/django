@@ -83,3 +83,7 @@ body{
 .nav-item>a{
   color: #000000
 }
+
+.nav-justified .nav-item {
+  padding: 2px;
+}
