@@ -20,6 +20,11 @@
     $(document).ready(function () {
         $('#hint_id_tags').hide()
         $('#id_tags_text').attr('placeholder','Search Tags')
+        $('#id_tags').select2({
+            allowClear:true,
+            placeholder:'Search Tags',
+        });
+        $('#id_category').select2();
     });
 </script>
 {% endblock %}

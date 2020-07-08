@@ -14,12 +14,12 @@ class OrderForm(forms.ModelForm):
         fields = ('customer','product','status')
 
 class ProductForm(forms.ModelForm):
-    tags = AutoCompleteSelectMultipleField('tags', required=False, help_text=None,plugin_options={'autoFocus': True, 'minLength': 1})
+    # tags = AutoCompleteSelectMultipleField('tags', required=False, help_text=None,plugin_options={'autoFocus': True, 'minLength': 1})
     class Meta:
         model = Product
         fields = '__all__'
         exclude = ['date_created']
         widgets = {
           'description': forms.Textarea(attrs={'rows':2, 'cols':15}),
-          'tags':forms.TextInput(attrs={'placeholder':'Enter text to seach tags'})
+        #   'tags':forms.TextInput(attrs={'placeholder':'Enter text to seach tags'})
         }
