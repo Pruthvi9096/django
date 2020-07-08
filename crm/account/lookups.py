@@ -11,10 +11,11 @@ class TagsLookup(LookupChannel):
         return self.model.objects.filter(name=q)
     
 
-    def format_match(self, obj):
+    def format_match(self, Tag):
+        print("============")
         """ (HTML) formatted item for display in the dropdown """
-        return self.format_item_display(obj)
+        return self.format_item_display(Tag)
 
-    def format_item_display(self, obj):
+    def format_item_display(self, Tag):
         """ (HTML) formatted item for displaying item in the selected deck area """
-        return u"<span class='badge badge-pill badge-info'>%s</span>" % (escape(obj.moboList))
+        return u"<span class='badge badge-pill badge-info'>%s</span>" % (escape(Tag.moboList))

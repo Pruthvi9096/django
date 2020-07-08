@@ -45,7 +45,8 @@ INSTALLED_APPS = [
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 AJAX_LOOKUP_CHANNELS = {
     'tags':{'model':'account.tag','search_field':'name'},
-    'categories':{'model':'account.category','search_field':'name'}
+    'categories':{'model':'account.category','search_field':'name'},
+    'tag':('account.lookups','TagsLookup'),
 }
 AJAX_SELECT_BOOTSTRAP = True
 AJAX_SELECT_INLINES = 'inline'
