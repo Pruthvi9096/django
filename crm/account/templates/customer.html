@@ -111,12 +111,12 @@
             <div class = "col-md-12">
                 <div class="text-center">
                     {% if orders.has_previous %}
-                    <a class="btn btn-outline-dark" onchange href="{% if query %}{{ request.get_full_path }}&page={{ orders.previous_page_number }}{% else %}?page={{ orders.previous_page_number }}{% endif %}">Previous</a>
+                    <a class="btn btn-outline-dark" href="{% if query %}{{ request.get_full_path }}&page={{ orders.previous_page_number }}{% else %}?page={{ orders.previous_page_number }}{% endif %}">Previous</a>
                     {% else %}
                    <button type="button" disabled class="btn btn-outline-dark" title = "No Orders available">Previous</button>
                     {% endif %}
                     {% if orders.has_next %}
-                    <a disabled class="btn btn-outline-dark" href="{% if query %}{{ request.get_full_path }}&page={{ orders.next_page_number }}{% else %}?page={{ orders.next_page_number }}{% endif %}">Next</a>
+                    <a class="btn btn-outline-dark" href="{% if query %}{{ request.get_full_path }}&page={{ orders.next_page_number }}{% else %}?page={{ orders.next_page_number }}{% endif %}">Next</a>
                     {% else %}
                     <button disabled type="button" class="btn btn-outline-dark" title = "No Orders available">Next</button>
                     {% endif %}
