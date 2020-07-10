@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    #=========== Apps =========#
     'account',
     'crispy_forms',
     'django_filters',
-    'ajax_select'
+    'ajax_select',
+    #=========== Api =========-#
+    'rest_framework'
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 AJAX_LOOKUP_CHANNELS = {

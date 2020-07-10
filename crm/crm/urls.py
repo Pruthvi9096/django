@@ -22,6 +22,7 @@ from ajax_select import urls as ajax_select_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('account.urls')),
+    path('api/',include('account.api.urls')),
     path('ajax_select/', include(ajax_select_urls)),
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
