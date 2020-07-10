@@ -94,7 +94,10 @@ body{
   margin:3px;
   border-radius: 50%;
   border: 2px solid black;
-  background-color: lightgray;
+  background-color: transparent;
+}
+.fourdots button:disabled{
+  background-color: gray;
 }
 .red {
   background-color: red !important;
