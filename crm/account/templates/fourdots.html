@@ -151,6 +151,46 @@
             return win
 
         }
+        function checkWinDiagonal(id, color) {
+            var row = Number(id[0])
+            var col = Number(id[1])
+            var count = 0
+            console.log(id)
+            // while(row > 1 && col < 7){
+            //     row--;
+            //     col++;
+            //     var id = String(row) + String(col)
+            //     if($(id).hasClass(color)){
+            //         count++;
+            //     }
+            //     else{
+            //         count = 0;
+            //     }
+            //     if(count==4){
+            //         return true
+            //     }
+            // }
+            // var row1 = Number(id[0])
+            // var col1 = Number(id[1])
+            // var count1 = 0
+            // console.log(id[0],id[1])
+            // while(row1 < 6 && col1 < 7){
+            //     row1++;
+            //     col1++;
+            //     var id = String(row1) + String(col1)
+            //     console.log(id)
+            //     if($(id).hasClass(color)){
+            //         count1++;
+            //     }
+            //     else{
+            //         count1 = 0;
+            //     }
+            //     if(count==4){
+            //         return true
+            //     }
+            // }
+            // return false
+        }
         var player1 = prompt("Enter Player1 name:")
         var player2 = prompt("Enter Player2 name:")
 
@@ -184,7 +224,7 @@
                     if (currentPlayer == 'player1') {
                         btn.classList.add('red')
                         currentPlayer = 'player2'
-                        if (checkWinRow(btn.classList[1], 'red') || checkWinColumn(btn.classList[0], 'red')) {
+                        if (checkWinRow(btn.classList[1], 'red') || checkWinColumn(btn.classList[0], 'red') || checkWinDiagonal(btn.id, 'red')) {
                             $('#message').text(player1 + " won the game.")
                             $('#result').attr('style', 'display:block;')
                             $('#reset').prop('disabled', false)
@@ -194,7 +234,7 @@
                     if (currentPlayer == 'player2') {
                         btn.classList.add('blue')
                         currentPlayer = 'player1'
-                        if (checkWinRow(btn.classList[1], 'blue') || checkWinColumn(btn.classList[0], 'blue')) {
+                        if (checkWinRow(btn.classList[1], 'blue') || checkWinColumn(btn.classList[0], 'blue')|| checkWinDiagonal(btn.id, 'blue')) {
                             $('#message').text(player2 + " won the game.")
                             $('#result').attr('style', 'display:block;')
                             $('#reset').prop('disabled', false)
@@ -202,7 +242,7 @@
                         return true
                     }
                 }
-            }
+            }     
         });
     }
 </script>
