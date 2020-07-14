@@ -7,5 +7,6 @@ urlpatterns = [
     path('customers/create/',customerCreateView,name='customer-create'),
     path('customer/<int:pk>/',getUpdateDeleteCustomer),
     path('products/',productView),
+    path('products/class',productListCreateView.as_view()),
     path('game/',game,name='game')
 ]
