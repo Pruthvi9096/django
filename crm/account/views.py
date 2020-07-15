@@ -9,6 +9,40 @@ from .filters import OrderFilter
 from django.forms import inlineformset_factory
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.views.generic import ListView,DetailView
+from django.contrib.auth import login,authenticate,logout
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib import messages
+
+def signup(request):
+    form = UserCreationForm()
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print("========",form.cleaned_data)
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username,password=password)
+            # if user.is_exist():
+                # login(request,user)
+            messages.success(request,'Account Created Successfully')
+            return redirect('login')
+    return render(request,'account/signup.html',{'form':form})
+
+def loginView(request):
+    form = AuthenticationForm()
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username,password=password)
+        if user and user.is_active:
+            login(request,user)
+            return redirect('dashboard')
+        else:
+            messages.error(request,f'Invalid Username/Password')
+    else:
+        return render(request,'account/login.html',{'form':form})
+
 
 def DashboardView(request):
     if request.method == "POST":

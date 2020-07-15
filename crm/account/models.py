@@ -1,7 +1,26 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 from .utils import unique_slug_generator
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    bio = models.TextField(max_length=700,null=True,blank=True)
+    profile_image = models.ImageField(upload_to='image/',null=True,blank=True)
+    birth_date = models.DateField(verbose_name="DOB",null=True,blank=True)
+
+    def __str__(self):
+        return self.user.username+"'s profile"
+
+@receiver(post_save,sender=User)
+def create_user_profile_receiver(sender,instance,created,**kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save,sender=User)
+def save_user_profile_receiver(sender,instance,**kwargs):
+    instance.userprofile.save()
 
 class Customer(models.Model):
     name = models.CharField(max_length=200,null=True)
