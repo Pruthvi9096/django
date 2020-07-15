@@ -11,7 +11,7 @@ class Customer(models.Model):
     phone = models.CharField(max_length=20,null=True)
 
     def __str__(self):
-        return self.name
+        return self.name or ''
     
 def customer_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
@@ -30,7 +30,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=250,null=True)
 
     def __str__(self):
-        return self.name
+        return self.name or ''
 
 class Product(models.Model):
     name = models.CharField(max_length=200,null=True)
@@ -41,7 +41,7 @@ class Product(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.name or ''
 
 class Order(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True)
@@ -49,3 +49,6 @@ class Order(models.Model):
     date_ordered = models.DateTimeField(auto_now_add=True)
     status = models.CharField(choices=[('pending','Pending'),('ofd','Out For Delivery'),
         ('delivered','Delivered')],max_length=50,default='pending')
+    
+    def __str__(self):
+        return '{}-{}'.format(self.customer.name,self.product.name) or ''

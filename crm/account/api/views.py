@@ -84,9 +84,10 @@ def getUpdateDeleteCustomer(request,pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class OrderListCreateView(ListCreateAPIView):
+    print("=========inside==========")
     serializer_class = OrderSerializer
     queryset = Order.objects.all().order_by('id')
-    filter_backends = SearchFilter
+    # filter_backends = SearchFilter
 
 class OrderRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = OrderSerializer
