@@ -12,7 +12,6 @@ class TagsLookup(LookupChannel):
     
 
     def format_match(self, Tag):
-        print("============")
         """ (HTML) formatted item for display in the dropdown """
         return self.format_item_display(Tag)
 
