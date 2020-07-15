@@ -1,12 +1,14 @@
 from rest_framework.decorators import api_view,renderer_classes,APIView
-from account.models import Customer,Product
-from .serializers import CustomerSerializer,ProductSerializer
+from account.models import Customer,Product,Order
+from .serializers import CustomerSerializer,ProductSerializer,OrderSerializer
 from rest_framework.response import Response
 from django.http import HttpResponse,JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 from django.shortcuts import render,get_object_or_404
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
+from rest_framework.filters import SearchFilter
+
 
 class productListCreateView(ListCreateAPIView):
     queryset = Product.objects.all()
@@ -81,6 +83,15 @@ def getUpdateDeleteCustomer(request,pk):
         customer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class OrderListCreateView(ListCreateAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all().order_by('id')
+    filter_backends = SearchFilter
+
+class OrderRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    search_fields = ['product__name','cutomer__name','status']
 
 def game(request):
     return render(request,'fourdots.html',{})
