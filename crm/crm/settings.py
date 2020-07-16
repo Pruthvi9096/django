@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_filters',
     'ajax_select',
+    'dark',
     #=========== Api =========-#
     'rest_framework'
 ]
