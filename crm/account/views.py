@@ -40,6 +40,7 @@ def loginView(request):
             return redirect('dashboard')
         else:
             messages.error(request,f'Invalid Username/Password')
+            return render(request,'account/login.html',{'form':form})
     else:
         return render(request,'account/login.html',{'form':form})
 
