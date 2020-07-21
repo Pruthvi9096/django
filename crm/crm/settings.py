@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     'ajax_select',
     'dark',
+    'orm',
     #=========== Api =========-#
     'rest_framework'
 ]
