@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_filters',
     'ajax_select',
+    'djrichtextfield',
     'twitter',
     #=========== Api =========-#
     'rest_framework'
@@ -137,7 +138,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
-print(STATICFILES_DIRS)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
@@ -161,3 +161,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 #         # 'rest_framework.parsers.MultiPartParser'
 #     ]
 # }
+DJRICHTEXTFIELD_CONFIG = {
+    'js': ['//cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js'],
+    'init_template': 'djrichtextfield/init/tinymce.js',
+    'settings': {
+        'menubar': True,
+        'plugins': 'link image',
+        'toolbar': 'bold italic | link image | removeformat',
+        'format_tags': 'p;h1;h2;h3',
+        'width': 700
+    }
+}

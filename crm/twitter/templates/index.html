@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 {% block content %}
 {% load static %}
-<div class="row">
+<div class="row mt-3">
     <div style="width: 800px; margin: 0 auto;">
         {% if messages %}
         <ul class="alert alert-success" style="list-style: none;">
@@ -12,18 +12,116 @@
         {% endif %}
     </div>
     <div class="col-md-4">
-        {% if profile %}
         <div class="card" style="width: 18rem;">
+            {% if profile.profile_image%}
             <img src="{{profile.profile_image.url}}" class="avatar" alt="...">
+            {% else %}
+            <img src="http://www.gravatar.com/avatar/?d=identicon" class="avatar" alt="...">
+            {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{request.user.username}}</h5>
-                <p class="card-text">
+                <p class="card-text text-muted">
+                {% if profile %}
                   {{profile.bio}}
                 </p>
+                {% endif %}
               <a href="{% url 'update-profile' %}" class="btn btn-outline-dark">Update Profile</a>
             </div>
           </div>
-        {% endif %}
+    </div>
+    <div class="col-md-7 mx-auto">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="pills-feed-tab" data-toggle="pill" href="#pills-feed" role="tab" aria-controls="pills-feed" aria-selected="true">Feed</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="pills-explore-tab" data-toggle="pill" href="#pills-explore" role="tab" aria-controls="pills-explore" aria-selected="false">Explore</a>
+            </li>
+            <li class="nav-item" style="margin: 0 auto;" role="presentation">
+                <a href="{% url 'create-post' %}" class="btn btn-outline-info">Create Post</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-feed" role="tabpanel" aria-labelledby="pills-feed-tab"><h3>Feed</h3></div>
+            <div class="tab-pane fade" id="pills-explore" role="tabpanel" aria-labelledby="pills-explore-tab">
+                <h5>People may you know</h5>
+                {% for p in explore_profiles %}
+                <div class="profile-row">
+                    <div style="flex:1">
+                        {% if p.profile_image%}
+                        <img style="width: 50%;height: 50%;" src="{{p.profile_image.url}}" alt="..." class="avatar">
+                        {% else %}
+                        <img style="width: 50%;height: 50%;" src="http://www.gravatar.com/avatar/?d=identicon" class="avatar" alt="...">
+                        {% endif %}
+                    </div>
+                    <div style="flex:1"><strong>{{p.user.username}}</strong></div>
+                    <div style="flex:1"><strong>{{p.user.first_name}} {{p.user.last_name}}</strong></div>
+                    <div style="flex:2"><strong><button class="btn btn-outline-info follow-unfollow" data-target="{{request.user.id}}" data-follower="{{p.user.id}}">F</button></div>
+                </div>
+                {% endfor %}
+                <script>
+                    $(document).ready(function () {
+                        
+                        console.log($('.follow-unfollow'))
+                        $('.follow-unfollow').each(function (index, el) {
+                            var target = $(el).attr('data-target')
+                            var follower= $(el).attr('data-follower')
+                            console.log(index,el)
+                            $.ajax({
+                                url:'follow-check/'+target+'/'+follower,
+                                data:"",
+                                success: function(response){
+                                    console.log(response)
+                                    if(response['following']){
+                                        $(el).text("Following")
+                                        $(el).prop({'disabled':true})
+                                        // var newel = $(el).after(`<button class="btn btn-outline-danger unfollow" data-target="${target}" data-follower="${follower}">Unfollow</button>`)
+                                        // console.log(newel)
+                                    }
+                                    else{
+                                        $(el).text("Follow")
+                                    }
+                                }
+                            })
+                            $(el).click(function (e) { 
+                                e.preventDefault();
+                                $.ajax({
+                                    url:'follow/'+target+'/'+follower,
+                                    data:'',
+                                    success:function(response) {
+                                        console.log("--response--",response)
+                                        if(response['is_followed']) {
+                                            $(el).text("Following")
+                                            $(el).prop({'disabled':true})
+                                            $(el).after(`<button class="btn btn-outline-danger unfollow" onclick="unfollow()"  data-target="${target}" data-follower="${follower}">Unfollow</button>`)
+                                        }
+                                    }
+                                })
+                                
+                            });
+                        });
+                        $('.unfollow').click(function(e){
+                            e.preventDefault();
+                            $.ajax({
+                                url:'unfollow/'+target+'/'+follower,
+                                data:'',
+                                success:function(response) {
+                                    console.log("--response--",response)
+                                    if(response['is_unfollowed']) {
+                                        $(el).prev().prop({'disabled':false})
+                                        $(el).prev().text("Follow")
+                                        $(el).remove()
+                                    }
+                                }
+                            })
+                        })
+                        function unfollow(){
+                            console.log("=========finally===")
+                        }
+                    });
+                </script>
+            </div>
+          </div>
     </div>
 </div>
 {% endblock%}
