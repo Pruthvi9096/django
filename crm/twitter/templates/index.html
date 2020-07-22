@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% block content %}
+{% load static %}
 <div class="row">
     <div style="width: 800px; margin: 0 auto;">
         {% if messages %}
@@ -9,7 +10,20 @@
                 {% endfor %}
         </ul>
         {% endif %}
-        <h3>It Worked!</h3>
+    </div>
+    <div class="col-md-4">
+        {% if profile %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{profile.profile_image.url}}" class="avatar" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{request.user.username}}</h5>
+                <p class="card-text">
+                  {{profile.bio}}
+                </p>
+              <a href="{% url 'update-profile' %}" class="btn btn-outline-dark">Update Profile</a>
+            </div>
+          </div>
+        {% endif %}
     </div>
 </div>
 {% endblock%}

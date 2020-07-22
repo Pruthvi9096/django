@@ -4,9 +4,17 @@ from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib import messages
 from .forms import UserForm,ProfileForm
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='login')
 def IndexView(request):
-    return render(request,'index.html',{})
+    profile = False
+    try:
+        profile = request.user.profile
+    except:
+        pass
+    print("======",profile)
+    return render(request,'index.html',{'profile':profile})
 
 def RegisterView(request):
     form = UserCreationForm()
@@ -50,7 +58,7 @@ def updateProfileView(request):
     if request.method == 'POST':
         userform = UserForm(request.POST,instance=request.user)
         if profile:
-            profileform = ProfileForm(request.POST,instance=profile)
+            profileform = ProfileForm(request.POST,request.FILES,instance=profile)
         if userform.is_valid() and profileform.is_valid():
             userform.save()
             profileform.save()
@@ -58,10 +66,10 @@ def updateProfileView(request):
             return redirect('index')
         else:
             messages.error(request,"There is a problem in updating profile. Please try later.")
-    userform = UserForm()
+    userform = UserForm(instance=request.user)
     context= {'userform':userform}
     if profile:
-        context.update({'profileform':ProfileForm()})
+        context.update({'profileform':ProfileForm(instance=profile)})
     return render(request,'updateprofile.html',context=context)
 
     
