@@ -4,7 +4,7 @@
 <div class="row">
     <div style="width: 800px; margin: 0 auto;">
         {% if messages %}
-        <ul class="alert" style="list-style: none;">
+        <ul class="alert alert-danger" style="list-style: none;">
             {% for message in messages %}
             <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
                 {% endfor %}
