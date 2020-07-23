@@ -6,39 +6,52 @@
     <div style="width: 800px;margin: 0 auto;">
         <div class="card mb-2">
             <div class="card-header">
-            {{post.title}}
-                <a style="float: right;" href="{% url 'visit-profile' post.author.id %}">{{post.author.user.username}}</a>
+                {{post.title}}
+                <a style="float: right;"
+                    href="{% url 'visit-profile' post.author.id %}">{{post.author.user.username}}</a>
             </div>
             <div class="card-body">
-            {{post.content|safe}}
+                {{post.content|safe}}
             </div>
         </div>
         <div id="comments">
             <h3>Comments:</h3>
             {% for comment in comments %}
-            <p>
-                On {{comment.date_created.date }}&nbsp;
-                <b>{{ comment.user.username }}</b> wrote:
-            </p>
-            <p>{{ comment.comment }}</p>
-            {% if comment.user == request.user %}
-            <span><a href="#" class="mx-1" style="color:red">delete</a></span>
-            {% else %}
-            <span><a href="#" id="{{comment.id}}" class="reply mx-1" style="color: blue;">reply</a></span>
-            {% endif %}
-            <div style="padding-left:5em">
-                {% for reply in comment.comments_set.all %}
-                
-                    <p>
-                        On {{reply.date_created.date }}&nbsp;
-                        <b>{{ reply.user.username }}</b> wrote:
-                    </p>
-                    <p>{{ reply.comment }}</p>
-                {% endfor %}
+            <div class='comment-body'>
+                <p>
+                    On {{comment.date_created.date }}&nbsp;
+                    <b>{{ comment.user.username }}</b> wrote:
+                </p>
+                <p>{{ comment.comment }}</p>
+                {% if comment.user == request.user %}
+                <span><a href="#" data-target="{{comment.id}}" class="delete" style="color:red">delete</a></span>
+                {% else %}
+                <span><a href="#" id="{{comment.id}}" class="reply mx-1" style="color: blue;">reply</a></span>
+                {% endif %}
+                <div style="padding-left:5em">
+                    {% for reply in comment.comments_set.all %}
+                    <div class='comment-body'>
+                        <p>
+                            On {{reply.date_created.date }}&nbsp;
+                            <b>{{ reply.user.username }}</b> wrote:
+                        </p>
+                        <p>{{ reply.comment }}</p>
+                        {% if reply.user == request.user %}
+                        <span><a href="#" data-target="{{reply.id}}" class="delete"
+                                style="color:red">delete</a></span>
+                        {% else %}
+                        <span><a href="#" id="{{comment.id}}" class="reply mx-1" style="color: blue;">reply</a></span>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <hr>
+                </div>
             </div>
-            <hr>
             {% endfor %}
-            </div>
+        </div>
+    </div>
+    <br>
+    <div style="width: 800px;margin: 0 auto;">
             <form id="form" action="" method="post">
                 {% csrf_token%}
                 <div style="display: flex;">

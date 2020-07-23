@@ -13,5 +13,6 @@ urlpatterns = [
     path('unfollow/<int:target>/<int:follower>/',views.unfollow_api_view,name='unfollow'),
     path('visit_profile/<uuid:id>',views.profileDetailView,name='visit-profile'),
     path('post-detail/<int:pk>',views.postDetailView,name='post-detail'),
-    path('reply-to/<int:pk>/',views.replyComment_api_view,name='reply')
+    path('reply-to/<int:pk>/',views.replyComment_api_view,name='reply'),
+    path('delete-comment/<int:pk>/',views.deleteComment_api_view)
 ]

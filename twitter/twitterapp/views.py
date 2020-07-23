@@ -118,6 +118,7 @@ def profileDetailView(request,id):
     return render(request,'profile.html',context=context)
 
 def postDetailView(request,pk):
+    post = Post.objects.get(pk=pk)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -126,7 +127,6 @@ def postDetailView(request,pk):
             comment.user = request.user
             comment.save()
             return redirect(reverse('post-detail',kwargs={'pk':pk})) 
-    post = Post.objects.get(pk=pk)
     comments = post.comments_set.filter(parent_comment__isnull=True).order_by('-date_created')
     form = CommentForm()
     return render(request,'post-detail.html',
@@ -149,3 +149,8 @@ def replyComment_api_view(request,pk):
     context={'commentform':form}
     form_html = render_to_string('comment_form.html',context=context,request=request)
     return JsonResponse({'form':form_html})
+
+def deleteComment_api_view(request,pk):
+    comment = Comments.objects.get(pk=pk)
+    comment.delete()
+    return JsonResponse({'deleted':True})

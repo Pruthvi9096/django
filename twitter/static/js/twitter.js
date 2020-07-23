@@ -41,7 +41,7 @@ $(document).ready(function () {
             url: url,
             data:'',
             success: function(response) {
-                $('#form').remove();
+                // $('#form').remove();
                 $('#comments').find('#commentForm').remove();
                 $(comment).after(response['form'])
                 $(comment).hide();
@@ -50,4 +50,22 @@ $(document).ready(function () {
             }
         })
     });
+    $('.delete').click(function(e){
+        e.preventDefault();
+        var comment = this;
+        var id = $(comment).attr('data-target')
+        alert("Are you sure delete this comment?");
+        var url = `/delete-comment/${id}`;
+        $.ajax({
+            url: url,
+            data:'',
+            success: function(response) {
+                if(response['deleted']){
+                    $(comment).closest('.comment-body').remove();
+                    // alert("Comment Deleted Successfully!")
+                }
+            }
+        })
+
+    })
 });
