@@ -56,8 +56,10 @@
                     </div>
                     <div style="flex:1"><strong>{{p.user.username}}</strong></div>
                     <div style="flex:1"><strong>{{p.user.first_name}} {{p.user.last_name}}</strong></div>
-                    <div style="flex:1"><button id="unfollow-{{p.user.id}}" class="btn btn-outline-danger unfollow" {% if request.user not in p.get_followers %}style="display:none;"{%endif%} data-target="{{p.user.id}}" data-follower="{{request.user.id}}">Unfollow</button></div>
-                    <div style="flex:1"><button id="follow-{{p.user.id}}" class="btn btn-outline-info follow" {% if request.user in p.get_followers %}style="display:none;"{%endif%} data-target="{{p.user.id}}" data-follower="{{request.user.id}}">Follow</button></div>
+                    <div style="flex:1">
+                      <button id="unfollow-{{p.user.id}}" class="btn btn-outline-danger unfollow" {% if request.user not in p.get_followers %}style="display:none;"{%endif%} data-target="{{p.user.id}}" data-follower="{{request.user.id}}">Unfollow</button>
+                      <button id="follow-{{p.user.id}}" class="btn btn-outline-info follow" {% if request.user in p.get_followers %}style="display:none;"{%endif%} data-target="{{p.user.id}}" data-follower="{{request.user.id}}">Follow</button>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
