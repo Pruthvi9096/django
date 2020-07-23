@@ -21,6 +21,10 @@ class Profile(models.Model):
 
     def __unicode__(self):
         return self.id
+    
+    @property
+    def get_followers(self):
+        return [line.follower for line in self.followers.all().filter(target=self.user)]
 
 
 class Post(models.Model):

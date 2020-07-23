@@ -56,70 +56,10 @@
                     </div>
                     <div style="flex:1"><strong>{{p.user.username}}</strong></div>
                     <div style="flex:1"><strong>{{p.user.first_name}} {{p.user.last_name}}</strong></div>
-                    <div style="flex:2"><strong><button class="btn btn-outline-info follow-unfollow" data-target="{{request.user.id}}" data-follower="{{p.user.id}}">F</button></div>
+                    <div style="flex:1"><strong><button class="btn btn-outline-danger unfollow" {% if request.user not in p.get_followers %}style="display:none;"{%endif%} data-target="{{p.user.id}}" data-follower="{{request.user.id}}">Unfollow</button></div>
+                    <div style="flex:1"><strong><button class="btn btn-outline-info follow" {% if request.user in p.get_followers %}style="display:none;"{%endif%} data-target="{{p.user.id}}" data-follower="{{request.user.id}}">Follow</button></div>
                 </div>
                 {% endfor %}
-                <script>
-                    $(document).ready(function () {
-                        
-                        console.log($('.follow-unfollow'))
-                        $('.follow-unfollow').each(function (index, el) {
-                            var target = $(el).attr('data-target')
-                            var follower= $(el).attr('data-follower')
-                            console.log(index,el)
-                            $.ajax({
-                                url:'follow-check/'+target+'/'+follower,
-                                data:"",
-                                success: function(response){
-                                    console.log(response)
-                                    if(response['following']){
-                                        $(el).text("Following")
-                                        $(el).prop({'disabled':true})
-                                        // var newel = $(el).after(`<button class="btn btn-outline-danger unfollow" data-target="${target}" data-follower="${follower}">Unfollow</button>`)
-                                        // console.log(newel)
-                                    }
-                                    else{
-                                        $(el).text("Follow")
-                                    }
-                                }
-                            })
-                            $(el).click(function (e) { 
-                                e.preventDefault();
-                                $.ajax({
-                                    url:'follow/'+target+'/'+follower,
-                                    data:'',
-                                    success:function(response) {
-                                        console.log("--response--",response)
-                                        if(response['is_followed']) {
-                                            $(el).text("Following")
-                                            $(el).prop({'disabled':true})
-                                            $(el).after(`<button class="btn btn-outline-danger unfollow" onclick="unfollow()"  data-target="${target}" data-follower="${follower}">Unfollow</button>`)
-                                        }
-                                    }
-                                })
-                                
-                            });
-                        });
-                        $('.unfollow').click(function(e){
-                            e.preventDefault();
-                            $.ajax({
-                                url:'unfollow/'+target+'/'+follower,
-                                data:'',
-                                success:function(response) {
-                                    console.log("--response--",response)
-                                    if(response['is_unfollowed']) {
-                                        $(el).prev().prop({'disabled':false})
-                                        $(el).prev().text("Follow")
-                                        $(el).remove()
-                                    }
-                                }
-                            })
-                        })
-                        function unfollow(){
-                            console.log("=========finally===")
-                        }
-                    });
-                </script>
             </div>
           </div>
     </div>

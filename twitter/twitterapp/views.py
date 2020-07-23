@@ -85,7 +85,8 @@ def follower_check_api_view(request,target,follower):
     return JsonResponse(dict)
 
 def follow_api_view(request,target,follower):
-    profile = request.user.profile
+    user = User.objects.get(id=target)
+    profile = user.profile
     following = Following.objects.create(target_id=target,follower_id=follower)
     profile.followers.add(following)
     print(profile.followers)
@@ -93,9 +94,9 @@ def follow_api_view(request,target,follower):
     return JsonResponse(dict)
 
 def unfollow_api_view(request,target,follower):
-    print("=======")
-    profile = request.user.profile
-    following = Following.objects.filter(target_id=target,follower_id=follower)
+    user = User.objects.get(id=target)
+    profile = user.profile
+    following = Following.objects.filter(target_id=target,follower_id=follower).first()
     profile.followers.remove(following)
     following.delete()
     dict = {'is_unfollowed':True}
