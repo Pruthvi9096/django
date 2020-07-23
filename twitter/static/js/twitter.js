@@ -9,8 +9,8 @@ $(document).ready(function () {
                 data:'',
                 success:function(response){
                     if(response['is_followed']){
-                        alert($(el).closest('.unfollow').css({'display':'block'}))
-                        $(el).closest('.unfollow').css({'display':'block'})
+                        $(el).css({'display':'none'})
+                        $('#unfollow-'+target).css({'display':'block'});
                     }
                 }
             })
@@ -26,7 +26,8 @@ $(document).ready(function () {
                 data:'',
                 success:function(response){
                     if(response['is_unfollowed']){
-                        location.reload();
+                        $(el).css({'display':'none'})
+                        $('#follow-'+target).css({'display':'block'});
                     }
                 }
             })

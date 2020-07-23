@@ -31,7 +31,6 @@ def RegisterView(request):
 def LoginView(request):
     form = AuthenticationForm()
     if request.method == 'POST':
-        print(request.POST)
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username,password=password)
@@ -89,7 +88,6 @@ def follow_api_view(request,target,follower):
     profile = user.profile
     following = Following.objects.create(target_id=target,follower_id=follower)
     profile.followers.add(following)
-    print(profile.followers)
     dict = {'is_followed':True}
     return JsonResponse(dict)
 
