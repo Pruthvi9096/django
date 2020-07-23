@@ -1,5 +1,5 @@
 {% for p in profiles %}
-    <div class="profile-row">
+    <div class="profile-row" onclick="window.parent.location='{% url 'visit-profile' p.id %}'">
         <div style="flex:1">
         {% if p.profile_image%}
         <img style="width: 50%;height: 50%;" src="{{p.profile_image.url}}" alt="..." class="avatar">
