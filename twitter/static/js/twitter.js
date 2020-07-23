@@ -33,4 +33,21 @@ $(document).ready(function () {
             })
         })
     })
+    $('.reply').click(function (e) { 
+        e.preventDefault();
+        var comment = this;
+        var url = `/reply-to/${comment.id}/`
+        $.ajax({
+            url: url,
+            data:'',
+            success: function(response) {
+                $('#form').remove();
+                $('#comments').find('#commentForm').remove();
+                $(comment).after(response['form'])
+                $(comment).hide();
+                $('#commentForm').attr('action',url)
+                $('#comment-id').val(comment.id)
+            }
+        })
+    });
 });

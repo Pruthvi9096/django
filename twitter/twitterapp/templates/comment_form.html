@@ -1,0 +1,7 @@
+<form id="commentForm" method="post">
+    {% csrf_token%}
+    <div style="display: flex;">
+        {{commentform.comment}}<button type="submit" class="btn btn-sm btn-primary reply-button">Reply</button>
+    </div>
+    <input type="hidden" id="comment-id" value="">
+</form>

@@ -1,13 +1,14 @@
-
+from django.urls import reverse
 from django.shortcuts import render,redirect
-from .models import Profile,User,Following,Post
+from .models import Profile,User,Following,Post,Comments
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib import messages
-from .forms import UserForm,ProfileForm,PostForm
+from .forms import UserForm,ProfileForm,PostForm,CommentForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
+from django.template.loader import render_to_string
 
 @login_required(login_url='login')
 def IndexView(request):
@@ -115,3 +116,36 @@ def profileDetailView(request,id):
         'posts':posts
     }
     return render(request,'profile.html',context=context)
+
+def postDetailView(request,pk):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            return redirect(reverse('post-detail',kwargs={'pk':pk})) 
+    post = Post.objects.get(pk=pk)
+    comments = post.comments_set.filter(parent_comment__isnull=True).order_by('-date_created')
+    form = CommentForm()
+    return render(request,'post-detail.html',
+        {'post':post,
+        'comments':comments,
+        'form':form})
+
+def replyComment_api_view(request,pk):
+    comment = Comments.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.post = comment.post
+            reply.user = request.user
+            reply.parent_comment = comment
+            reply.save()
+            return redirect(reverse('post-detail',kwargs={'pk':comment.post.pk})) 
+    form = CommentForm()
+    context={'commentform':form}
+    form_html = render_to_string('comment_form.html',context=context,request=request)
+    return JsonResponse({'form':form_html})

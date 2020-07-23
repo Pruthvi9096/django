@@ -50,7 +50,7 @@
                     {{post.title}}
                       <a style="float: right;" href="{% url 'visit-profile' post.author.id %}">{{post.author.user.username}}</a>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body" onclick="location.href='{% url 'post-detail' post.id %}'">
                     {{post.content|safe}}
                   </div>
                 </div>
