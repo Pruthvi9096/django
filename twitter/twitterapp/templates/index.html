@@ -22,10 +22,23 @@
               <h5 class="card-title">{{request.user.username}}</h5>
                 <p class="card-text text-muted">
                 {% if profile %}
-                  {{profile.bio}}
+                  {{profile.bio|safe}}
                 </p>
                 {% endif %}
-              <a href="{% url 'update-profile' %}" class="btn btn-outline-dark">Update Profile</a>
+                <div style="display: flex;">
+                  <div style="flex:3">
+                    <h6 class="text-center"><b>{{profile.follower_count}}<p>Followers</p></b></h6>
+                  </div>
+                  <div style="flex:3">
+                  <h6 class="text-center"><b>{{profile.following_count}}<p>Following</p></b></h6>
+                  </div>
+                  <div style="flex:3">
+                  <h6 class="text-center"><b>{{profile.post_count}}<p>Posts</p></b></h6>
+                  </div>
+                </div>
+                <div>
+                  <a href="{% url 'update-profile' %}" class="btn btn-outline-dark">Update Profile</a>
+                </div>
             </div>
           </div>
     </div>

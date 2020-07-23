@@ -26,6 +26,19 @@ class Profile(models.Model):
     def get_followers(self):
         return [line.follower for line in self.followers.all().filter(target=self.user)]
 
+    @property
+    def follower_count(self):
+        return Following.objects.filter(target=self.user).count()
+    
+    @property
+    def following_count(self):
+        return Following.objects.filter(follower=self.user).count()
+    
+    @property
+    def post_count(self):
+        return self.post_set.all().count()
+
+
 
 class Post(models.Model):
     author = models.ForeignKey(Profile,on_delete=models.CASCADE,null=True)

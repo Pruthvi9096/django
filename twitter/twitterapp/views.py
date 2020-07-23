@@ -17,7 +17,6 @@ def IndexView(request):
     feed_posts = Post.objects.filter(
         author__followers__follower=request.user) \
         .order_by('-date_created')
-    print(feed_posts)
     return render(request,'index.html',
         {'profile':profile,
         'explore_profiles':profiles,
