@@ -22,6 +22,7 @@ from ajax_select import urls as ajax_select_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('twitter/',include('twitterapp.urls')),
+    path('djrichtextfield/', include('djrichtextfield.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL,document_root=settings.STATICFILES_DIRS)
