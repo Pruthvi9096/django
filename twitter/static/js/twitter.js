@@ -5,7 +5,7 @@ $(document).ready(function () {
             target = $(el).attr('data-target')
             follower = $(el).attr('data-follower')
             $.ajax({
-                url:`follow/${target}/${follower}`,
+                url:`/follow/${target}/${follower}`,
                 data:'',
                 success:function(response){
                     if(response['is_followed']){
@@ -22,7 +22,7 @@ $(document).ready(function () {
             target = $(el).attr('data-target')
             follower = $(el).attr('data-follower')
             $.ajax({
-                url:`unfollow/${target}/${follower}`,
+                url:`/unfollow/${target}/${follower}`,
                 data:'',
                 success:function(response){
                     if(response['is_unfollowed']){

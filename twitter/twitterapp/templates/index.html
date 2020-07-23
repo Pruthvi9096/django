@@ -42,7 +42,20 @@
             </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-feed" role="tabpanel" aria-labelledby="pills-feed-tab"><h3>Feed</h3></div>
+            <div class="tab-pane fade show active" id="pills-feed" role="tabpanel" aria-labelledby="pills-feed-tab">
+              <h3>Feed</h3>
+              {% for post in feed_posts %}
+                <div class="card mb-2">
+                  <div class="card-header">
+                    {{post.title}}
+                      <a style="float: right;" href="{% url 'visit-profile' post.author.id %}">{{post.author.user.username}}</a>
+                  </div>
+                  <div class="card-body">
+                    {{post.content|safe}}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
             <div class="tab-pane fade" id="pills-explore" role="tabpanel" aria-labelledby="pills-explore-tab">
                 <h5>People may you know</h5>
                 {% for p in explore_profiles %}

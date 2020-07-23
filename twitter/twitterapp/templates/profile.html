@@ -1,0 +1,51 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
+<div class="row mt-3">
+
+    <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+            {% if profile.profile_image%}
+            <img src="{{profile.profile_image.url}}" class="avatar" alt="...">
+            {% else %}
+            <img src="http://www.gravatar.com/avatar/?d=identicon" class="avatar" alt="...">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{profile.user.username}}</h5>
+                <p class="card-text text-muted">
+                {% if profile %}
+                  {{profile.bio}}
+                </p>
+                {% endif %}
+            </div>
+            <!-- <div style="display: inline-block;"> -->
+                <button id="unfollow-{{profile.user.id}}" class="btn btn-outline-danger unfollow" {% if request.user not in profile.get_followers %}style="display:none;"{%endif%} data-target="{{profile.user.id}}" data-follower="{{request.user.id}}">Unfollow</button>
+                <button id="follow-{{profile.user.id}}" class="btn btn-outline-info follow" {% if request.user in profile.get_followers %}style="display:none;"{%endif%} data-target="{{profile.user.id}}" data-follower="{{request.user.id}}">Follow</button>
+            <!-- </div> -->
+          </div>
+    </div>
+    <div class="col-md-7 mx-auto">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="pills-feed-tab" data-toggle="pill" href="#pills-feed" role="tab" aria-controls="pills-feed" aria-selected="true">Posts</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-feed" role="tabpanel" aria-labelledby="pills-feed-tab">
+              <h3>Feed</h3>
+              {% for post in posts %}
+                <div class="card mb-2">
+                  <div class="card-header">
+                    {{post.title}}
+                      <a style="float: right;" href="#">{{post.author.user.username}}</a>
+                  </div>
+                  <div class="card-body">
+                    {{post.content|safe}}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock%}

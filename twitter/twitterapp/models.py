@@ -19,8 +19,8 @@ class Profile(models.Model):
     profile_image = models.ImageField(upload_to='images/',null=True,blank=True)
     followers = models.ManyToManyField(Following,related_name='profiles')
 
-    def __unicode__(self):
-        return self.id
+    def __str__(self):
+        return self.user.username
     
     @property
     def get_followers(self):
@@ -28,7 +28,7 @@ class Profile(models.Model):
 
 
 class Post(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,null=True)
+    author = models.ForeignKey(Profile,on_delete=models.CASCADE,null=True)
     title = models.CharField(max_length=250,null=True)
     content = RichTextField()
     date_created = models.DateTimeField(auto_now_add=True)

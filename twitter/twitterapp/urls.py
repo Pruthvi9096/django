@@ -11,4 +11,5 @@ urlpatterns = [
     path('follow-check/<int:target>/<int:follower>/',views.follower_check_api_view,name='follow-check'),
     path('follow/<int:target>/<int:follower>/',views.follow_api_view,name='follow'),
     path('unfollow/<int:target>/<int:follower>/',views.unfollow_api_view,name='unfollow'),
+    path('visit_profile/<uuid:id>',views.profileDetailView,name='visit-profile')
 ]

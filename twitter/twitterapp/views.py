@@ -13,7 +13,14 @@ from django.db.models import Q
 def IndexView(request):
     profile = request.user.profile
     profiles = Profile.objects.exclude(id=profile.id)
-    return render(request,'index.html',{'profile':profile,'explore_profiles':profiles})
+    feed_posts = Post.objects.filter(
+        author__followers__follower=request.user) \
+        .order_by('-date_created')
+    print(feed_posts)
+    return render(request,'index.html',
+        {'profile':profile,
+        'explore_profiles':profiles,
+        'feed_posts':feed_posts})
 
 def RegisterView(request):
     form = UserCreationForm()
@@ -69,7 +76,7 @@ def createPostView(request):
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.user= request.user
+            post.author= request.user.profile
             post.save()
             return redirect('index')
     form = PostForm()
@@ -100,6 +107,11 @@ def unfollow_api_view(request,target,follower):
     dict = {'is_unfollowed':True}
     return JsonResponse(dict)
 
-    
-    
-    
+def profileDetailView(request,id):
+    profile = Profile.objects.get(id=id)
+    posts = profile.post_set.all()
+    context = {
+        'profile':profile,
+        'posts':posts
+    }
+    return render(request,'profile.html',context=context)
