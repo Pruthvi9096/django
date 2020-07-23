@@ -16,3 +16,8 @@
     border-bottom: 1px solid #ececec;
 
 }
+.box-element{
+	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+	background-color: #fff;
+    border-radius: 4px;
+}

@@ -1,56 +1,56 @@
 $(document).ready(function () {
-    $('.follow').each(function(index,el){
-        $(el).click(function(e){
+    $('.follow').each(function (index, el) {
+        $(el).click(function (e) {
             e.preventDefault()
             target = $(el).attr('data-target')
             follower = $(el).attr('data-follower')
             $.ajax({
-                url:`/follow/${target}/${follower}`,
-                data:'',
-                success:function(response){
-                    if(response['is_followed']){
-                        $(el).css({'display':'none'})
-                        $('#unfollow-'+target).css({'display':'block'});
+                url: `/follow/${target}/${follower}`,
+                data: '',
+                success: function (response) {
+                    if (response['is_followed']) {
+                        $(el).css({ 'display': 'none' })
+                        $('#unfollow-' + target).css({ 'display': 'block' });
                     }
                 }
             })
         })
     })
-    $('.unfollow').each(function(index,el){
-        $(el).click(function(e){
+    $('.unfollow').each(function (index, el) {
+        $(el).click(function (e) {
             e.preventDefault()
             target = $(el).attr('data-target')
             follower = $(el).attr('data-follower')
             $.ajax({
-                url:`/unfollow/${target}/${follower}`,
-                data:'',
-                success:function(response){
-                    if(response['is_unfollowed']){
-                        $(el).css({'display':'none'})
-                        $('#follow-'+target).css({'display':'block'});
+                url: `/unfollow/${target}/${follower}`,
+                data: '',
+                success: function (response) {
+                    if (response['is_unfollowed']) {
+                        $(el).css({ 'display': 'none' })
+                        $('#follow-' + target).css({ 'display': 'block' });
                     }
                 }
             })
         })
     })
-    $('.reply').click(function (e) { 
+    $('.reply').click(function (e) {
         e.preventDefault();
         var comment = this;
         var url = `/reply-to/${comment.id}/`
         $.ajax({
             url: url,
-            data:'',
-            success: function(response) {
+            data: '',
+            success: function (response) {
                 // $('#form').remove();
                 $('#comments').find('#commentForm').remove();
                 $(comment).after(response['form'])
                 $(comment).hide();
-                $('#commentForm').attr('action',url)
+                $('#commentForm').attr('action', url)
                 $('#comment-id').val(comment.id)
             }
         })
     });
-    $('.delete').click(function(e){
+    $('.delete').click(function (e) {
         e.preventDefault();
         var comment = this;
         var id = $(comment).attr('data-target')
@@ -58,9 +58,9 @@ $(document).ready(function () {
         var url = `/delete-comment/${id}`;
         $.ajax({
             url: url,
-            data:'',
-            success: function(response) {
-                if(response['deleted']){
+            data: '',
+            success: function (response) {
+                if (response['deleted']) {
                     $(comment).closest('.comment-body').remove();
                     // alert("Comment Deleted Successfully!")
                 }
@@ -68,4 +68,24 @@ $(document).ready(function () {
         })
 
     })
+    $('#search').keyup(function (e) {
+        var query = $(this).val()
+        if (query !== '' && query !== null && query !== undefined) {
+            $.ajax({
+                url: '/search-profile/',
+                data: { 'q': query },
+                success: function (response) {
+                    if (response['list']) {
+                        $('#results').html(response['list'])
+                    }
+                    else {
+                        $('#results').html('')
+                    }
+                }
+            })
+        }
+        else {
+            $('#results').html('')
+        }
+    });
 });

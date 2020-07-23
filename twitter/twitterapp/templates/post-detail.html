@@ -37,8 +37,7 @@
                         </p>
                         <p>{{ reply.comment }}</p>
                         {% if reply.user == request.user %}
-                        <span><a href="#" data-target="{{reply.id}}" class="delete"
-                                style="color:red">delete</a></span>
+                        <span><a href="#" data-target="{{reply.id}}" class="delete" style="color:red">delete</a></span>
                         {% else %}
                         <span><a href="#" id="{{comment.id}}" class="reply mx-1" style="color: blue;">reply</a></span>
                         {% endif %}
@@ -52,17 +51,17 @@
     </div>
     <br>
     <div style="width: 800px;margin: 0 auto;">
-            <form id="form" action="" method="post">
-                {% csrf_token%}
-                <div class="row">
-                    <div class="col-sm-10">
-                        {{form.comment}}    
-                    </div>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-sm btn-primary">Comment</button>
-                    </div>
+        <form id="form" action="" method="post">
+            {% csrf_token%}
+            <div class="row">
+                <div class="col-sm-10">
+                    {{form.comment}}
                 </div>
-            </form>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-sm btn-primary">Comment</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

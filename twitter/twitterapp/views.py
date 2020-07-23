@@ -153,3 +153,19 @@ def deleteComment_api_view(request,pk):
     comment = Comments.objects.get(pk=pk)
     comment.delete()
     return JsonResponse({'deleted':True})
+
+def searchView(request):
+    return render(request,'search.html',{})
+
+def search_api_view(request):
+    query = request.GET.get('q')
+    profiles = Profile.objects.filter(
+        Q(user__username__icontains=query) |
+        Q(user__first_name__icontains=query) |
+        Q(user__last_name__icontains=query)
+    )
+    context = {
+        'profiles':profiles
+    }
+    listItems = render_to_string('profile_list.html',context=context,request=request)
+    return JsonResponse({'list':listItems})
