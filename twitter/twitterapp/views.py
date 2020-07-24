@@ -163,9 +163,48 @@ def search_api_view(request):
         Q(user__username__icontains=query) |
         Q(user__first_name__icontains=query) |
         Q(user__last_name__icontains=query)
-    )
+    ).exclude(user=request.user)
     context = {
         'profiles':profiles
     }
     listItems = render_to_string('profile_list.html',context=context,request=request)
     return JsonResponse({'list':listItems})
+
+def get_followers_list_api_view(request,id):
+    profile = Profile.objects.get(id=id)
+    if profile.user == request.user or profile.mode == 'public':
+
+        users = Following.objects.filter(target=profile.user)
+        followers = [line.follower.profile for line in users]
+        context = {
+            'followers':followers
+        }
+        follower_list = render_to_string('follower_list.html',context=context,request=request)
+        return JsonResponse({'followers':follower_list})
+    else:
+        return JsonResponse({'followers':False})
+
+def get_following_list_api_view(request,id):
+    profile = Profile.objects.get(id=id)
+    if profile.user == request.user or profile.mode == 'public':
+        users = Following.objects.filter(follower=profile.user)
+        followings = [line.target.profile for line in users]
+        context = {
+            'followers':followings
+        }
+        following_list = render_to_string('follower_list.html',context=context,request=request)
+        return JsonResponse({'followings':following_list})
+    else:
+        return JsonResponse({'followings':False})
+
+def get_post_list_api_view(request,id):
+    profile = Profile.objects.get(id=id)
+    if profile.user == request.user or profile.mode == 'public':
+        posts = profile.post_set.all()
+        context = {
+            'posts':posts
+        }
+        post_list = render_to_string('post_list.html',context=context,request=request)
+        return JsonResponse({'posts':post_list})
+    else:
+        return JsonResponse({'posts':False})  

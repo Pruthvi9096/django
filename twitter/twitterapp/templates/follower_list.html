@@ -1,0 +1,25 @@
+{% for follower in followers %}
+<div style="padding: 2%;">
+    <h4 id="feed-title"></h4>
+    <div class="profile-row" onclick="window.parent.location='{% url 'visit-profile' follower.id %}'">
+        <div style="flex:1">
+        {% if follower.profile_image%}
+        <img style="width: 50%;height: 50%;" src="{{follower.profile_image.url}}" alt="..." class="avatar">
+        {% else %}
+        <img style="width: 50%;height: 50%;" src="http://www.gravatar.com/avatar/?d=identicon" class="avatar"
+            alt="...">
+        {% endif %}
+        </div>
+        <div style="flex:1"><strong>{{follower.user.username}}</strong></div>
+        <div style="flex:1"><strong>{{follower.user.first_name}} {{follower.user.last_name}}</strong></div>
+        <div style="flex:1">
+        <button id="unfollow-{{follower.user.id}}" class="btn btn-outline-danger unfollow"
+            {% if request.user not in follower.get_followers %}style="display:none;" {%endif%} data-target="{{follower.user.id}}"
+            data-follower="{{request.user.id}}">Unfollow</button>
+        <button id="follow-{{follower.user.id}}" class="btn btn-outline-info follow"
+            {% if request.user in follower.get_followers %}style="display:none;" {%endif%} data-target="{{follower.user.id}}"
+            data-follower="{{request.user.id}}">Follow</button>
+        </div>
+    </div>
+</div>
+{% endfor %}

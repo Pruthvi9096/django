@@ -88,4 +88,49 @@ $(document).ready(function () {
             $('#results').html('')
         }
     });
+    $('#followers').click(function(e){
+        e.preventDefault();
+        profileId = $('#followers').attr('data-profile')
+        console.log(profileId)
+        $.ajax({
+            url:`/followers/${profileId}`,
+            data:'',
+            success: function(response) {
+                if(response['followers']){
+                    $('#feed-content').html(response['followers'])
+                    $('#feed-title').text("Followers")
+                }
+            }
+        })
+    })
+    $('#followings').click(function(e){
+        e.preventDefault();
+        profileId = $('#followings').attr('data-profile')
+        console.log(profileId)
+        $.ajax({
+            url:`/followings/${profileId}`,
+            data:'',
+            success: function(response) {
+                if(response['followings']){
+                    $('#feed-content').html(response['followings'])
+                    $('#feed-title').text("Followings")
+                }
+            }
+        })
+    })
+    $('#posts').click(function(e){
+        e.preventDefault();
+        profileId = $('#posts').attr('data-profile')
+        console.log(profileId)
+        $.ajax({
+            url:`/posts/${profileId}`,
+            data:'',
+            success: function(response) {
+                if(response['posts']){
+                    $('#feed-content').html(response['posts'])
+                    $('#feed-title').text("Posts")
+                }
+            }
+        })
+    })
 });

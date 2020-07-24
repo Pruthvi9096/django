@@ -9,7 +9,7 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('bio', 'location', 'birth_date','profile_image')
+        fields = ('bio', 'location', 'birth_date','profile_image','mode')
 
 class PostForm(forms.ModelForm):
     class Meta:

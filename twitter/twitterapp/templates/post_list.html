@@ -1,0 +1,11 @@
+{% for post in posts %}
+<div class="card mb-2">
+    <div class="card-header">
+        {{post.title}}
+        <a style="float: right;" href="{% url 'visit-profile' post.author.id %}">{{post.author.user.username}}</a>
+    </div>
+    <div class="card-body" onclick="location.href='{% url 'post-detail' post.id %}'">
+        {{post.content|safe}}
+    </div>
+</div>
+{% endfor %}

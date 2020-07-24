@@ -26,13 +26,13 @@
         </p>
         {% endif %}
         <div style="display: flex;">
-          <div style="flex:3">
+          <div id="followers" data-profile="{{profile.id}}" style="flex:3">
             <h6 class="text-center"><b>{{profile.follower_count}}<p>Followers</p></b></h6>
           </div>
-          <div style="flex:3">
+          <div id="followings" data-profile="{{profile.id}}" style="flex:3">
             <h6 class="text-center"><b>{{profile.following_count}}<p>Following</p></b></h6>
           </div>
-          <div style="flex:3">
+          <div id="posts" data-profile="{{profile.id}}" style="flex:3">
             <h6 class="text-center"><b>{{profile.post_count}}<p>Posts</p></b></h6>
           </div>
         </div>
@@ -42,7 +42,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-7 mx-auto box-element" style="height:max-content;">
+  <div id="feed-content" class="col-md-7 mx-auto box-element" style="height:max-content;">
     <ul class="nav nav-pills mt-3 mb-3" id="pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
         <a class="nav-link active" id="pills-feed-tab" data-toggle="pill" href="#pills-feed" role="tab"
@@ -59,21 +59,34 @@
     <div class="tab-content" id="pills-tabContent">
       <div class="tab-pane fade show active" id="pills-feed" role="tabpanel" aria-labelledby="pills-feed-tab">
         <h3>Feed</h3>
-        {% for post in feed_posts %}
-        <div class="card mb-2">
-          <div class="card-header">
-            {{post.title}}
-            <a style="float: right;" href="{% url 'visit-profile' post.author.id %}">{{post.author.user.username}}</a>
-          </div>
-          <div class="card-body" onclick="location.href='{% url 'post-detail' post.id %}'">
-            {{post.content|safe}}
-          </div>
-        </div>
-        {% endfor %}
+        {% include 'post_list.html' with posts=feed_posts %}
       </div>
       <div class="tab-pane fade" id="pills-explore" role="tabpanel" aria-labelledby="pills-explore-tab">
         <h5>People may you know</h5>
-        {% include 'profile_list.html' with profiles=explore_profiles%}
+        {% for p in explore_profiles %}
+            <div class="profile-row" onclick="window.parent.location='{% url 'visit-profile' p.id %}'">
+                <div style="flex:1">
+                {% if p.profile_image%}
+                <img style="width: 50%;height: 50%;" src="{{p.profile_image.url}}" alt="..." class="avatar">
+                {% else %}
+                <img style="width: 50%;height: 50%;" src="http://www.gravatar.com/avatar/?d=identicon" class="avatar"
+                    alt="...">
+                {% endif %}
+                </div>
+                <div style="flex:1"><strong>{{p.user.username}}</strong></div>
+                <div style="flex:1"><strong>{{p.user.first_name}} {{p.user.last_name}}</strong></div>
+                <div style="flex:1">
+                {% if p.user != request.user %}
+                <button id="unfollow-{{p.user.id}}" class="btn btn-outline-danger unfollow"
+                    {% if request.user not in p.get_followers %}style="display:none;" {%endif%} data-target="{{p.user.id}}"
+                    data-follower="{{request.user.id}}">Unfollow</button>
+                <button id="follow-{{p.user.id}}" class="btn btn-outline-info follow"
+                    {% if request.user in p.get_followers %}style="display:none;" {%endif%} data-target="{{p.user.id}}"
+                    data-follower="{{request.user.id}}">Follow</button>
+                  {% endif %}
+                </div>
+            </div>
+        {% endfor %}
       </div>
     </div>
   </div>

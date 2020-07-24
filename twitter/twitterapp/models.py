@@ -18,6 +18,7 @@ class Profile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     profile_image = models.ImageField(upload_to='images/',null=True,blank=True)
     followers = models.ManyToManyField(Following,related_name='profiles')
+    mode = models.CharField(max_length=50,choices=[('public','Public'),('private','Private')],default='public')
 
     def __str__(self):
         return self.user.username
@@ -65,3 +66,17 @@ def create_user_profile(sender,instance,created,**kwargs):
 @receiver(post_save,sender=User)
 def save_user_profile(sender,instance,**kwargs):
     instance.profile.save()
+
+class People(models.Model):
+    name = models.CharField(max_length=255)
+
+    def save(self,*args,**kwargs):
+        if People.objects.count() > 1:
+            return False
+        else:
+            super(People,self).save(*args,**kwargs)
+
+class Rating(models.Model):
+    people = models.ForeignKey(People, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField() # rating from 1-10
+    rated_by = models.ForeignKey(User, on_delete=models.CASCADE)
