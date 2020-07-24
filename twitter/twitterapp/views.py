@@ -13,8 +13,8 @@ from django.template.loader import render_to_string
 @login_required(login_url='login')
 def IndexView(request):
     profile = request.user.profile
-    profiles = Profile.objects.exclude(id=profile.id)
-    feed_posts = Post.objects.filter(
+    profiles = Profile.objects.select_related('user').exclude(id=profile.id)
+    feed_posts = Post.objects.select_related('author').filter(
         author__followers__follower=request.user) \
         .order_by('-date_created')
     return render(request,'index.html',
@@ -91,7 +91,7 @@ def follower_check_api_view(request,target,follower):
     return JsonResponse(dict)
 
 def follow_api_view(request,target,follower):
-    user = User.objects.get(id=target)
+    user = User.objects.select_related('profile').get(id=target)
     profile = user.profile
     following = Following.objects.create(target_id=target,follower_id=follower)
     profile.followers.add(following)
@@ -99,7 +99,7 @@ def follow_api_view(request,target,follower):
     return JsonResponse(dict)
 
 def unfollow_api_view(request,target,follower):
-    user = User.objects.get(id=target)
+    user = User.objects.select_related('profile').get(id=target)
     profile = user.profile
     following = Following.objects.filter(target_id=target,follower_id=follower).first()
     profile.followers.remove(following)
@@ -108,7 +108,7 @@ def unfollow_api_view(request,target,follower):
     return JsonResponse(dict)
 
 def profileDetailView(request,id):
-    profile = Profile.objects.get(id=id)
+    profile = Profile.objects.select_related('user').get(id=id)
     posts = profile.post_set.all()
     context = {
         'profile':profile,
@@ -185,7 +185,7 @@ def get_followers_list_api_view(request,id):
         return JsonResponse({'followers':False})
 
 def get_following_list_api_view(request,id):
-    profile = Profile.objects.get(id=id)
+    profile = Profile.objects.select_related('user').get(id=id)
     if profile.user == request.user or profile.mode == 'public':
         users = Following.objects.filter(follower=profile.user)
         followings = [line.target.profile for line in users]
@@ -198,7 +198,7 @@ def get_following_list_api_view(request,id):
         return JsonResponse({'followings':False})
 
 def get_post_list_api_view(request,id):
-    profile = Profile.objects.get(id=id)
+    profile = Profile.objects.select_related('user').get(id=id)
     if profile.user == request.user or profile.mode == 'public':
         posts = profile.post_set.all()
         context = {
