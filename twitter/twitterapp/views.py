@@ -207,4 +207,4 @@ def get_post_list_api_view(request,id):
         post_list = render_to_string('post_list.html',context=context,request=request)
         return JsonResponse({'posts':post_list})
     else:
-        return JsonResponse({'posts':False})  
+        return JsonResponse({'posts':False})

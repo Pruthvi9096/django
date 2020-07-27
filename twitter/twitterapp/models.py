@@ -66,11 +66,3 @@ def create_user_profile(sender,instance,created,**kwargs):
 @receiver(post_save,sender=User)
 def save_user_profile(sender,instance,**kwargs):
     instance.profile.save()
-
-class Product(models.Model):
-    title = models.CharField(max_length=200)
-
-class Order(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.CASCADE,null=True)
-    cost = models.FloatField(null=True,max_length=20)
-    qty = models.IntegerField(null=True)

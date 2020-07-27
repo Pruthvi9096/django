@@ -1,5 +1,6 @@
 from django import forms
 from .models import Profile,User,Post,Comments
+from django.forms.models import inlineformset_factory
 
 class UserForm(forms.ModelForm):
     class Meta:

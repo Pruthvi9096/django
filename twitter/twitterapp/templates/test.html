@@ -1,0 +1,7 @@
+{% extends 'main.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+    {% for form in formset %}
+        {{form|crispy}}
+    {% endfor %}
+{% endblock %}
