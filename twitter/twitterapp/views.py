@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from django.template.loader import render_to_string
+from django.views.generic import DetailView
+from django.views.generic.edit import FormMixin
 
 @login_required(login_url='login')
 def IndexView(request):
@@ -115,6 +117,40 @@ def profileDetailView(request,id):
         'posts':posts
     }
     return render(request,'profile.html',context=context)
+
+class PostDetailViewCls(FormMixin,DetailView):
+    model = Post
+    # queryset = Post.objects.get(pk=pk)
+    template_name = 'post-detail.html'
+    form_class = CommentForm
+
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.object.id})
+
+    def get_context_data(self,*args,**kwargs):
+        context = super(PostDetailViewCls,self).get_context_data(*args,**kwargs)
+        comments = self.get_object().comments_set.filter(parent_comment__isnull=True).order_by('-date_created')
+        form = CommentForm()
+        context['comments'] = comments
+        context['form'] = form
+        return context
+    
+    def post(self,request,*args,**kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+    
+    def form_valid(self,form):
+        comment = form.save(commit=False)
+        comment.post = self.get_object()
+        comment.user = self.request.user
+        comment.save()
+        return super(PostDetailViewCls,self).form_valid(form)
+
+    
 
 def postDetailView(request,pk):
     post = Post.objects.get(pk=pk)
