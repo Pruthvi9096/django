@@ -26,5 +26,5 @@ class ProfileDetailUpdateDeleteView(RetrieveUpdateAPIView):
     lookup_url_kwarg = 'id'
 
 class PostListCreateView(ListCreateAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-date_created')
     serializer_class = PostSerializer

@@ -11,6 +11,24 @@ class FollowingSerializer(serializers.ModelSerializer):
         model = Following
         fields = '__all__'
 
+class ParentCommentSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(source='user',queryset=User.objects.all(),write_only=True)
+    post_id = serializers.PrimaryKeyRelatedField(source='post',queryset=Post.objects.all(),write_only=True)
+    user = serializers.CharField(read_only=True,source='user.username')
+    class Meta:
+        model = Comments
+        fields = ('comment','user','user_id','post_id')
+
+class CommentSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(source='user',queryset=User.objects.all(),write_only=True)
+    post_id = serializers.PrimaryKeyRelatedField(source='post',queryset=Post.objects.all(),write_only=True)
+    user = serializers.CharField(read_only=True,source='user.username')
+    comments_set = ParentCommentSerializer(many=True, read_only=True)
+    class Meta:
+        model = Comments
+        fields = ('comment','user','user_id','post_id','comments_set')
+    
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
@@ -26,7 +44,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         return super(ProfileSerializer,self).update(instance=instance,validated_data=validated_data)
 
 class PostSerializer(serializers.ModelSerializer):
+    author_id = serializers.PrimaryKeyRelatedField(source='author',queryset=Profile.objects.all(),write_only=True)
     author = serializers.ReadOnlyField(source='author.user.username')
+    comments_set = CommentSerializer(many=True,read_only=True)
     class Meta:
         model = Post
-        fields = ('author','title','content')
+        fields = ('author','author_id','title','content','comments_set')
+    
+
