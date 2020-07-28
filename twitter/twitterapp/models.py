@@ -69,8 +69,6 @@ def save_user_profile(sender,instance,**kwargs):
 
 class Main(models.Model):
     name = models.CharField(default=None, max_length=200, blank=True, null=True)
-    # [...]
-
 
 class Attribute(models.Model):
     main = models.ForeignKey('Main', on_delete=models.CASCADE, related_name='attrs')

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     'ajax_select',
     'djrichtextfield',
-    'twitter',
+    # 'twitter',
     #=========== Api =========-#
     'rest_framework'
 ]

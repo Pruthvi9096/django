@@ -22,7 +22,7 @@ from ajax_select import urls as ajax_select_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('account.urls')),
-    path('twitter/',include('twitter.urls')),
+    # path('twitter/',include('twitter.urls')),
     path('api/',include('account.api.urls')),
     path('ajax_select/', include(ajax_select_urls)),
     path('djrichtextfield/', include('djrichtextfield.urls'))
