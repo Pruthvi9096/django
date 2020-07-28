@@ -1,14 +1,12 @@
 from django.urls import path
 from .views import (
-    mainListCreateView,
-    mainDetailUpdateDeleteView,
-    attributeListCreateView,
-    attributeDetailUpdateDeleteView,
+    ProfileListApiView,
+    ProfileDetailUpdateDeleteView,
+    PostListCreateView
 )
 
 urlpatterns = [
-    path('mains',mainListCreateView.as_view()),
-    path('mains/<int:pk>/',mainDetailUpdateDeleteView.as_view()),
-    path('attributes/',attributeListCreateView.as_view()),
-    path('attributes/<int:pk>/',attributeDetailUpdateDeleteView.as_view()),
+    path('profiles/',ProfileListApiView.as_view()),
+    path('profiles/<uuid:id>/',ProfileDetailUpdateDeleteView.as_view()),
+    path('posts/',PostListCreateView.as_view())
 ]
