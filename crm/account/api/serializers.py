@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from account.models import Customer,Product,Order,Category,Tag
-from rest_framework.serializers import SerializerMethodField
+from rest_framework.serializers import SerializerMethodField,PrimaryKeyRelatedField
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,8 +18,10 @@ class TagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(required=False, read_only=True)
-    tags = TagSerializer(many=True, required=False, read_only=True)
+    category = CategorySerializer(read_only=True)
+    category_id = PrimaryKeyRelatedField(source='category',queryset=Category.objects.all(),write_only=True)
+    tags = TagSerializer(many=True,read_only=True)
+    tag_ids = PrimaryKeyRelatedField(source='tags',queryset=Category.objects.all(),write_only=True,many=True)
     class Meta:
         model = Product
         fields = '__all__'

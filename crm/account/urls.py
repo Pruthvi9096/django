@@ -15,5 +15,5 @@ urlpatterns = [
    path('products/',views.ProductListView.as_view(),name='product-list'),
    path('products/create/',views.ProductCreateView.as_view(),name='product-create'),
    path('category-products/',views.category_product_api_view,name='category-products'),
-   path('tag-products/',views.tag_product_api_view,name='tag-products')
+   path('tag-products/',views.tag_product_api_view,name='tag-products'),
 ]

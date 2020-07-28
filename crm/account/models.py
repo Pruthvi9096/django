@@ -53,3 +53,19 @@ class Order(models.Model):
     
     def __str__(self):
         return '{}-{}'.format(self.customer.name,self.product.name) or ''
+
+class Leave(models.Model):
+    Leave_ID = models.CharField(max_length=5, primary_key=True,default=" ")
+    Employee_Name = models.ForeignKey('Customer',models.DO_NOTHING)
+    
+    m = (
+        ("January","January"),("February","February"),("March","March"),("April","April"),("May","May"),("June","June"),("July","July"),("August","August"),("September","September"),("October","October"),("November","November"),("December","december")
+    )
+    Month = models.CharField(max_length=10, choices= m)
+
+
+    def __str__(self):
+        return str(self.Employee_Name)
+    
+    def get_print(val):
+        return 'print'+str(val)

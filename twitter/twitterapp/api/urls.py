@@ -10,5 +10,5 @@ urlpatterns = [
     path('mains',mainListCreateView.as_view()),
     path('mains/<int:pk>/',mainDetailUpdateDeleteView.as_view()),
     path('attributes/',attributeListCreateView.as_view()),
-    path('attributes/',attributeDetailUpdateDeleteView.as_view()),
+    path('attributes/<int:pk>/',attributeDetailUpdateDeleteView.as_view()),
 ]

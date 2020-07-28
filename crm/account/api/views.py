@@ -8,6 +8,9 @@ from rest_framework import status
 from django.shortcuts import render,get_object_or_404
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.filters import SearchFilter
+from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
+from rest_framework import mixins
 
 
 class productListCreateView(ListCreateAPIView):
@@ -95,3 +98,11 @@ class OrderRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 def game(request):
     return render(request,'fourdots.html',{})
+
+class HealthDetailView(viewsets.GenericViewSet,mixins.UpdateModelMixin,mixins.RetrieveModelMixin,mixins.DestroyModelMixin):
+    serializer_class=ProductSerializer
+    queryset=Product.objects.all()
+    permission_classes =[]
+    authentication_classes=[]
+    lookup_field='id'
+    

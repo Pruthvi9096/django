@@ -1,5 +1,5 @@
 from rest_framework import views
-from .serializers import MainSerializer,AttributeSerializer,AttributeGetSerializer
+from .serializers import MainSerializer,AttributeSerializer
 from ..models import Attribute,Main
 from rest_framework.response import Response
 from django.http import JsonResponse

@@ -8,14 +8,7 @@ class MainSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
     main = MainSerializer(read_only=True)
-    main_id = serializers.PrimaryKeyRelatedField(source='main',  queryset=Main.objects.all(), write_only=True)
+    main_id = serializers.PrimaryKeyRelatedField(source='main',queryset=Main.objects.all(), write_only=True)
     class Meta:
         model = Attribute
         fields = '__all__'
-        
-
-class AttributeGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Attribute
-        fields = '__all__'
-        depth = 2
