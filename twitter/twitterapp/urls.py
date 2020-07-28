@@ -19,5 +19,5 @@ urlpatterns = [
     path('search-profile/',views.search_api_view),
     path('followers/<uuid:id>/',views.get_followers_list_api_view),
     path('followings/<uuid:id>/',views.get_following_list_api_view),
-    path('posts/<uuid:id>/',views.get_post_list_api_view)
+    path('posts/<uuid:id>/',views.get_post_list_api_view),
 ]

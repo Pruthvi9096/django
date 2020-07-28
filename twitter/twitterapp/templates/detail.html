@@ -1,0 +1,19 @@
+<div class="col-md-3 px-0" id="course-content-box">
+    <div class="py-2 px-3 bg-lgrey">
+        <h5> Course Content <i class="mx-2 fas fa-plus" id="toggleCourse"></i></h5>
+    </div>
+    <div id="content-box">
+        <ul class="content-holder">
+         {% for i in j %}
+            <a href="/detail/{{i.topic}}/{{i.id}}">
+                <li class="content-holder-item">
+                    {{i.id}}. &nbsp; {{i.material_name}}
+                    <div class="mx-3">
+                        <i class="far fa-play-circle"></i> Free YouTube Video
+                    </div>
+                </li>
+            </a>
+         {% endfor %}
+    </ul>
+    </div>
+    </div>

@@ -66,3 +66,13 @@ def create_user_profile(sender,instance,created,**kwargs):
 @receiver(post_save,sender=User)
 def save_user_profile(sender,instance,**kwargs):
     instance.profile.save()
+
+class Main(models.Model):
+    name = models.CharField(default=None, max_length=200, blank=True, null=True)
+    # [...]
+
+
+class Attribute(models.Model):
+    main = models.ForeignKey('Main', on_delete=models.CASCADE, related_name='attrs')
+    code = models.CharField(max_length=50, null=True)
+    value = models.CharField(max_length=50, null=True)
