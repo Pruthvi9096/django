@@ -28,6 +28,14 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comments
         fields = ('comment','user','user_id','post_id','comments_set')
     
+    def get_fields(self, *args, **kwargs):
+        fields = super(CommentSerializer, self).get_fields(*args, **kwargs)
+        request = self.context.get('request')
+        if request.method == 'PUT':
+            fields['user_id'].read_only = True
+            fields['post_id'].read_only = True
+        return fields
+    
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -50,5 +58,12 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('author','author_id','title','content','comments_set')
+    
+    def get_fields(self, *args, **kwargs):
+        fields = super(PostSerializer, self).get_fields(*args, **kwargs)
+        request = self.context.get('request', None)
+        if request and getattr(request, 'method', None) == "PUT":
+            fields['author_id'].read_only = True
+        return fields
     
 
