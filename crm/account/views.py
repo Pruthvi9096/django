@@ -97,33 +97,33 @@ def deleteOrder(request,id):
 
 
 def customerView(request, slug):
-    query = False
+    # query = False
     customer = Customer.objects.get(slug=slug)
     orders = customer.order_set.all().order_by("-date_ordered")
     order_count = orders.count()
-    if (
-        request.GET.get("product")
-        and request.GET.get("status")
-        and request.GET.get("start_date")
-        and request.GET.get("end_date")
-    ):
-        query = str(request.GET.urlencode())
+    # if (
+    #     request.GET.get("product")
+    #     and request.GET.get("status")
+    #     and request.GET.get("start_date")
+    #     and request.GET.get("end_date")
+    # ):
+    #     query = str(request.GET.urlencode())
     orderFilter = OrderFilter(request.GET, orders)
     orders = orderFilter.qs
-    page = request.GET.get("page")
-    paginator = Paginator(orders, 5)
-    try:
-        orders = paginator.page(page)
-    except PageNotAnInteger:
-        orders = paginator.page(1)
-    except EmptyPage:
-        orders = paginator.page(orders.num_pages)
+    # page = request.GET.get("page")
+    # paginator = Paginator(orders, 5)
+    # try:
+    #     orders = paginator.page(page)
+    # except PageNotAnInteger:
+    #     orders = paginator.page(1)
+    # except EmptyPage:
+    #     orders = paginator.page(orders.num_pages)
     context = {
         "customer": customer,
         "orders": orders,
         "order_count": order_count,
         "orderFilter": orderFilter,
-        "query": query,
+        # "query": query,
     }
     return render(request, "customer.html", context=context)
 

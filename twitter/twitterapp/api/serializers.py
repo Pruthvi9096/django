@@ -85,5 +85,4 @@ class PostSerializer(serializers.ModelSerializer):
         if request and getattr(request, 'method', None) == "PUT":
             fields['author_id'].read_only = True
         return fields
-    
 
