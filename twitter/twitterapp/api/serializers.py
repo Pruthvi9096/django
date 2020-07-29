@@ -87,3 +87,18 @@ class PostSerializer(serializers.ModelSerializer):
             fields['author_id'].read_only = True
         return fields
 
+class OnlyProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        exclude = ['followers',]
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    profile = OnlyProfileSerializer()
+    class Meta:
+        model = User
+        exclude = ['password',]
+
+class UserAuthenticationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'

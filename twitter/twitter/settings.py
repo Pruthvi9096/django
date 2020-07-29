@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'ajax_select',
     'djrichtextfield',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -141,3 +142,13 @@ DJRICHTEXTFIELD_CONFIG = {
         'width': 700
     }
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+               'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES':(
+                'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+# -X POST -H "Content-Type: application/json" -d '{"username": "pruthvi", "password": "pruthvi@1998"}' http://localhost:8000/api/token/

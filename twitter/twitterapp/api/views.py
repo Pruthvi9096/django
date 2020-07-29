@@ -10,6 +10,8 @@ from .serializers import (
     FollowingSerializer,
     GetFollowerSerializer,
     GetFollowingSerializer,
+    UserProfileSerializer,
+    UserAuthenticationSerializer
 )
 from ..models import Profile,Post,Comments,Following,User
 from rest_framework.response import Response
@@ -20,9 +22,15 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     RetrieveUpdateAPIView,
     CreateAPIView,
-    RetrieveDestroyAPIView
+    RetrieveDestroyAPIView,
+    RetrieveAPIView
     
 )
+from rest_framework import viewsets
+
+class UserAPIView(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
 
 class ProfileListApiView(generics.ListAPIView):
     queryset = Profile.objects.all()
@@ -107,3 +115,8 @@ def get_post_list_api_view(request,id):
         return Response(serializer.data,status=status.HTTP_200_OK)
     else:
         return Response({"message:Profile is private"},status=status.HTTP_200_OK)
+
+
+class userviewsets(viewsets.ModelViewSet): 
+	queryset = User.objects.all() 
+	serializer_class = UserAuthenticationSerializer 

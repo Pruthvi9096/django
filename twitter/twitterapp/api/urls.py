@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from .views import (
     ProfileListApiView,
     ProfileDetailUpdateDeleteView,
@@ -13,10 +13,23 @@ from .views import (
     get_followers_list_api_view,
     get_following_list_api_view,
     get_post_list_api_view,
+    UserAPIView,
+    userviewsets
     
 )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from rest_framework import routers
+from rest_framework.authtoken import views
+
+router = routers.DefaultRouter() 
+router.register('user', userviewsets, basename ='user_api')
 
 urlpatterns = [
+    path('',include(router.urls)),
+    path('api-token-auth/', views.obtain_auth_token, name='api-tokn-auth'),
     path('profiles/',ProfileListApiView.as_view()),
     path('profiles/<uuid:id>/',ProfileDetailUpdateDeleteView.as_view()),
     path('posts/',PostListCreateView.as_view()),
@@ -30,5 +43,8 @@ urlpatterns = [
     path('followerlist/<uuid:id>/',get_followers_list_api_view),
     path('followinglist/<uuid:id>/',get_following_list_api_view),
     path('postlist/<uuid:id>/',get_post_list_api_view),
+    path('user/<int:pk>/',UserAPIView.as_view()),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]
