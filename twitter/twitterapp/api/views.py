@@ -3,7 +3,8 @@ from rest_framework import generics
 from .serializers import (
     ProfileSerializer,
     PostSerializer,
-    CommentSerializer
+    CommentSerializer,
+    FollowingSerializer,
 )
 from ..models import Profile,Post,Comments,Following
 from rest_framework.response import Response
@@ -13,6 +14,8 @@ from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
     RetrieveUpdateAPIView,
+    CreateAPIView,
+    RetrieveDestroyAPIView
     
 )
 
@@ -37,3 +40,15 @@ class PostDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
 class CommentUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Comments.objects.all().order_by('-date_created')
     serializer_class = CommentSerializer
+
+class CommentCreateView(CreateAPIView):
+    queryset = Comments.objects.all().order_by('-date_created')
+    serializer_class = CommentSerializer
+
+class FollowingCreateView(CreateAPIView):
+    queryset = Following.objects.all()
+    serializer_class = FollowingSerializer
+
+class FollowingDeleteView(RetrieveDestroyAPIView):
+    queryset = Following.objects.all()
+    serializer_class = FollowingSerializer

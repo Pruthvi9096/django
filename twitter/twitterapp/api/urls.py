@@ -4,7 +4,10 @@ from .views import (
     ProfileDetailUpdateDeleteView,
     PostListCreateView,
     PostDetailUpdateDeleteView,
-    CommentUpdateDeleteView
+    CommentUpdateDeleteView,
+    CommentCreateView,
+    FollowingCreateView,
+    FollowingDeleteView
 )
 
 urlpatterns = [
@@ -12,5 +15,8 @@ urlpatterns = [
     path('profiles/<uuid:id>/',ProfileDetailUpdateDeleteView.as_view()),
     path('posts/',PostListCreateView.as_view()),
     path('posts/<int:pk>/',PostDetailUpdateDeleteView.as_view()),
-    path('comments/<int:pk>/',CommentUpdateDeleteView.as_view())
+    path('comments/<int:pk>/',CommentUpdateDeleteView.as_view()),
+    path('comments/',CommentCreateView.as_view()),
+    path('following/',FollowingCreateView.as_view()),
+    path('following/<int:pk>/',FollowingDeleteView.as_view())
 ]
