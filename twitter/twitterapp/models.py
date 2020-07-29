@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 import uuid
 from djrichtextfield.models import RichTextField
-
+from datetime import datetime
 
 class Following(models.Model):
     target = models.ForeignKey(User,on_delete=models.CASCADE,related_name='followers')

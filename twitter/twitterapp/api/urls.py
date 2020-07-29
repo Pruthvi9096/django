@@ -11,7 +11,9 @@ from .views import (
     follow_api_view,
     unfollow_api_view,
     get_followers_list_api_view,
-    get_following_list_api_view
+    get_following_list_api_view,
+    get_post_list_api_view,
+    
 )
 
 urlpatterns = [
@@ -26,5 +28,7 @@ urlpatterns = [
     path('follow/<int:target>/<int:follower>/',follow_api_view),
     path('unfollow/<int:target>/<int:follower>/',unfollow_api_view),
     path('followerlist/<uuid:id>/',get_followers_list_api_view),
-    path('followinglist/<uuid:id>/',get_following_list_api_view)
+    path('followinglist/<uuid:id>/',get_following_list_api_view),
+    path('postlist/<uuid:id>/',get_post_list_api_view),
+
 ]

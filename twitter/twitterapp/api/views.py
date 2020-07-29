@@ -97,3 +97,13 @@ def get_following_list_api_view(request,id):
         return Response(serializer.data,status=status.HTTP_200_OK)
     else:
         return Response({"message:Profile is private"},status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_post_list_api_view(request,id):
+    profile = Profile.objects.select_related('user').get(id=id)
+    if profile.user == request.user or profile.mode == 'public':
+        posts = profile.post_set.all()
+        serializer = PostSerializer(posts,many=True,context={'request':request})
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    else:
+        return Response({"message:Profile is private"},status=status.HTTP_200_OK)

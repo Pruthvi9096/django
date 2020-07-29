@@ -2,9 +2,10 @@ from rest_framework import serializers
 from ..models import Profile,Post,Following,Comments,User
 
 class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(read_only=True)
     class Meta:
         model = User
-        fields = ('first_name','last_name','email')
+        fields = ('username','first_name','last_name','email')
 
 class FollowingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,8 +51,8 @@ class CommentSerializer(serializers.ModelSerializer):
     
     def get_fields(self, *args, **kwargs):
         fields = super(CommentSerializer, self).get_fields(*args, **kwargs)
-        request = self.context.get('request')
-        if request.method == 'PUT':
+        request = self.context.get('request', None)
+        if request and getattr(request, 'method', None) == "PUT":
             fields['user_id'].read_only = True
             fields['post_id'].read_only = True
         return fields
@@ -61,7 +62,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Profile
-        exclude = ['followers']
+        exclude = ['followers',]
 
     def update(self,instance,validated_data):
         user_data = dict(validated_data.pop('user'))
