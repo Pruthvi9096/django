@@ -1,11 +1,15 @@
 from rest_framework import views
 from rest_framework import generics
 from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser
+from django.http import JsonResponse
 from .serializers import (
     ProfileSerializer,
     PostSerializer,
     CommentSerializer,
     FollowingSerializer,
+    GetFollowerSerializer,
+    GetFollowingSerializer,
 )
 from ..models import Profile,Post,Comments,Following,User
 from rest_framework.response import Response
@@ -71,3 +75,25 @@ def unfollow_api_view(request,target,follower):
     if following and profile.followers.filter(id=following.id).exists():
         profile.followers.remove(following)
     return Response({"message:Follower removed"},status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_followers_list_api_view(request,id):
+    profile = Profile.objects.get(id=id)
+    if profile.user == request.user or profile.mode == 'public':
+
+        users = Following.objects.filter(target=profile.user)
+        serializer = GetFollowerSerializer(users,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    else:
+        return Response({"message:Profile is private"},status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_following_list_api_view(request,id):
+    profile = Profile.objects.get(id=id)
+    if profile.user == request.user or profile.mode == 'public':
+
+        users = Following.objects.filter(follower=profile.user)
+        serializer = GetFollowingSerializer(users,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    else:
+        return Response({"message:Profile is private"},status=status.HTTP_200_OK)

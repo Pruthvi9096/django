@@ -18,6 +18,18 @@ class FollowingSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Self Following is not allowed!")
         return super(FollowingSerializer,self).validate(validated_data)
 
+class GetFollowerSerializer(serializers.ModelSerializer):
+    followers = UserSerializer(read_only=True,source='follower')
+    class Meta:
+        model = Following
+        fields = ('followers',)
+
+class GetFollowingSerializer(serializers.ModelSerializer):
+    followings = UserSerializer(read_only=True,source='target')
+    class Meta:
+        model = Following
+        fields = ('followings',)
+
 class ParentCommentSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(source='user',queryset=User.objects.all(),write_only=True)
     post_id = serializers.PrimaryKeyRelatedField(source='post',queryset=Post.objects.all(),write_only=True)
