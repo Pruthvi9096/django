@@ -1,12 +1,13 @@
 from rest_framework import views
 from rest_framework import generics
+from rest_framework.decorators import api_view
 from .serializers import (
     ProfileSerializer,
     PostSerializer,
     CommentSerializer,
     FollowingSerializer,
 )
-from ..models import Profile,Post,Comments,Following
+from ..models import Profile,Post,Comments,Following,User
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
@@ -52,3 +53,21 @@ class FollowingCreateView(CreateAPIView):
 class FollowingDeleteView(RetrieveDestroyAPIView):
     queryset = Following.objects.all()
     serializer_class = FollowingSerializer
+
+@api_view(['GET'])
+def follow_api_view(request,target,follower):
+    user = User.objects.select_related('profile').get(id=target)
+    profile = user.profile
+    following,created = Following.objects.get_or_create(target_id=target,follower_id=follower)
+    if not profile.followers.filter(id=following.id).exists():
+        profile.followers.add(following)
+    return Response({"message:Follower added"},status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def unfollow_api_view(request,target,follower):
+    user = User.objects.select_related('profile').get(id=target)
+    profile = user.profile
+    following = Following.objects.filter(target_id=target,follower_id=follower).first()
+    if following and profile.followers.filter(id=following.id).exists():
+        profile.followers.remove(following)
+    return Response({"message:Follower removed"},status=status.HTTP_200_OK)
