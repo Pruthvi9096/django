@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from ..models import Profile,Post,Following,Comments,User
+from ..models import Profile,Post,Following,Comments
+from django.contrib.auth import get_user_model
+from rest_framework.serializers import CharField,EmailField
+from django.db.models import Q
+from rest_framework.authtoken.models import Token
+
+User  = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(read_only=True)
@@ -98,7 +104,75 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         exclude = ['password',]
 
-class UserAuthenticationSerializer(serializers.ModelSerializer):
+class UserLoginSerializer(serializers.ModelSerializer):
+    token = CharField(allow_blank=True,read_only=True)
+    username = CharField(required=False,allow_blank=True)
+    email = EmailField(label="Email Address",required=False,allow_blank=True)
+
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            'username',
+            'email',
+            'password',
+            'token',
+            )
+        extra_kwargs = {
+            'password':{'write_only':True}
+        }
+    
+    def validate(self,data):
+        user_obj = None
+        username = data.get('username',None)
+        email = data.get('email',None)
+        password = data.get('password')
+
+        if not username and not email:
+            raise serializers.ValidationError("Username Or Email is Required")
+        user = User.objects.filter(
+            Q(email=email)|
+            Q(username=username)
+        ).distinct()
+        user = user.exclude(email__isnull=True).exclude(email__iexact='')
+        print(user.exists(),user.count())
+        if user.exists() and user.count() == 1:
+            user_obj = user.first()
+        else:
+            raise serializers.ValidationError("Username/Email Doesn't valid")
+        if user_obj:
+            if not user_obj.check_password(password):
+                raise serializers.ValidationError("Incorrect Password!")
+        data['token'] = Token.objects.filter(user=user_obj).first().key
+        return data
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    password2 = CharField(write_only=True,required=True)
+    class Meta:
+        model = User
+        fields = ('username','email','password','password2')
+        extra_kwargs = {
+            'password':{'write_only':True},
+            # 'password2':{'write_only':True}
+        }
+
+    def validate(self,data):
+        email = data.get('email')
+        password = data.get('password')
+        password2 = data.get('password2')
+        user_qs = User.objects.filter(email=email)
+        if user_qs.exists():
+            raise serializers.ValidationError("Email is already registered")
+        if password != password2:
+            raise serializers.ValidationError("Password doesn't match with previous password")
+        return data
+
+
+    def create(self,validated_data):
+        username = validated_data.get('username')
+        email = validated_data.get('email')
+        password = validated_data.get('password')
+        user_obj = User(username=username,email=email)
+        user_obj.set_password(password)
+        user_obj.save()
+        print(validated_data)
+        return validated_data

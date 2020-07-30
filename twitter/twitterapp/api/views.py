@@ -1,6 +1,6 @@
 from rest_framework import views
 from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,APIView
 from rest_framework.parsers import JSONParser
 from django.http import JsonResponse
 from .serializers import (
@@ -11,7 +11,8 @@ from .serializers import (
     GetFollowerSerializer,
     GetFollowingSerializer,
     UserProfileSerializer,
-    UserAuthenticationSerializer
+    UserCreateSerializer,
+    UserLoginSerializer,
 )
 from ..models import Profile,Post,Comments,Following,User
 from rest_framework.response import Response
@@ -26,7 +27,24 @@ from rest_framework.generics import (
     RetrieveAPIView
     
 )
-from rest_framework import viewsets
+from rest_framework.permissions import AllowAny
+
+class UserRegistrationView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    serializer_class = UserCreateSerializer
+
+class UserLoginView(APIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserLoginSerializer
+
+    def post(self,request,*args,**kwargs):
+        data = request.data
+        serializer = UserLoginSerializer(data=data)
+        if serializer.is_valid():
+            new_data = serializer.data
+            return Response(new_data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class UserAPIView(RetrieveAPIView):
     queryset = User.objects.all()
@@ -115,8 +133,3 @@ def get_post_list_api_view(request,id):
         return Response(serializer.data,status=status.HTTP_200_OK)
     else:
         return Response({"message:Profile is private"},status=status.HTTP_200_OK)
-
-
-class userviewsets(viewsets.ModelViewSet): 
-	queryset = User.objects.all() 
-	serializer_class = UserAuthenticationSerializer 
