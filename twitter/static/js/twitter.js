@@ -1,4 +1,21 @@
 $(document).ready(function () {
+    $.ajax({
+        type : "GET",
+        url : "/api/profiles/",
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        // data : JSON.stringify({username:'pruthvi',password:'pruthvi@1998'}),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Token fcee93025475e4a15f29bf0c16f41faec949681e',
+          },
+        success: function(response){
+            console.log(response)
+          },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
+          }
+        });
     $('.follow').each(function (index, el) {
         $(el).click(function (e) {
             e.preventDefault()

@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(read_only=True)
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email')
+        fields = ('id','username','first_name','last_name','email')
 
 class FollowingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,7 +43,7 @@ class ParentCommentSerializer(serializers.ModelSerializer):
     user = serializers.CharField(read_only=True,source='user.username')
     class Meta:
         model = Comments
-        fields = ('comment','user','user_id','post_id')
+        fields = ('id','comment','user','user_id','post_id')
 
 class CommentSerializer(serializers.ModelSerializer):
     user_id = serializers.PrimaryKeyRelatedField(source='user',queryset=User.objects.all(),write_only=True)
@@ -53,7 +53,7 @@ class CommentSerializer(serializers.ModelSerializer):
     comments_set = ParentCommentSerializer(many=True, read_only=True)
     class Meta:
         model = Comments
-        fields = ('comment','user','user_id','post_id','comments_set','parent_comment_id')
+        fields = ('id','comment','user','user_id','post_id','comments_set','parent_comment_id')
     
     def get_fields(self, *args, **kwargs):
         fields = super(CommentSerializer, self).get_fields(*args, **kwargs)
@@ -84,7 +84,7 @@ class PostSerializer(serializers.ModelSerializer):
     comments_set = CommentSerializer(many=True,read_only=True)
     class Meta:
         model = Post
-        fields = ('author','author_id','title','content','comments_set')
+        fields = ('id','author','author_id','title','content','comments_set')
     
     def get_fields(self, *args, **kwargs):
         fields = super(PostSerializer, self).get_fields(*args, **kwargs)
@@ -134,7 +134,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
             Q(username=username)
         ).distinct()
         user = user.exclude(email__isnull=True).exclude(email__iexact='')
-        print(user.exists(),user.count())
         if user.exists() and user.count() == 1:
             user_obj = user.first()
         else:
@@ -174,5 +173,4 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user_obj = User(username=username,email=email)
         user_obj.set_password(password)
         user_obj.save()
-        print(validated_data)
         return validated_data

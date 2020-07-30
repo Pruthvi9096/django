@@ -55,7 +55,7 @@ class UserAPIView(RetrieveAPIView):
     serializer_class = UserProfileSerializer
 
 class ProfileListApiView(generics.ListAPIView):
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.all().order_by('user_id')
     serializer_class = ProfileSerializer
     pagination_class = CustomPagination
     filter_backends = [SearchFilter]
