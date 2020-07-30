@@ -153,4 +153,4 @@ REST_FRAMEWORK = {
 }
 # -X POST -H "Content-Type: application/json" -d '{"username": "pruthvi", "password": "pruthvi@1998"}' http://localhost:8000/api/token/
 #http POST http://localhost:8000/api/api-token-auth/ username='pruthvi' password="pruthvi@1998"
-#http http://localhost:8000/api/profiles/ "Authorization: Token fcee93025475e4a15f29bf0c16f41faec949681e"
+#http http://localhost:8000/api/followerlist/475a019f-4ddf-4b76-9072-9d872e39ea06 "Authorization: Token fcee93025475e4a15f29bf0c16f41faec949681e"

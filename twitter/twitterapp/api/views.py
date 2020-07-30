@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import views
 from rest_framework import generics
 from rest_framework.decorators import api_view,APIView,permission_classes
@@ -30,6 +31,7 @@ from rest_framework.generics import (
 from rest_framework.permissions import AllowAny
 from .paginations import CustomPagination
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.filters import SearchFilter,OrderingFilter
 
 class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
@@ -56,6 +58,8 @@ class ProfileListApiView(generics.ListAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     pagination_class = CustomPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['user__username','user__first_name','user__last_name','user__email']
 
 class ProfileDetailUpdateDeleteView(RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
@@ -67,6 +71,9 @@ class PostListCreateView(ListCreateAPIView):
     queryset = Post.objects.all().order_by('-date_created')
     serializer_class = PostSerializer
     pagination_class = CustomPagination
+    filter_backends = [SearchFilter]
+    search_fields = ['title','content','author__user__username',
+        'author__user__first_name','author__user__last_name','date_created']
 
 class PostDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all().order_by('-date_created')
@@ -108,11 +115,18 @@ def unfollow_api_view(request,target,follower):
 
 @api_view(['GET'])
 def get_followers_list_api_view(request,id):
+    query = request.GET.get('search',False)
     profile = Profile.objects.get(id=id)
     if profile.user == request.user or profile.mode == 'public':
         paginator = PageNumberPagination()
         paginator.page_size = 10
         users = Following.objects.filter(target=profile.user)
+        if query:
+            users = users.filter(
+                Q(follower__username__icontains=query) |
+                Q(follower__first_name__icontains=query) |
+                Q(follower__last_name__icontains=query) 
+            )
         result_page = paginator.paginate_queryset(users, request)
         serializer = GetFollowerSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
@@ -121,11 +135,18 @@ def get_followers_list_api_view(request,id):
 
 @api_view(['GET'])
 def get_following_list_api_view(request,id):
+    query = request.GET.get('search',False)
     profile = Profile.objects.get(id=id)
     if profile.user == request.user or profile.mode == 'public':
         paginator = PageNumberPagination()
         paginator.page_size = 10
         users = Following.objects.filter(follower=profile.user)
+        if query:
+            users = users.filter(
+                Q(target__username__icontains=query) |
+                Q(target__first_name__icontains=query) |
+                Q(target__last_name__icontains=query) 
+            )
         result_page = paginator.paginate_queryset(users, request)
         serializer = GetFollowingSerializer(result_page,many=True)
         return paginator.get_paginated_response(serializer.data)
@@ -134,11 +155,20 @@ def get_following_list_api_view(request,id):
 
 @api_view(['GET'])
 def get_post_list_api_view(request,id):
+    query = request.GET.get('search',False)
     profile = Profile.objects.select_related('user').get(id=id)
     if profile.user == request.user or profile.mode == 'public':
         paginator = PageNumberPagination()
         paginator.page_size = 10
         posts = profile.post_set.all()
+        if query:
+            posts = posts.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(author__user__username__icontains=query) |
+                Q(author__user__first_name__icontains=query) |
+                Q(author__user__last_name__icontains=query) 
+            )
         result_page = paginator.paginate_queryset(posts, request)
         serializer = PostSerializer(result_page,many=True,context={'request':request})
         return paginator.get_paginated_response(serializer.data)
