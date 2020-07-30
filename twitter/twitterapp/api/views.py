@@ -1,6 +1,6 @@
 from rest_framework import views
 from rest_framework import generics
-from rest_framework.decorators import api_view,APIView
+from rest_framework.decorators import api_view,APIView,permission_classes
 from rest_framework.parsers import JSONParser
 from django.http import JsonResponse
 from .serializers import (
@@ -28,6 +28,8 @@ from rest_framework.generics import (
     
 )
 from rest_framework.permissions import AllowAny
+from .paginations import CustomPagination
+from rest_framework.pagination import PageNumberPagination
 
 class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
@@ -53,6 +55,7 @@ class UserAPIView(RetrieveAPIView):
 class ProfileListApiView(generics.ListAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    pagination_class = CustomPagination
 
 class ProfileDetailUpdateDeleteView(RetrieveUpdateAPIView):
     queryset = Profile.objects.all()
@@ -63,6 +66,7 @@ class ProfileDetailUpdateDeleteView(RetrieveUpdateAPIView):
 class PostListCreateView(ListCreateAPIView):
     queryset = Post.objects.all().order_by('-date_created')
     serializer_class = PostSerializer
+    pagination_class = CustomPagination
 
 class PostDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all().order_by('-date_created')
@@ -106,10 +110,12 @@ def unfollow_api_view(request,target,follower):
 def get_followers_list_api_view(request,id):
     profile = Profile.objects.get(id=id)
     if profile.user == request.user or profile.mode == 'public':
-
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         users = Following.objects.filter(target=profile.user)
-        serializer = GetFollowerSerializer(users,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        result_page = paginator.paginate_queryset(users, request)
+        serializer = GetFollowerSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     else:
         return Response({"message:Profile is private"},status=status.HTTP_200_OK)
 
@@ -117,10 +123,12 @@ def get_followers_list_api_view(request,id):
 def get_following_list_api_view(request,id):
     profile = Profile.objects.get(id=id)
     if profile.user == request.user or profile.mode == 'public':
-
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         users = Following.objects.filter(follower=profile.user)
-        serializer = GetFollowingSerializer(users,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        result_page = paginator.paginate_queryset(users, request)
+        serializer = GetFollowingSerializer(result_page,many=True)
+        return paginator.get_paginated_response(serializer.data)
     else:
         return Response({"message:Profile is private"},status=status.HTTP_200_OK)
 
@@ -128,8 +136,11 @@ def get_following_list_api_view(request,id):
 def get_post_list_api_view(request,id):
     profile = Profile.objects.select_related('user').get(id=id)
     if profile.user == request.user or profile.mode == 'public':
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         posts = profile.post_set.all()
-        serializer = PostSerializer(posts,many=True,context={'request':request})
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        result_page = paginator.paginate_queryset(posts, request)
+        serializer = PostSerializer(result_page,many=True,context={'request':request})
+        return paginator.get_paginated_response(serializer.data)
     else:
         return Response({"message:Profile is private"},status=status.HTTP_200_OK)
