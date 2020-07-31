@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Profile,Post,Following,Comments
+from ..models import Profile,Post,Following,Comments,Member,Group,Membership
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import CharField,EmailField
 from django.db.models import Q
@@ -174,3 +174,23 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user_obj.set_password(password)
         user_obj.save()
         return validated_data
+
+class MembershipSerializer(serializers.HyperlinkedModelSerializer):
+
+    id = serializers.ReadOnlyField(source='group.id')
+    name = serializers.ReadOnlyField(source='group.name')
+
+    class Meta:
+        model = Membership
+        fields = ('id', 'name', 'join_date', )
+
+class MemberSerializer(serializers.ModelSerializer):
+    groups = MembershipSerializer(source='membership_set', many=True)
+    class Meta:
+        model = Member
+        fields = '__all__'
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'

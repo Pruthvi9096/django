@@ -1,7 +1,9 @@
 {% extends 'main.html' %}
 {% block content %}
 {% load crispy_forms_tags %}
-    {% for form in formset %}
-        {{form|crispy}}
+    {% for Profile in profile %}
+        {% for f in Profile.followers.all %}
+            {{f.target.username}}-{{f.follower.username}}
+        {% endfor %}
     {% endfor %}
 {% endblock %}
