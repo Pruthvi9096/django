@@ -6,6 +6,15 @@ import uuid
 from djrichtextfield.models import RichTextField
 from datetime import datetime
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
 class Following(models.Model):
     target = models.ForeignKey(User,on_delete=models.CASCADE,related_name='followers')
     follower = models.ForeignKey(User,on_delete=models.CASCADE, related_name='targets')
