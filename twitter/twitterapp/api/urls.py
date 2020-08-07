@@ -17,7 +17,8 @@ from .views import (
     UserLoginView,
     UserRegistrationView,
     MemberViewSet,
-    GroupViewSet
+    GroupViewSet,
+    ProfileViewSet
     
 )
 # from rest_framework_simplejwt.views import (
@@ -29,11 +30,14 @@ router = routers.DefaultRouter()
 router.register('group', GroupViewSet, basename='group')
 router2 = routers.DefaultRouter()
 router2.register('member', MemberViewSet, basename='member')
+profile_router = routers.DefaultRouter()
+profile_router.register('profile',ProfileViewSet,basename='profile')
 from rest_framework.authtoken import views
 
 urlpatterns = [
     path('',include(router.urls)),
     path('',include(router2.urls)),
+    path('',include(profile_router.urls)),
     path('login/',UserLoginView.as_view(),name='login'),
     path('register/',UserRegistrationView.as_view(),name='register'),
     path('api-token-auth/', views.obtain_auth_token, name='api-tokn-auth'),

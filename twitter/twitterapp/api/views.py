@@ -15,7 +15,8 @@ from .serializers import (
     UserCreateSerializer,
     UserLoginSerializer,
     MemberSerializer,
-    GroupSerializer
+    GroupSerializer,
+    OnlyProfileSerializer
 )
 from ..models import Profile,Post,Comments,Following,User,Member,Group
 from rest_framework.response import Response
@@ -35,6 +36,19 @@ from rest_framework.permissions import AllowAny
 from .paginations import CustomPagination
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.filters import SearchFilter,OrderingFilter
+from rest_framework import viewsets
+from rest_framework.decorators import action
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = OnlyProfileSerializer
+    queryset = Profile.objects.all()
+    permission_classes = [AllowAny]
+
+    @action(detail=True,url_path='posts',url_name="profile-posts")
+    def posts(self,request,*args,**kwargs):
+        queryset = self.get_object().post_set.all()
+        serializer = PostSerializer(queryset,many=True)
+        return Response(serializer.data)
 
 class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
