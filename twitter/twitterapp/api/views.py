@@ -49,6 +49,12 @@ class ProfileViewSet(viewsets.ModelViewSet):
         queryset = self.get_object().post_set.all()
         serializer = PostSerializer(queryset,many=True)
         return Response(serializer.data)
+    
+    @action(detail=True,url_path='posts/(?P<post_pk>[^/.]+)/comments',url_name='post-commets')
+    def comments(self,request,*args,**kwargs):
+        queryset = Comments.objects.filter(post_id=self.kwargs.get('post_pk'))
+        serializer = CommentSerializer(queryset,many=True)
+        return Response(serializer.data)
 
 class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
