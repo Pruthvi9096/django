@@ -96,3 +96,12 @@ class Membership(models.Model):
 
     def __str__(self):
         return self.member.name
+
+class Event(models.Model):
+    name = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+
+class Usage(models.Model):
+    name = models.CharField(max_length=255)
+    usage_datetime = models.DateTimeField(auto_now_add=True)
