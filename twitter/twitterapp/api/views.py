@@ -14,11 +14,9 @@ from .serializers import (
     UserProfileSerializer,
     UserCreateSerializer,
     UserLoginSerializer,
-    MemberSerializer,
-    GroupSerializer,
     OnlyProfileSerializer
 )
-from ..models import Profile,Post,Comments,Following,User,Member,Group
+from ..models import Profile,Post,Comments,Following,User
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
@@ -197,13 +195,3 @@ def get_post_list_api_view(request,id):
         return paginator.get_paginated_response(serializer.data)
     else:
         return Response({"message:Profile is private"},status=status.HTTP_200_OK)
-
-class MemberViewSet(viewsets.ModelViewSet):
-    queryset = Member.objects.all()
-    serializer_class = MemberSerializer
-    permission_classes = [AllowAny]
-
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [AllowAny]

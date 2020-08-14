@@ -16,8 +16,6 @@ from .views import (
     UserAPIView,
     UserLoginView,
     UserRegistrationView,
-    MemberViewSet,
-    GroupViewSet,
     ProfileViewSet
     
 )
@@ -26,20 +24,14 @@ from .views import (
 #     TokenRefreshView,
 # )
 from rest_framework import routers
-router = routers.DefaultRouter()
-router.register('group', GroupViewSet, basename='group')
-router2 = routers.DefaultRouter()
-router2.register('member', MemberViewSet, basename='member')
 profile_router = routers.DefaultRouter()
 profile_router.register('profile',ProfileViewSet,basename='profile')
 from rest_framework.authtoken import views
 
 urlpatterns = [
-    path('',include(router.urls)),
-    path('',include(router2.urls)),
     path('',include(profile_router.urls)),
-    path('login/',UserLoginView.as_view(),name='login'),
-    path('register/',UserRegistrationView.as_view(),name='register'),
+    path('login/',UserLoginView.as_view(),name='api-login'),
+    path('register/',UserRegistrationView.as_view(),name='api-register'),
     path('api-token-auth/', views.obtain_auth_token, name='api-tokn-auth'),
     path('profiles/',ProfileListApiView.as_view()),
     path('profiles/<uuid:id>/',ProfileDetailUpdateDeleteView.as_view()),

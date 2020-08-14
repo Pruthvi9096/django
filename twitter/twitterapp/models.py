@@ -75,33 +75,3 @@ def create_user_profile(sender,instance,created,**kwargs):
 @receiver(post_save,sender=User)
 def save_user_profile(sender,instance,**kwargs):
     instance.profile.save()
-
-class Member(models.Model):
-    name = models.CharField(max_length = 20)
-    groups = models.ManyToManyField('Group', through = 'Membership')
-
-    def __str__(self):
-        return self.name
-
-class Group(models.Model):
-    name = models.CharField(max_length = 20)
-
-    def __str__(self):
-        return self.name
-
-class Membership(models.Model):
-    member = models.ForeignKey('Member',on_delete=models.CASCADE)
-    group = models.ForeignKey('Group',on_delete=models.CASCADE)
-    join_date = models.DateTimeField(null=True)
-
-    def __str__(self):
-        return self.member.name
-
-class Event(models.Model):
-    name = models.CharField(max_length=255)
-    created = models.DateTimeField(auto_now_add=True, editable=False)
-    last_updated = models.DateTimeField(auto_now=True, editable=False)
-
-class Usage(models.Model):
-    name = models.CharField(max_length=255)
-    usage_datetime = models.DateTimeField(auto_now_add=True)
