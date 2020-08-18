@@ -20,4 +20,5 @@ urlpatterns = [
     path('followers/<uuid:id>/',views.get_followers_list_api_view),
     path('followings/<uuid:id>/',views.get_following_list_api_view),
     path('posts/<uuid:id>/',views.get_post_list_api_view),
+    path('like/<int:id>/',views.get_likes_api_view),
 ]

@@ -2,19 +2,21 @@
 <div class="card mb-2">
     <div class="card-header">
         {{post.title}}
-        <a style="float: right;" href="{% url 'visit-profile' post.author.id %}">{{post.author.user.username}}</a>
+        <a style="float: right;" href="{% url 'visit-profile' post.author.id %}">
+            {{post.author.user.username}}
+        </a>
     </div>
     <div class="card-body" onclick="location.href='{% url 'post-detail' post.id %}'">
         {{post.content|safe}}
     </div>
     <div>
-        <span class="mx-2">
-            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-            {{post.like_count}}
+        <span class="mx-2 like-x" data-postId="{{post.id}}">
+            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+            <span id="likes-count">{{post.like_count}}</span>
         </span>
-        <span class="mx-2">
-            <i class="fa fa-comment" aria-hidden="true"></i>
-            {{post.comment_count}}
+        <span class="mx-2 comment-x" data-postId="{{post.id}}">
+            <i class="fa fa-comment-o" aria-hidden="true"></i>
+            <span id="comments-count">{{post.comment_count}}</span>
         </span>
     </div>
 </div>

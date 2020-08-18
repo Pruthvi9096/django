@@ -1,6 +1,6 @@
 from django.urls import reverse
 from django.shortcuts import render,redirect
-from .models import Profile,User,Following,Post,Comments
+from .models import Profile,User,Following,Post,Comments,Like
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib import messages
@@ -244,3 +244,14 @@ def get_post_list_api_view(request,id):
         return JsonResponse({'posts':post_list})
     else:
         return JsonResponse({'posts':False})
+
+def get_likes_api_view(request,id):
+    post = Post.objects.get(id=id)
+    dict = {}
+    l = Like.objects.filter(post=post,user=request.user)
+    if l.exists():
+        l.delete()
+    else:
+        Like.objects.create(post=post,user=request.user)
+    dict['likes'] = post.like_set.all().count()
+    return JsonResponse(dict)

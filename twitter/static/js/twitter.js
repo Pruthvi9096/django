@@ -150,4 +150,19 @@ $(document).ready(function () {
             }
         })
     })
+    $('.like-x').click(function(e){
+        e.preventDefault();
+        postId = $(this).attr('data-postId')
+        var url = `/like/${postId}`;
+        $.ajax({
+            url:url,
+            data:'',
+            success: function(response){
+                $('#likes-count').text(response['likes'])
+                $('.fa-thumbs-o-up').toggleClass('like')
+            }
+        })
+        
+
+    })
 });
