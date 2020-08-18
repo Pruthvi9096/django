@@ -9,6 +9,7 @@ from datetime import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.db.models import Count,Q
 
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -58,6 +59,25 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @property
+    def comment_count(self):
+        return Post.objects.filter(id=self.id).aggregate(
+            comment_count = Count('comments',filter=(
+                Q(comments__parent_comment=None)
+                ))
+            )['comment_count']
+
+    @property
+    def like_count(self):
+        return Post.objects.filter(id=self.id).aggregate(
+            likes_count = Count('like')
+        )['likes_count']
+
+class Like(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    post = models.ForeignKey(Post,on_delete=models.CASCADE,null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
 
 class Comments(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
