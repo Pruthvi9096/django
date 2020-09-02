@@ -95,3 +95,17 @@ def create_user_profile(sender,instance,created,**kwargs):
 @receiver(post_save,sender=User)
 def save_user_profile(sender,instance,**kwargs):
     instance.profile.save()
+
+class AccountsInsightsHourly(models.Model):
+    account_id = models.CharField(max_length=32, blank=True, null=True)
+    spend = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    date = models.IntegerField(blank=True, null=True)
+    hour = models.IntegerField(blank=True, null=True)
+    created_time = models.DateTimeField(blank=True, null=True)
+
+class Author (models.Model):
+    name = models.CharField(max_length=32, blank=True, null=True)
+
+class Book (models.Model):
+    author_id = models.ForeignKey('Author',on_delete=models.CASCADE,null=True)
+    book_name = models.CharField(max_length=32, blank=True, null=True)

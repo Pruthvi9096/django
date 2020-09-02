@@ -8,7 +8,8 @@ from rest_framework.authtoken.models import Token
 User  = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(read_only=True)
+    username = serializers.CharField(
+        read_only=True)
     class Meta:
         model = User
         fields = ('id','username','first_name','last_name','email')
@@ -38,18 +39,25 @@ class GetFollowingSerializer(serializers.ModelSerializer):
         fields = ('followings',)
 
 class ParentCommentSerializer(serializers.ModelSerializer):
-    user_id = serializers.PrimaryKeyRelatedField(source='user',queryset=User.objects.all(),write_only=True)
-    post_id = serializers.PrimaryKeyRelatedField(source='post',queryset=Post.objects.all(),write_only=True)
-    user = serializers.CharField(read_only=True,source='user.username')
+    user_id = serializers.PrimaryKeyRelatedField(
+        source='user',queryset=User.objects.all(),write_only=True)
+    post_id = serializers.PrimaryKeyRelatedField(
+        source='post',queryset=Post.objects.all(),write_only=True)
+    user = serializers.CharField(
+        read_only=True,source='user.username')
     class Meta:
         model = Comments
         fields = ('id','comment','user','user_id','post_id')
 
 class CommentSerializer(serializers.ModelSerializer):
-    user_id = serializers.PrimaryKeyRelatedField(source='user',queryset=User.objects.all(),write_only=True)
-    post_id = serializers.PrimaryKeyRelatedField(source='post',queryset=Post.objects.all(),write_only=True)
-    parent_comment_id = serializers.PrimaryKeyRelatedField(source='parent_comment',queryset=Comments.objects.all(),write_only=True)
-    user = serializers.CharField(read_only=True,source='user.username')
+    user_id = serializers.PrimaryKeyRelatedField(
+        source='user',queryset=User.objects.all(),write_only=True)
+    post_id = serializers.PrimaryKeyRelatedField(
+        source='post',queryset=Post.objects.all(),write_only=True)
+    parent_comment_id = serializers.PrimaryKeyRelatedField(
+        source='parent_comment',queryset=Comments.objects.all(),write_only=True)
+    user = serializers.CharField(
+        read_only=True,source='user.username')
     comments_set = ParentCommentSerializer(many=True, read_only=True)
     class Meta:
         model = Comments
@@ -79,7 +87,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         return super(ProfileSerializer,self).update(instance=instance,validated_data=validated_data)
 
 class PostSerializer(serializers.ModelSerializer):
-    author_id = serializers.PrimaryKeyRelatedField(source='author',queryset=Profile.objects.all(),write_only=True)
+    author_id = serializers.PrimaryKeyRelatedField(
+        source='author',queryset=Profile.objects.all(),write_only=True)
     author = serializers.ReadOnlyField(source='author.user.username')
     comments_set = CommentSerializer(many=True,read_only=True)
     class Meta:
