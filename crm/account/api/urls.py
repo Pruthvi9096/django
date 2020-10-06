@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (customerView,customerCreateView,game,getUpdateDeleteCustomer,productListCreateView,
-productView,productDetailView,OrderListCreateView,OrderRetrieveUpdateDestroyAPIView,HealthDetailView)
+productView,productDetailView,OrderListCreateView,OrderRetrieveUpdateDestroyAPIView,HealthDetailView,tagListCreateView)
 
 urlpatterns = [
     path('customers/',customerView,name='customers'),
@@ -12,6 +12,7 @@ urlpatterns = [
     path('orders/',OrderListCreateView.as_view()),
     path('order/<int:pk>/',OrderRetrieveUpdateDestroyAPIView.as_view()),
     path('game/',game,name='game'),
+    path('tags/',tagListCreateView.as_view()),
     path('health-detail/<int:id>/',HealthDetailView.as_view({
     'get': 'retrieve'}),name='health-detail')
 ]

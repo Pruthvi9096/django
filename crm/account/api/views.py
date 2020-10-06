@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view, renderer_classes, APIView
-from account.models import Customer, Product, Order
-from .serializers import CustomerSerializer, ProductSerializer, OrderSerializer
+from account.models import Customer, Product, Order, Tag
+from .serializers import CustomerSerializer, ProductSerializer, OrderSerializer,TagSerializer
 from rest_framework.response import Response
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
@@ -17,6 +17,9 @@ class productListCreateView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+class tagListCreateView(ListCreateAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
 
 @api_view(['GET', 'POST'])
 def productView(request):

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from .utils import unique_slug_generator
+from random import shuffle
 
 class Customer(models.Model):
     name = models.CharField(max_length=200,null=True)
@@ -67,5 +68,22 @@ class Leave(models.Model):
     def __str__(self):
         return str(self.Employee_Name)
     
-    def get_print(val):
+    def get_print(self,val):
         return 'print'+str(val)
+
+class Location(models.Model):
+    name = models.CharField(max_length=200)
+    country_name = models.CharField(max_length=200)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+
+
+class TrackingData(models.Model):
+    location = models.ForeignKey(Location,on_delete=models.CASCADE,null=True)
+
+class Galaxy(models.Model):
+    name = models.CharField(max_length=200)
+
+class Star(models.Model):
+    galaxy = models.ForeignKey(Galaxy, related_name='stars',on_delete=models.CASCADE,null=True)
+    type = models.CharField(max_length=200)
