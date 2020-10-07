@@ -5,7 +5,10 @@ from .models import (
     OpportunityTemplates,
     TemplateLineItems,
     LineItemType,
-    ChargeCategory
+    ChargeCategory,
+    Contact,
+    SaleProposal,
+    OrderLine
 )
 
 admin.site.register(Opportunity)
@@ -15,3 +18,6 @@ admin.site.register(OpportunityTemplates)
 admin.site.register(TemplateLineItems)
 admin.site.register(LineItemType)
 admin.site.register(ChargeCategory)
+admin.site.register(Contact)
+admin.site.register(SaleProposal)
+admin.site.register(OrderLine)

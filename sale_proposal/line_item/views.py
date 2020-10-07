@@ -1,9 +1,16 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Opportunity, Template, LineItem, OpportunityTemplates, TemplateLineItems
+from .models import (
+    Opportunity, Template,
+    LineItem, OpportunityTemplates, 
+    TemplateLineItems, SaleProposal
+)
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
-from .forms import OpportunityForm, TemplateForm, LineItemForm
+from .forms import (
+    OpportunityForm, TemplateForm,
+    LineItemForm, ProposalForm
+)
 from django.forms import inlineformset_factory
 from django.db.models import Count
 
@@ -97,3 +104,17 @@ class LineItemDetail(DetailView):
     model = LineItem
     template_name = 'frontend/line_item_detail.html'
     pk_url_kwarg = 'id'
+
+class ProposalsList(ListView):
+    model = SaleProposal
+    queryset = SaleProposal.objects.all()
+    template_name = 'frontend/proposals.html'
+
+class ProposalCreate(CreateView):
+    model = SaleProposal
+    queryset = SaleProposal.objects.all()
+    template_name = 'frontend/proposal_create.html'
+    form_class = ProposalForm
+
+    def get_success_url(self):
+        return reverse('proposals', kwargs={})

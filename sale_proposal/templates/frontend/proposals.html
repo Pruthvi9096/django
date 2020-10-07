@@ -1,0 +1,40 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    {% block page-heading %}
+    <h1 class="h3 mb-0 text-gray-800">Proposal</h1>
+    <a href="{% url 'proposal-create' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-download fa-sm text-white-50"></i> Create Proposal</a>
+    {% endblock %}
+</div>
+<a class="btn btn-light mb-2 mx-1 shadow" href="{% url 'index' %}">Back</a>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- Earnings (Monthly) Card Example -->
+    <table class="table table-stripped">
+        <thead>
+            <tr>
+                <th>For</th>
+                <th>Attention To</th>
+                <th>Created On</th>
+                <th>Created By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proposal in saleproposal_list %}
+            <tr>
+                <td>{{proposal.contact_for.name}}</td>
+                <td>{{proposal.attention_to.name}}</td>
+                <td>{{proposal.created_on}}</td>
+                <td>{{proposal.created_by}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
