@@ -33,7 +33,7 @@
                     <tr class='added-row'>
                         <td>{{form.template|add_class:"form-control"}}</td>
                         <td>{{form.charge_category|add_class:"form-control"}}</td>
-                        <td class="delete-line"></td>
+                        <td class="delete-line d-none" style="width: 1px;"></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -51,6 +51,10 @@
         $('#add_more').click(function (e) {
             e.preventDefault();
             cloneMore('.added-row:last', 'templates');
+        });
+        $('.delete-line').click(function (e){
+            e.preventDefault();
+            removeItem(this,'templates');
         });
     });
 </script>

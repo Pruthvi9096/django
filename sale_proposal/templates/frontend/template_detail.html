@@ -30,7 +30,7 @@
                     {% for form in formset.forms %}
                     <tr class='added-row'>
                         <td>{{form.line_item|add_class:"form-control"}}</td>
-                        <td class="delete-line"></td>
+                        <td class="delete-line d-none" style="width: 1px;"></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -49,6 +49,11 @@
             e.preventDefault();
             cloneMore('.added-row:last', 'line_items');
         });
+        $('.delete-line').click(function (e){
+            e.preventDefault();
+            removeItem(this,'line_items');
+        });
+        
     });
 </script>
 {% block javascript %}

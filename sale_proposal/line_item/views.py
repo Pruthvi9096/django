@@ -3,7 +3,7 @@ from django.urls import reverse
 from .models import Opportunity, Template, LineItem, OpportunityTemplates, TemplateLineItems
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
-from .forms import OpportunityForm, TemplateForm
+from .forms import OpportunityForm, TemplateForm, LineItemForm
 from django.forms import inlineformset_factory
 from django.db.models import Count
 
@@ -76,3 +76,24 @@ def template_detail_view(request, id):
             formset.save()
             return redirect(reverse('template-detail',kwargs={'id':template.id}))
     return render(request, 'frontend/template_detail.html', {'template': template, 'formset': formset})
+
+class LineItemView(ListView):
+    model = LineItem
+    queryset = LineItem.objects.all()
+    template_name = 'frontend/line_item.html'
+
+
+class LineItemCreate(CreateView):
+    model = LineItem
+    queryset = LineItem.objects.all()
+    template_name = 'frontend/line_create.html'
+    form_class = LineItemForm
+
+    def get_success_url(self):
+        return reverse('line_item', kwargs={})
+
+
+class LineItemDetail(DetailView):
+    model = LineItem
+    template_name = 'frontend/line_item_detail.html'
+    pk_url_kwarg = 'id'

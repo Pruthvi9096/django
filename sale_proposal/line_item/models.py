@@ -26,7 +26,7 @@ class LineItem(models.Model):
     sale_price = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     discount_allowed = models.BooleanField(default=False)
-    max_discount = models.DecimalField(max_digits=7, decimal_places=2)
+    max_discount = models.DecimalField(max_digits=7, decimal_places=2,blank=True)
     line_item_type = models.ForeignKey(LineItemType, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):

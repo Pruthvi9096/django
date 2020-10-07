@@ -8,5 +8,8 @@ urlpatterns = [
     path('opportunity/<int:id>/',views.opportunity_detail_view, name="opportunity-detail"),
     path('templates/',views.TemplateView.as_view(),name='template'),
     path('template/create/',views.TemplateCreate.as_view(),name='template-create'),
-    path('template/<int:id>/',views.template_detail_view, name="template-detail")
+    path('template/<int:id>/',views.template_detail_view, name="template-detail"),
+    path('line-item/',views.LineItemView.as_view(),name='line-item'),
+    path('line-item/create/',views.LineItemCreate.as_view(),name='line-create'),
+    path('line-item/<int:id>/',views.LineItemDetail.as_view(), name="line-item-detail")
 ]

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Opportunity,Template
+from .models import Opportunity,Template,LineItem
 
 class OpportunityForm(forms.ModelForm):
     class Meta:
@@ -9,4 +9,9 @@ class OpportunityForm(forms.ModelForm):
 class TemplateForm(forms.ModelForm):
     class Meta:
         model = Template
+        fields = '__all__'
+
+class LineItemForm(forms.ModelForm):
+    class Meta:
+        model = LineItem
         fields = '__all__'

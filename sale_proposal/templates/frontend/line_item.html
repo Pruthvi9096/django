@@ -1,0 +1,40 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    {% block page-heading %}
+    <h1 class="h3 mb-0 text-gray-800">Line Item</h1>
+    <a href="{% url 'line-create' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-download fa-sm text-white-50"></i> Create Line Item</a>
+    {% endblock %}
+</div>
+<a class="btn btn-light mb-2 mx-1 shadow" href="{% url 'index' %}">Back</a>
+
+<!-- Content Row -->
+<div class="row">
+    {% for line_item in lineitem_list %}
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2" onclick="window.parent.location='{% url 'line-item-detail' line_item.id%}'">
+            {% block primary-card %}
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">{{line_item.name}}
+                        </div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800">$ {{line_item.sale_price}}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
