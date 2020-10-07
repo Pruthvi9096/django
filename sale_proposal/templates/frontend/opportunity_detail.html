@@ -1,0 +1,44 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="col-lg-10 p-20" style="font-size: small;">
+    <div class="card shadow p-3">
+        <h3>{{opportunity.name}}</h3>
+        <br>
+        <p><b>Opportunity ID: </b>{{opportunity.opportunity_id}}</p>
+        <br>
+        <h5>Templates</h5>
+        <form id="templates_form" action="" method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Template</th>
+                    <th>Charge Category</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for line in opportunity.templates.all %}
+                <tr>
+                    <td>{{line.template}}</td>
+                    <td>{{line.charge_category}}</td>
+                </tr>
+            {% endfor %}
+                {% csrf_token %}
+                {{formset.management_form}}
+                {% for form in formset.forms %}
+                <tr>
+                    <td>{{form.template}}</td>
+                    <td>{{form.charge_category}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            
+        </table>
+        <button type='submit' class='btn btn-success mx-1 shadow'>Add</button>
+    </form>
+    </div>
+
+</div>
+{% endblock %}

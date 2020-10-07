@@ -41,11 +41,12 @@ INSTALLED_APPS = [
     #====== Apps ======#
     'auth_user',
     'line_item',
-    'sale'
+    'sale',
 
     #====== 3rd Party ======#
+    'crispy_forms',
 ]
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
