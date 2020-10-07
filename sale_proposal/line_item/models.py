@@ -62,5 +62,5 @@ class OpportunityTemplates(models.Model):
 
 class TemplateLineItems(models.Model):
 
-    template = models.ForeignKey(Template,on_delete=models.CASCADE)
+    template = models.ForeignKey(Template,on_delete=models.CASCADE, related_name='line_items')
     line_item = models.ForeignKey(LineItem,on_delete=models.CASCADE)

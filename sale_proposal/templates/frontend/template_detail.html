@@ -6,33 +6,30 @@
 <a class="btn btn-outline-dark mb-2 mx-3" href="{{request.META.HTTP_REFERER|escape}}">Back</a>
 <div class="col-lg-10 p-20" style="font-size: small;">
     <div class="card shadow p-3">
-        <h3>{{opportunity.name}}</h3>
+        <h3>{{template.name}}</h3>
         <br>
-        <p><b>Opportunity ID: </b>{{opportunity.opportunity_id}}</p>
-        <p><b>Templates: </b>{{opportunity.template_count}}</p>
+        <p><b>Template ID: </b>{{template.template_id}}</p>
+        <p><b>Line Items: </b>{{template.line_count}}</p>
         <br>
         <h5>Templates</h5>
         <form id="templates_form" action="" method="post">
             <table class="table" id="dataTable">
                 <thead>
                     <tr>
-                        <th>Template</th>
-                        <th>Charge Category</th>
+                        <th>Line Item</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for line in opportunity.templates.all %}
+                    {% for line in template.line_items.all %}
                     <tr>
-                        <td>{{line.template}}</td>
-                        <td>{{line.charge_category}}</td>
+                        <td>{{line.line_item}}</td>
                     </tr>
                     {% endfor %}
                     {% csrf_token %}
                     {{formset.management_form}}
                     {% for form in formset.forms %}
                     <tr class='added-row'>
-                        <td>{{form.template|add_class:"form-control"}}</td>
-                        <td>{{form.charge_category|add_class:"form-control"}}</td>
+                        <td>{{form.line_item|add_class:"form-control"}}</td>
                         <td class="delete-line"></td>
                     </tr>
                     {% endfor %}
@@ -50,7 +47,7 @@
         $('tr:last').after('<button id="add_more" class="btn btn-link" style="text-decoration:none;">+ Add template</button>')
         $('#add_more').click(function (e) {
             e.preventDefault();
-            cloneMore('.added-row:last', 'templates');
+            cloneMore('.added-row:last', 'line_items');
         });
     });
 </script>

@@ -66,7 +66,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Setup Items:</h6>
             <a class="collapse-item" href="{% url 'opportunity' %}">Opportunity</a>
-            <a class="collapse-item" href="cards.html">Template</a>
+            <a class="collapse-item" href="{% url 'template' %}">Template</a>
             <a class="collapse-item" href="cards.html">Line Item</a>
           </div>
         </div>
@@ -400,10 +400,11 @@
   <!-- Page level plugins -->
   <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
 
+  {% block javascript %}
   <!-- Page level custom scripts -->
   <!-- <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
   <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script> -->
-
+  {% endblock %}
 </body>
 
 </html>
