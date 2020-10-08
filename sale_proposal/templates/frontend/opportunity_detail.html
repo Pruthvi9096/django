@@ -17,14 +17,14 @@
                 <thead>
                     <tr>
                         <th>Template</th>
-                        <th>Charge Category</th>
+                        <!-- <th>Charge Category</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     {% for line in opportunity.templates.all %}
                     <tr>
                         <td>{{line.template}}</td>
-                        <td>{{line.charge_category}}</td>
+                        <!-- <td>{{line.charge_category}}</td> -->
                     </tr>
                     {% endfor %}
                     {% csrf_token %}
@@ -32,7 +32,7 @@
                     {% for form in formset.forms %}
                     <tr class='added-row'>
                         <td>{{form.template|add_class:"form-control template_id"}}</td>
-                        <td>{{form.charge_category|add_class:"form-control category"}}</td>
+                        <!-- <td>{{form.charge_category|add_class:"form-control category"}}</td> -->
                         <td class="delete-line d-none" style="width: 1px;"></td>
                     </tr>
                     {% endfor %}

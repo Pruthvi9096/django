@@ -1,0 +1,36 @@
+<h5>Select Line Items</h5>
+<table class="table">
+    <thead class="bg-info" style="color: white;">
+        <tr>
+            <th>Select</th>
+            <th>Line Item</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in line_items %}
+        <tr class="line">
+            <td>
+                <label class="switch">
+                    <input type="checkbox" id="{{item.id}}">
+                    <span class="slider round"></span>
+                </label>
+            </td>
+            <td>{{item}}</td>
+            <td>{{item.sale_price}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <script>
+        $('.line').click(function (e) {
+            if ($(this).find('input').is(":checked")) {
+                $(this).find('input').prop({ 'checked': false });
+                $(this).removeClass('bg-outline-success').css({'color':'#858796'})
+            }
+            else {
+                $(this).find('input').prop({ 'checked': true });
+                $(this).addClass('bg-success').css({'color':'white'})
+            }
+        })
+    </script>
+</table>

@@ -74,8 +74,6 @@ class OpportunityTemplates(models.Model):
     opportunity = models.ForeignKey(
         Opportunity, on_delete=models.CASCADE, related_name='templates')
     template = models.ForeignKey(Template, on_delete=models.CASCADE)
-    charge_category = models.ForeignKey(
-        ChargeCategory, on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class TemplateLineItems(models.Model):
@@ -83,6 +81,8 @@ class TemplateLineItems(models.Model):
     template = models.ForeignKey(
         Template, on_delete=models.CASCADE, related_name='line_items')
     line_item = models.ForeignKey(LineItem, on_delete=models.CASCADE)
+    charge_category = models.ForeignKey(
+        ChargeCategory, on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class Contact(models.Model):

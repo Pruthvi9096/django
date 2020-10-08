@@ -42,7 +42,7 @@ def opportunity_detail_view(request, id):
     opportunity = Opportunity.objects.filter(id=id).annotate(
         template_count=Count('templates')).first()
     FormSet = inlineformset_factory(
-        Opportunity, OpportunityTemplates, fields=("template", "charge_category"), extra=1
+        Opportunity, OpportunityTemplates, fields=("template",), extra=1
     )
     formset = FormSet(
         queryset=OpportunityTemplates.objects.none(), instance=opportunity)
@@ -79,7 +79,7 @@ def template_detail_view(request, id):
     template = Template.objects.filter(id=id).annotate(
         line_count=Count('line_items')).first()
     FormSet = inlineformset_factory(
-        Template, TemplateLineItems, fields=("line_item",), extra=1
+        Template, TemplateLineItems, fields=("line_item","charge_category"), extra=1
     )
     formset = FormSet(
         queryset=TemplateLineItems.objects.none(), instance=template)
@@ -91,9 +91,6 @@ def template_detail_view(request, id):
         formset = FormSet(request.POST, instance=template)
         if formset.is_valid():
             formset.save()
-            if request.is_ajax():
-                html_form = render_to_string('frontend/template-form.html',context={'template': template, 'formset': formset},request=request)
-                return JsonResponse({'form':html_form})
             return redirect(reverse('template-detail',kwargs={'id':template.id}))
     return render(request, 'frontend/template_detail.html', {'template': template, 'formset': formset})
 
@@ -137,3 +134,10 @@ def get_related_templates(request,id):
     templates = opportunity.templates.all()
     html_options = render_to_string('frontend/related_templates.html',context={'templates':templates},request=request)
     return JsonResponse({'data':html_options})
+
+def generate_line_items(request,id):
+    
+    items = TemplateLineItems.objects.filter(template_id=id)
+    line_items = [line.line_item for line in items]
+    line_item_page = render_to_string('frontend/generate_line_items.html',context={'line_items':line_items},request=request)
+    return JsonResponse({'data':line_item_page})
