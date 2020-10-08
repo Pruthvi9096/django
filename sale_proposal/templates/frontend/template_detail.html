@@ -41,18 +41,32 @@
     </div>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     $(document).ready(function () {
         $('tr:last').after('<button id="add_more" class="btn btn-link" style="text-decoration:none;">+ Add template</button>')
         $('#add_more').click(function (e) {
             e.preventDefault();
+            $('.btn-success').click()
             cloneMore('.added-row:last', 'line_items');
         });
         $('.delete-line').click(function (e){
             e.preventDefault();
             removeItem(this,'line_items');
         });
+        $('#templates_form').submit(function (e) {
+            e.preventDefault();
+            var form = $(this)
+            console.log("=======",form.serialize())
+            $.ajax({
+                url: '/template/'+'{{template.id}}'+'/',
+                method: form.attr('method'),
+                data: form.serialize(),
+                success: function(response) {
+                    console.log("----",response)
+                    form.html(response.form)
+                }
+            })
+        })
         
     });
 </script>

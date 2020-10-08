@@ -31,8 +31,8 @@
                     {{formset.management_form}}
                     {% for form in formset.forms %}
                     <tr class='added-row'>
-                        <td>{{form.template|add_class:"form-control"}}</td>
-                        <td>{{form.charge_category|add_class:"form-control"}}</td>
+                        <td>{{form.template|add_class:"form-control template_id"}}</td>
+                        <td>{{form.charge_category|add_class:"form-control category"}}</td>
                         <td class="delete-line d-none" style="width: 1px;"></td>
                     </tr>
                     {% endfor %}
@@ -44,12 +44,12 @@
     </div>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     $(document).ready(function () {
         $('tr:last').after('<button id="add_more" class="btn btn-link" style="text-decoration:none;">+ Add template</button>')
         $('#add_more').click(function (e) {
             e.preventDefault();
+            $('.btn-success').click()
             cloneMore('.added-row:last', 'templates');
         });
         $('.delete-line').click(function (e){

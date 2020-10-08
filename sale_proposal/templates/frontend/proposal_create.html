@@ -61,5 +61,25 @@
 <!-- {{form|crispy}} -->
 <button type="submit" class="btn btn-sm btn-primary rounded shadow">Create</button>
 </form>
+<script>
+    $(document).ready(function () {
+        $('#id_opportunity').change(function (e) { 
+            e.preventDefault();
+            
+            $.ajax({
+                url: '/get_related_templates/'+$(this).val(),
+                data: '',
+                success: function (response){
+                    console.log("==============",response.data)
+                    $('#id_template').html('');
+                    if (response && response.data){
+                        console.log("---in--")
+                        $('#id_template').html(response.data);
+                    }
+                }
+            })
+        });
+    });
+</script>
 
 {% endblock %}

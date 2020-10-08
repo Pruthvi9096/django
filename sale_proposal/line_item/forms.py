@@ -1,5 +1,5 @@
 from django import forms
-from .models import Opportunity,Template,LineItem,SaleProposal
+from .models import Opportunity,Template,LineItem,SaleProposal,OpportunityTemplates
 
 class OpportunityForm(forms.ModelForm):
     class Meta:
