@@ -13,7 +13,7 @@ urlpatterns = [
     path('line-item/create/',views.LineItemCreate.as_view(),name='line-create'),
     path('line-item/<int:id>/',views.LineItemDetail.as_view(), name="line-item-detail"),
     path('proposals/',views.ProposalsList.as_view(),name='proposals'),
-    path('proposal/create/',views.ProposalCreate.as_view(), name='proposal-create'),
+    path('proposal/create/',views.proposal_create, name='proposal-create'),
     path('get_related_templates/<int:id>/',views.get_related_templates),
     path('generate_line_items/<int:id>/',views.generate_line_items),
     path('generate_order_lines/',views.generate_order_lines)

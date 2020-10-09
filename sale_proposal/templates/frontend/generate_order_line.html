@@ -1,22 +1,28 @@
 <h5>Order Line</h5>
 <table class="table">
-    {% for k,v in line_items.items %}
-    <tr><th>{{k}}</th></tr>
     <thead class="bg-info" style="color: white;">
         <tr>
             <th>Line Item</th>
             <th>Line Item Type</th>
             <th>Price</th>
+            <th>Qty</th>
+            <th>Item Discount</th>
+            <th>Discount</th>
+            <th>Sub Total</th>
+
         </tr>
     </thead>
     <tbody>
-        {% for line in v %}
-        <tr class="line">
-            <td>{{line.line_item}}</td>
-            <td>{{line.line_item.line_item_type}}</td>
-            <td>{{line.line_item.sale_price}}</td>
+        {% for line in order_line %}
+        <tr class="line" data-order-line="{{line.id}}">
+            <td>{{line.product}}</td>
+            <td>{{line.product.line_item_type}}</td>
+            <td><input type="number" name="sale_price" id="id_sale_price"></td>
+            <td><input type="number" name="qty" id="id_qty"></td>
+            <td><input type="checkbox" name="item_discount" id="id_item_discount"></td>
+            <td><input type="number" name="discount" id="id_discount"></td>
+            <td><input type="number" name="subtotal" id="id_subtotal"></td>
         </tr>
-        {% endfor %}
         {% endfor %}
     </tbody>
 </table>

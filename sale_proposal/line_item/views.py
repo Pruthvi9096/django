@@ -3,7 +3,8 @@ from django.urls import reverse
 from .models import (
     Opportunity, Template,
     LineItem, OpportunityTemplates,
-    TemplateLineItems, SaleProposal
+    TemplateLineItems, SaleProposal,
+    OrderLine,Contact
 )
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
@@ -143,6 +144,21 @@ class ProposalCreate(CreateView):
         context['sale_id'] = new_obj
         return context
 
+def proposal_create(request):
+    sale_id = request.GET.get('new',False)
+    if sale_id:
+        new_id = SaleProposal.objects.get(id=int(sale_id))
+    else:
+        new_id = SaleProposal.objects.create(name='New')
+    form = ProposalForm(instance=new_id)
+    order_lines = new_id.orderline_set.all()
+    if request.method == 'POST':
+        form = ProposalForm(request.POST, instance=new_id)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('proposals'))
+    return render(request,'frontend/proposal_create.html',{'form':form,'sale_id':new_id, 'order_line':order_lines})
+
 
 def get_related_templates(request, id):
     opportunity = Opportunity.objects.get(id=id)
@@ -164,14 +180,26 @@ def generate_line_items(request, id):
 def generate_order_lines(request):
     data = json.loads(request.body)
     lineitems = data.get('line_items')
+    sale_id = SaleProposal.objects.get(id=data.get('sale_id'))
+    sale_id.contact_for = Contact.objects.get(id=data.get('contact_for'))
+    sale_id.attention_to = Contact.objects.get(id=data.get('attention_to'))
+    sale_id.valid_upto = data.get('valid_upto')
+    sale_id.save()
     # line_items = LineItem.objects.filter(id__in=lineitems)
     results = TemplateLineItems.objects.filter(id__in=lineitems)
-    result = {}
+    result = []
     for line in results:
-        if line.charge_category:
-            if line.charge_category.name not in result.keys():
-                result[line.charge_category.name] = results.filter(
-                    charge_category=line.charge_category)
-    order_line_page = render_to_string(
-        'frontend/generate_order_line.html', context={'line_items': result}, request=request)
-    return JsonResponse({'data': order_line_page})
+        order_line = OrderLine.objects.create(
+            proposal = sale_id,
+            product = line.line_item,
+            charge_category = line.charge_category,
+            price = line.line_item.sale_price,
+        )
+        result.append(order_line)
+        # if line.charge_category:
+        #     if line.charge_category.name not in result.keys():
+        #         result[line.charge_category.name] = results.filter(
+        #             charge_category=line.charge_category)
+    # order_line_page = render_to_string(
+    #     'frontend/generate_order_line.html', context={'order_line': result}, request=request)
+    return JsonResponse({'data': True})
