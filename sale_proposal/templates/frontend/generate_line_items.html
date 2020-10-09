@@ -9,7 +9,19 @@
         </tr>
     </thead>
     <tbody>
-        {% for item in line_items %}
+        {% if order_lines %} {% for item in line_items %} {% for line in order_lines %}
+        <tr class="line">
+            <td>
+                <label class="switch">
+                    <input type="checkbox" id="{{item.id}}" {% if item.line_item == line.product %} checked {% endif %}>
+                    <span class="slider round"></span>
+                </label>
+            </td>
+            <td>{{item.line_item}}</td>
+            <td>{{item.charge_category}}</td>
+            <td>{{item.sale_price}}</td>
+        </tr>
+        {% endfor %} {% endfor %} {% else %} {% for item in line_items %}
         <tr class="line">
             <td>
                 <label class="switch">
@@ -21,17 +33,24 @@
             <td>{{item.charge_category}}</td>
             <td>{{item.sale_price}}</td>
         </tr>
-        {% endfor %}
+        {% endfor %} {% endif %}
     </tbody>
     <script>
-        $('.line').click(function (e) {
+        $('.line').click(function(e) {
             if ($(this).find('input').is(":checked")) {
-                $(this).find('input').prop({ 'checked': false });
-                $(this).removeClass('bg-success').css({'color':'#858796'})
-            }
-            else {
-                $(this).find('input').prop({ 'checked': true });
-                $(this).addClass('bg-success').css({'color':'white'})
+                $(this).find('input').prop({
+                    'checked': false
+                });
+                $(this).removeClass('bg-success').css({
+                    'color': '#858796'
+                })
+            } else {
+                $(this).find('input').prop({
+                    'checked': true
+                });
+                $(this).addClass('bg-success').css({
+                    'color': 'white'
+                })
             }
         })
     </script>

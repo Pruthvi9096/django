@@ -45,7 +45,7 @@
                     <td>{{line.product.line_item_type}}</td>
                     <td><input class="form-control" type="number" name="sale_price" id="id_sale_price"></td>
                     <td><input class="form-control" type="number" name="qty" id="id_qty"></td>
-                    <td><input class="checkbox" type="checkbox" name="item_discount" id="id_item_discount"></td>
+                    <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount" id="id_item_discount"><span class="slider round"></span></label></td>
                     <td><input class="form-control" type="number" name="discount" id="id_discount"></td>
                     <td><input class="form-control" type="number" name="subtotal" id="id_subtotal"></td>
                 </tr>
@@ -82,11 +82,11 @@
             </div>
         </div>
     </div>
-    <!-- {{form|crispy}} -->
     <button type="submit" class="btn btn-sm btn-primary rounded shadow">Create</button>
 </form>
 <script>
     $(document).ready(function() {
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
         $('#id_opportunity').change(function(e) {
             e.preventDefault();
 
@@ -105,7 +105,13 @@
             e.preventDefault();
             $.ajax({
                 url: '/generate_line_items/' + $('#id_template').val() + '/',
-                data: '',
+                method: 'POST',
+                headers: {
+                    "X-CSRFToken": csrftoken
+                },
+                data: JSON.stringify({
+                    'sale_id': '{{sale_id.id}}'
+                }),
                 success: function(response) {
                     $('.line-items').html(response.data);
                 }
@@ -114,7 +120,6 @@
         $('#generate_lines').click(function(e) {
             e.preventDefault();
             var checked_line_items = []
-            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
             $('.line input:checked').each(function(index, el) {
                 checked_line_items.push(parseInt(el.id));
             })
@@ -129,13 +134,16 @@
                     'sale_id': '{{sale_id.id}}',
                     'contact_for': $('#id_contact_for').val(),
                     'attention_to': $('#id_attention_to').val(),
-                    'valid_upto': $('#id_valid_upto').val()
+                    'valid_upto': $('#id_valid_upto').val(),
+                    'opportunity': $('#id_opportunity').val(),
+                    'template': $('#id_template').val()
                 }),
                 success: function(response) {
                     if (response && response.data) {
                         // $('#order_line').html(response.data);
                         $('#line_modal').modal('toggle');
-                        window.location.href = '{{request.path}}' + '?new=' + '{{sale_id.id}}'
+                        window.location = '{{request.path}}' + '?new=' + '{{sale_id.id}}'
+                        console.log("----------called----------")
                     }
                 }
             })

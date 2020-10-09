@@ -169,11 +169,13 @@ def get_related_templates(request, id):
 
 
 def generate_line_items(request, id):
-
+    data = json.loads(request.body)
+    sale_id = SaleProposal.objects.get(id=data.get('sale_id'))
+    order_lines = sale_id.orderline_set.all()
     items = TemplateLineItems.objects.filter(template_id=id)
     # line_items = [line.line_item for line in items]
     line_item_page = render_to_string(
-        'frontend/generate_line_items.html', context={'line_items': items}, request=request)
+        'frontend/generate_line_items.html', context={'line_items': items, 'order_lines':order_lines}, request=request)
     return JsonResponse({'data': line_item_page})
 
 
@@ -183,6 +185,8 @@ def generate_order_lines(request):
     sale_id = SaleProposal.objects.get(id=data.get('sale_id'))
     sale_id.contact_for = Contact.objects.get(id=data.get('contact_for'))
     sale_id.attention_to = Contact.objects.get(id=data.get('attention_to'))
+    sale_id.opportunity = Opportunity.objects.get(id=data.get('opportunity'))
+    sale_id.template = Template.objects.get(id=data.get('template'))
     sale_id.valid_upto = data.get('valid_upto')
     sale_id.save()
     # line_items = LineItem.objects.filter(id__in=lineitems)
