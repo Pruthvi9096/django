@@ -4,6 +4,7 @@
         <tr>
             <th>Select</th>
             <th>Line Item</th>
+            <th>Charge Category</th>
             <th>Price</th>
         </tr>
     </thead>
@@ -16,7 +17,8 @@
                     <span class="slider round"></span>
                 </label>
             </td>
-            <td>{{item}}</td>
+            <td>{{item.line_item}}</td>
+            <td>{{item.charge_category}}</td>
             <td>{{item.sale_price}}</td>
         </tr>
         {% endfor %}

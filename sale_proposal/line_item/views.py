@@ -15,7 +15,8 @@ from django.forms import inlineformset_factory
 from django.db.models import Count
 from django.template.loader import render_to_string
 from django.http import JsonResponse
-
+import json
+from django.db.models import QuerySet
 
 def index(request):
     return render(request, 'frontend/dashboard.html', {})
@@ -138,6 +139,16 @@ def get_related_templates(request,id):
 def generate_line_items(request,id):
     
     items = TemplateLineItems.objects.filter(template_id=id)
-    line_items = [line.line_item for line in items]
-    line_item_page = render_to_string('frontend/generate_line_items.html',context={'line_items':line_items},request=request)
+    # line_items = [line.line_item for line in items]
+    line_item_page = render_to_string('frontend/generate_line_items.html',context={'line_items':items},request=request)
     return JsonResponse({'data':line_item_page})
+
+def generate_order_lines(request):
+    data = json.loads(request.body)
+    lineitems = data.get('line_items')
+    # line_items = LineItem.objects.filter(id__in=lineitems)
+    query = TemplateLineItems.objects.filter(id__in=lineitems).query
+    query.group_by = ['charge_category']
+    results = QuerySet(query=query, model=TemplateLineItems)
+    print("========",results)
+    return JsonResponse({'data':True})

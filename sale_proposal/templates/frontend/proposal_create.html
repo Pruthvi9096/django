@@ -96,13 +96,17 @@
         $('#generate_lines').click(function (e) {
             e.preventDefault();
             var checked_line_items = []
+            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
             $('.line input:checked').each( function(index ,el) {
                 checked_line_items.push(parseInt(el.id));
             })
             $.ajax({
                 url: '/generate_order_lines/',
                 method:'POST',
-                data: {'line_items':checked_line_items},
+                headers:{
+                    "X-CSRFToken": csrftoken
+                },
+                data: JSON.stringify({'line_items':checked_line_items}),
                 success: function(response) {
                     if (response && response.data) {
                         $('#order_line').html(response.data);

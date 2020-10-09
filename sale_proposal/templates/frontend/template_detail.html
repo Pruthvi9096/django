@@ -17,6 +17,7 @@
                 <thead>
                     <tr>
                         <th>Line Item</th>
+                        <th>Line Item Type</th>
                         <th>Charge Category</th>
                     </tr>
                 </thead>
@@ -24,6 +25,7 @@
                     {% for line in template.line_items.all %}
                     <tr>
                         <td>{{line.line_item}}</td>
+                        <td>{{line.line_item.line_item_type}}</td>
                         <td>{{line.charge_category}}</td>
                     </tr>
                     {% endfor %}
@@ -32,6 +34,7 @@
                     {% for form in formset.forms %}
                     <tr class='added-row'>
                         <td>{{form.line_item|add_class:"form-control"}}</td>
+                        <td><input type="text" name="line_item_type" class="form-control" id="line_item_type" readonly></td>
                         <td>{{form.charge_category|add_class:"form-control"}}</td>
                         <td class="delete-line d-none" style="width: 1px;"></td>
                     </tr>
