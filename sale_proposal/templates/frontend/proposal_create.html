@@ -53,7 +53,7 @@
             </tbody>
         </table>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Opportunity & Template</button>
 
     <div class="modal fade bd-example-modal-lg" id="line_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -82,11 +82,36 @@
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-sm btn-primary rounded shadow">Create</button>
+    <!-- <button type="submit" class="btn btn-sm btn-primary rounded shadow">Create</button> -->
 </form>
 <script>
     $(document).ready(function() {
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        var line = '{{order_line.first}}'
+        if (line != 'None') {
+            $('#id_opportunity').attr({
+                'disabled': true
+            })
+            $('#id_template').attr({
+                'disabled': true
+            })
+            $.ajax({
+                url: '/generate_line_items/' + $('#id_template').val() + '/',
+                method: 'POST',
+                headers: {
+                    "X-CSRFToken": csrftoken
+                },
+                data: JSON.stringify({
+                    'sale_id': '{{sale_id.id}}'
+                }),
+                success: function(response) {
+                    $('.line-items').html(response.data);
+                }
+            });
+        } else {
+            $('#id_opportunity').val('');
+            $('#id_template').val('');
+        }
         $('#id_opportunity').change(function(e) {
             e.preventDefault();
 
@@ -115,7 +140,7 @@
                 success: function(response) {
                     $('.line-items').html(response.data);
                 }
-            })
+            });
         })
         $('#generate_lines').click(function(e) {
             e.preventDefault();

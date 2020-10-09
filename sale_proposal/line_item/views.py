@@ -191,15 +191,22 @@ def generate_order_lines(request):
     sale_id.save()
     # line_items = LineItem.objects.filter(id__in=lineitems)
     results = TemplateLineItems.objects.filter(id__in=lineitems)
-    result = []
+    # result = []
+    order_lines = sale_id.orderline_set.all()
+    product_lines = [line.product.id for line in order_lines]
     for line in results:
-        order_line = OrderLine.objects.create(
-            proposal = sale_id,
-            product = line.line_item,
-            charge_category = line.charge_category,
-            price = line.line_item.sale_price,
-        )
-        result.append(order_line)
+        if line.line_item.id not in product_lines:
+            OrderLine.objects.create(
+                proposal = sale_id,
+                product = line.line_item,
+                charge_category = line.charge_category,
+                price = line.line_item.sale_price,
+            )
+    selected_products = [line.line_item.id for line in results]
+    for order_line in order_lines:
+        if order_line.product.id not in selected_products:
+            order_line.delete()
+            # result.append(order_line)
         # if line.charge_category:
         #     if line.charge_category.name not in result.keys():
         #         result[line.charge_category.name] = results.filter(

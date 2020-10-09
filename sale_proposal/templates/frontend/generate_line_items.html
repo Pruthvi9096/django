@@ -9,8 +9,8 @@
         </tr>
     </thead>
     <tbody>
-        {% if order_lines %} {% for item in line_items %} {% for line in order_lines %}
-        <tr class="line">
+        {% if order_lines %} {% for line in order_lines %} {% for item in line_items %}
+        <tr class="line bg-success" style="color: white;">
             <td>
                 <label class="switch">
                     <input type="checkbox" id="{{item.id}}" {% if item.line_item == line.product %} checked {% endif %}>
