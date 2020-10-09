@@ -98,8 +98,9 @@ class Contact(models.Model):
 
 class SaleProposal(models.Model):
 
+    name = models.CharField(max_length=150)
     contact_for = models.ForeignKey(
-        Contact, on_delete=models.CASCADE, related_name='proposals')
+        Contact, on_delete=models.CASCADE, related_name='proposals',null=True)
     attention_to = models.ForeignKey(
         Contact, on_delete=models.SET_NULL, null=True)
     valid_upto = models.DateField(null=True, blank=True)

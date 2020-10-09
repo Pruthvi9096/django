@@ -135,6 +135,13 @@ class ProposalCreate(CreateView):
 
     def get_success_url(self):
         return reverse('proposals', kwargs={})
+    
+    def get_context_data(self,*args,**kwargs):
+        context = super(ProposalCreate, self).get_context_data(*args, **kwargs)
+        new_obj = SaleProposal.objects.create(name='New')
+        context['form'].instance = new_obj
+        context['sale_id'] = new_obj
+        return context
 
 
 def get_related_templates(request, id):
