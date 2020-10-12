@@ -39,7 +39,7 @@ class LineItem(models.Model):
         max_digits=7, decimal_places=2, null=True, blank=True)
     discount_allowed = models.BooleanField(default=False)
     max_discount = models.DecimalField(
-        max_digits=7, decimal_places=2, blank=True)
+        max_digits=7, decimal_places=2, blank=True, null=True)
     line_item_type = models.ForeignKey(
         LineItemType, on_delete=models.SET_NULL, null=True)
 
@@ -138,8 +138,18 @@ class OrderLine(models.Model):
     price = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     item_discount = models.BooleanField(null=True, blank=True)
-    qty = models.IntegerField(null=True, blank=True)
+    qty = models.IntegerField(null=True, blank=True, default=1)
     discount_amount = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=7, decimal_places=2, null=True, blank=True, default= 0.00)
     subtotal = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
+
+    @property
+    def get_sub_total(self):
+        subtotal = 0.00
+        if self.product.sale_price and self.qty:
+            subtotal = self.product.sale_price * self.qty
+            if self.discount_amount:
+                subtotal = amount - self.discount_amount
+        # self.subtotal = subtotal
+        return subtotal

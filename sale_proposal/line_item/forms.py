@@ -15,6 +15,14 @@ class LineItemForm(forms.ModelForm):
     class Meta:
         model = LineItem
         fields = '__all__'
+    
+    # def clean_max_discount(self):
+    #     data = self.cleaned_data
+    #     if data.get('discount_allowed') and not data.get('max_discount'):
+    #         raise forms.ValidationError("Max Discount Required when discount is allowed")
+    #     print(data)
+    #     return data
+
 
 class ProposalForm(forms.ModelForm):
     class Meta:

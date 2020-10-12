@@ -40,14 +40,14 @@
             </thead>
             <tbody>
                 {% for line in order_line %}
-                <tr class="line" data-order-line="{{line.id}}">
+                <tr class="order-line" data-order-line="{{line.id}}">
                     <td>{{line.product}}</td>
                     <td>{{line.product.line_item_type}}</td>
-                    <td><input class="form-control" type="number" name="sale_price" id="id_sale_price"></td>
-                    <td><input class="form-control" type="number" name="qty" id="id_qty"></td>
+                    <td><input class="form-control" type="number" name="sale_price" id="id_sale_price" value="{{line.product.sale_price}}"></td>
+                    <td><input class="form-control" type="number" name="qty" id="id_qty" value="{{line.qty}}"></td>
                     <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount" id="id_item_discount"><span class="slider round"></span></label></td>
                     <td><input class="form-control" type="number" name="discount" id="id_discount"></td>
-                    <td><input class="form-control" type="number" name="subtotal" id="id_subtotal"></td>
+                    <td><input class="form-control" type="number" name="subtotal" id="id_subtotal" value="{{line.get_sub_total}}"></td>
                 </tr>
                 {% endfor %}
             </tbody>

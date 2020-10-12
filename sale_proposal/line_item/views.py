@@ -171,7 +171,7 @@ def get_related_templates(request, id):
 def generate_line_items(request, id):
     data = json.loads(request.body)
     sale_id = SaleProposal.objects.get(id=data.get('sale_id'))
-    order_lines = sale_id.orderline_set.all()
+    order_lines = [line.product.id for line in sale_id.orderline_set.all()]
     items = TemplateLineItems.objects.filter(template_id=id)
     # line_items = [line.line_item for line in items]
     line_item_page = render_to_string(
