@@ -25,8 +25,18 @@
     </div>
     <div id="order_line" class="row">
         <h5>Order Line</h5>
+        <hr />
+        <!-- {{formset.management_form}}
+            {% for f in formset.forms %}
+            <div class="col-lg-12 bg-dark pt-2" style="color: white; display: inline-flex;">
+                {{f.charge_category}}
+                {{f.discount_offer}}
+                {{f.discount_reason}}
+                {{f.discount_amount}}
+                {% endfor %} -->
+        <!-- </div> -->
         <table class="table">
-            <thead class="bg-info" style="color: white;">
+            <thead>
                 <tr>
                     <th>Line Item</th>
                     <th>Line Item Type</th>
@@ -39,6 +49,10 @@
                 </tr>
             </thead>
             <tbody>
+                {% for charge_category,order_line in result.items %}
+                <tr style="border-top: 1px solid #e3e6f0;" class="col-lg-12">
+                    <td>{{charge_category}}</td>
+                </tr>
                 {% for line in order_line %}
                 <tr class="order-line" data-order-line="{{line.id}}">
                     <td>{{line.product}}</td>
@@ -52,6 +66,7 @@
                     <td><input class="form-control" type="number" name="subtotal" id="id_subtotal"
                             value="{{line.get_sub_total}}"></td>
                 </tr>
+                {% endfor %}
                 {% endfor %}
             </tbody>
         </table>

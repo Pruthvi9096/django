@@ -100,7 +100,7 @@ class SaleProposal(models.Model):
 
     name = models.CharField(max_length=150)
     contact_for = models.ForeignKey(
-        Contact, on_delete=models.CASCADE, related_name='proposals',null=True)
+        Contact, on_delete=models.CASCADE, related_name='proposals', null=True)
     attention_to = models.ForeignKey(
         Contact, on_delete=models.SET_NULL, null=True)
     valid_upto = models.DateField(null=True, blank=True)
@@ -140,7 +140,7 @@ class OrderLine(models.Model):
     item_discount = models.BooleanField(null=True, blank=True)
     qty = models.IntegerField(null=True, blank=True, default=1)
     discount_amount = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True, default= 0.00)
+        max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     subtotal = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
 
@@ -153,3 +153,23 @@ class OrderLine(models.Model):
                 subtotal = amount - self.discount_amount
         # self.subtotal = subtotal
         return subtotal
+
+
+class DiscountOffer(models.Model):
+
+    name = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.name
+
+
+class ChargeCategoryDiscount(models.Model):
+
+    sale_id = models.ForeignKey(SaleProposal, on_delete=models.CASCADE)
+    charge_category = models.ForeignKey(
+        ChargeCategory, on_delete=models.CASCADE, null=True, blank=True)
+    discount_offer = models.ForeignKey(
+        DiscountOffer, on_delete=models.SET_NULL, null=True, blank=True)
+    discount_reason = models.CharField(max_length=300, null=True, blank=True)
+    discount_amount = models.DecimalField(
+        default=0.00, max_digits=7, decimal_places=2, blank=True)

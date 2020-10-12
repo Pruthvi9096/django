@@ -4,7 +4,7 @@ from .models import (
     Opportunity, Template,
     LineItem, OpportunityTemplates,
     TemplateLineItems, SaleProposal,
-    OrderLine, Contact
+    OrderLine, Contact, ChargeCategoryDiscount
 )
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
@@ -153,12 +153,23 @@ def proposal_create(request):
         new_id = SaleProposal.objects.create(name='New')
     form = ProposalForm(instance=new_id)
     order_lines = new_id.orderline_set.all()
+    result = {}
+    for line in order_lines:
+        if line.charge_category not in result.keys():
+            result[line.charge_category] = order_lines.filter(charge_category= line.charge_category)
+    # FormSet = inlineformset_factory(
+    #     SaleProposal, ChargeCategoryDiscount, fields=("charge_category","discount_offer","discount_reason","discount_amount"), extra=len(result)
+    # )
+    # formset = FormSet(
+    #     queryset=ChargeCategoryDiscount.objects.none(), instance=new_id)
     if request.method == 'POST':
         form = ProposalForm(request.POST, instance=new_id)
         if form.is_valid():
             form.save()
             return redirect(reverse('proposals'))
-    return render(request, 'frontend/proposal_create.html', {'form': form, 'sale_id': new_id, 'order_line': order_lines})
+    return render(request, 'frontend/proposal_create.html', 
+        {'form': form, 'sale_id': new_id, 
+        'order_line': order_lines, 'result':result})
 
 
 def get_related_templates(request, id):
