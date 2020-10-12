@@ -4,7 +4,7 @@ from .models import (
     Opportunity, Template,
     LineItem, OpportunityTemplates,
     TemplateLineItems, SaleProposal,
-    OrderLine,Contact
+    OrderLine, Contact
 )
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
@@ -136,16 +136,17 @@ class ProposalCreate(CreateView):
 
     def get_success_url(self):
         return reverse('proposals', kwargs={})
-    
-    def get_context_data(self,*args,**kwargs):
+
+    def get_context_data(self, *args, **kwargs):
         context = super(ProposalCreate, self).get_context_data(*args, **kwargs)
         new_obj = SaleProposal.objects.create(name='New')
         context['form'].instance = new_obj
         context['sale_id'] = new_obj
         return context
 
+
 def proposal_create(request):
-    sale_id = request.GET.get('new',False)
+    sale_id = request.GET.get('new', False)
     if sale_id:
         new_id = SaleProposal.objects.get(id=int(sale_id))
     else:
@@ -157,7 +158,7 @@ def proposal_create(request):
         if form.is_valid():
             form.save()
             return redirect(reverse('proposals'))
-    return render(request,'frontend/proposal_create.html',{'form':form,'sale_id':new_id, 'order_line':order_lines})
+    return render(request, 'frontend/proposal_create.html', {'form': form, 'sale_id': new_id, 'order_line': order_lines})
 
 
 def get_related_templates(request, id):
@@ -175,7 +176,7 @@ def generate_line_items(request, id):
     items = TemplateLineItems.objects.filter(template_id=id)
     # line_items = [line.line_item for line in items]
     line_item_page = render_to_string(
-        'frontend/generate_line_items.html', context={'line_items': items, 'order_lines':order_lines}, request=request)
+        'frontend/generate_line_items.html', context={'line_items': items, 'order_lines': order_lines}, request=request)
     return JsonResponse({'data': line_item_page})
 
 
@@ -197,10 +198,10 @@ def generate_order_lines(request):
     for line in results:
         if line.line_item.id not in product_lines:
             OrderLine.objects.create(
-                proposal = sale_id,
-                product = line.line_item,
-                charge_category = line.charge_category,
-                price = line.line_item.sale_price,
+                proposal=sale_id,
+                product=line.line_item,
+                charge_category=line.charge_category,
+                price=line.line_item.sale_price,
             )
     selected_products = [line.line_item.id for line in results]
     for order_line in order_lines:

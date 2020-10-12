@@ -43,26 +43,31 @@
                 <tr class="order-line" data-order-line="{{line.id}}">
                     <td>{{line.product}}</td>
                     <td>{{line.product.line_item_type}}</td>
-                    <td><input class="form-control" type="number" name="sale_price" id="id_sale_price" value="{{line.product.sale_price}}"></td>
+                    <td><input class="form-control" type="number" name="sale_price" id="id_sale_price"
+                            value="{{line.product.sale_price}}"></td>
                     <td><input class="form-control" type="number" name="qty" id="id_qty" value="{{line.qty}}"></td>
-                    <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount" id="id_item_discount"><span class="slider round"></span></label></td>
+                    <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount"
+                                id="id_item_discount"><span class="slider round"></span></label></td>
                     <td><input class="form-control" type="number" name="discount" id="id_discount"></td>
-                    <td><input class="form-control" type="number" name="subtotal" id="id_subtotal" value="{{line.get_sub_total}}"></td>
+                    <td><input class="form-control" type="number" name="subtotal" id="id_subtotal"
+                            value="{{line.get_sub_total}}"></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Opportunity & Template</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add Opportunity
+        & Template</button>
 
-    <div class="modal fade bd-example-modal-lg" id="line_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg" id="line_modal" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add Opportunity & Template</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body form-row">
                     <div class="form-group col-sm-4">
@@ -85,7 +90,7 @@
     <!-- <button type="submit" class="btn btn-sm btn-primary rounded shadow">Create</button> -->
 </form>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
         var line = '{{order_line.first}}'
         if (line != 'None') {
@@ -104,7 +109,7 @@
                 data: JSON.stringify({
                     'sale_id': '{{sale_id.id}}'
                 }),
-                success: function(response) {
+                success: function (response) {
                     $('.line-items').html(response.data);
                 }
             });
@@ -112,13 +117,13 @@
             $('#id_opportunity').val('');
             $('#id_template').val('');
         }
-        $('#id_opportunity').change(function(e) {
+        $('#id_opportunity').change(function (e) {
             e.preventDefault();
 
             $.ajax({
                 url: '/get_related_templates/' + $(this).val(),
                 data: '',
-                success: function(response) {
+                success: function (response) {
                     $('#id_template').html('');
                     if (response && response.data) {
                         $('#id_template').html(response.data);
@@ -126,7 +131,7 @@
                 }
             })
         });
-        $('#id_template').change(function(e) {
+        $('#id_template').change(function (e) {
             e.preventDefault();
             $.ajax({
                 url: '/generate_line_items/' + $('#id_template').val() + '/',
@@ -137,15 +142,15 @@
                 data: JSON.stringify({
                     'sale_id': '{{sale_id.id}}'
                 }),
-                success: function(response) {
+                success: function (response) {
                     $('.line-items').html(response.data);
                 }
             });
         })
-        $('#generate_lines').click(function(e) {
+        $('#generate_lines').click(function (e) {
             e.preventDefault();
             var checked_line_items = []
-            $('.line input:checked').each(function(index, el) {
+            $('.line input:checked').each(function (index, el) {
                 checked_line_items.push(parseInt(el.id));
             })
             $.ajax({
@@ -163,12 +168,11 @@
                     'opportunity': $('#id_opportunity').val(),
                     'template': $('#id_template').val()
                 }),
-                success: function(response) {
+                success: function (response) {
                     if (response && response.data) {
                         // $('#order_line').html(response.data);
                         $('#line_modal').modal('toggle');
                         window.location = '{{request.path}}' + '?new=' + '{{sale_id.id}}'
-                        console.log("----------called----------")
                     }
                 }
             })

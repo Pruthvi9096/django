@@ -9,12 +9,14 @@
         </tr>
     </thead>
     <tbody>
-        {% if order_lines %} 
+        {% if order_lines %}
         {% for item in line_items %}
-        <tr {% if item.line_item.id in order_lines %} class="line bg-success" style="color: white;" {% else %} class="line" {% endif %}>
+        <tr {% if item.line_item.id in order_lines %} class="line bg-success" style="color: white;" {% else %}
+            class="line" {% endif %}>
             <td>
                 <label class="switch">
-                    <input type="checkbox" id="{{item.id}}" {% if item.line_item.id in order_lines %} checked {% endif %}>
+                    <input type="checkbox" id="{{item.id}}" {% if item.line_item.id in order_lines %} checked
+                        {% endif %}>
                     <span class="slider round"></span>
                 </label>
             </td>
@@ -22,8 +24,8 @@
             <td>{{item.charge_category}}</td>
             <td>{{item.sale_price}}</td>
         </tr>
-        {% endfor %} 
-        {% else %} 
+        {% endfor %}
+        {% else %}
         {% for item in line_items %}
         <tr class="line">
             <td>
@@ -39,7 +41,7 @@
         {% endfor %} {% endif %}
     </tbody>
     <script>
-        $('.line').click(function(e) {
+        $('.line').click(function (e) {
             if ($(this).find('input').is(":checked")) {
                 $(this).find('input').prop({
                     'checked': false
