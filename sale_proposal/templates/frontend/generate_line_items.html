@@ -14,7 +14,7 @@
         <tr {% if item.line_item.id in order_lines %} class="line bg-success" style="color: white;" {% else %}
             class="line" {% endif %}>
             <td>
-                <label class="switch">
+                <label class="switch mb-0 mt-1">
                     <input type="checkbox" id="{{item.id}}" {% if item.line_item.id in order_lines %} checked
                         {% endif %}>
                     <span class="slider round"></span>
@@ -22,21 +22,21 @@
             </td>
             <td>{{item.line_item}}</td>
             <td>{{item.charge_category}}</td>
-            <td>{{item.sale_price}}</td>
+            <td>{{item.line_item.sale_price}}</td>
         </tr>
         {% endfor %}
         {% else %}
         {% for item in line_items %}
         <tr class="line">
             <td>
-                <label class="switch">
+                <label class="switch mb-0 mt-1">
                     <input type="checkbox" id="{{item.id}}">
                     <span class="slider round"></span>
                 </label>
             </td>
             <td>{{item.line_item}}</td>
             <td>{{item.charge_category}}</td>
-            <td>{{item.sale_price}}</td>
+            <td>{{item.line_item.sale_price}}</td>
         </tr>
         {% endfor %} {% endif %}
     </tbody>

@@ -111,7 +111,7 @@ class SaleProposal(models.Model):
     template = models.ForeignKey(
         Template, on_delete=models.SET_NULL, null=True)
     discount_method = models.CharField(max_length=50, choices=[(
-        'fixed', 'Fixed'), ('percentage', '%')], default='percentage', blank=True)
+        'fixed', 'Fixed'), ('percentage', '%')], default='percentage')
     monthlies_amount = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     setup_amount = models.DecimalField(

@@ -59,3 +59,13 @@
   .slider.round:before {
     border-radius: 50%;
   }
+
+  .line > td {
+    margin: auto;
+    padding: 0;
+  }
+
+  .sidebar {
+    transition: 0.35s ease-out;
+    -webkit-transition: 0.35s ease-out;
+  }
