@@ -31,7 +31,9 @@
                 & Template</button>
         </div>
     </div>
+
     <div id="order_line" class="row">
+        {% if order_line %}
         <div class="col-md-4">
             <h5>Order Line</h5>
         </div>
@@ -88,6 +90,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% endif %}
     </div>
 
     <div class="modal fade bd-example-modal-lg" id="line_modal" tabindex="-1" role="dialog"
@@ -121,6 +124,7 @@
         </div>
     </div>
     <div class="row mt-2">
+        {% if order_line %}
         <div class="col-md-6 form-row">
             <div class="col-6">
                 {{form.monthlies_amount.label}}
@@ -166,8 +170,10 @@
                 {{form.amount_at_execution_of_contract | add_class:"form-control form-control-sm"}}
             </div>
         </div>
+        {% endif %}
     </div>
-    <input type="submit" value="Save">
+    <input type="submit" value="Save" class="btn btn-success">
+    <a class="btn btn-danger" href="#">Discard</a>
 </form>
 <script>
     $(document).ready(function () {
