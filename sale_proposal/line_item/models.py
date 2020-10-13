@@ -122,7 +122,7 @@ class SaleProposal(models.Model):
         max_digits=7, decimal_places=2, null=True, blank=True)
     balance_amount = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
-    balance_distribution = models.BooleanField(null=True, blank=True)
+    balance_distribution = models.BooleanField(default=False)
     balance_distribution_type = models.CharField(max_length=50, choices=[(
         'days', 'Days'), ('weeks', 'Weeks'), ('months', 'Months')], null=True, blank=True)
     amount_at_execution_of_contract = models.DecimalField(

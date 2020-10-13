@@ -30,5 +30,5 @@ class ProposalForm(forms.ModelForm):
         exclude = ['created_on','created_by']
         widgets = {
             'valid_upto':forms.TextInput(attrs={'type':'date'}),
-            'balance_distribution':forms.TextInput(attrs={'type':'checkbox'})
+            # 'balance_distribution':forms.BooleanField()
         }
