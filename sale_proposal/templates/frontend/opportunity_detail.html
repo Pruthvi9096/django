@@ -31,9 +31,9 @@
                     {{formset.management_form}}
                     {% for form in formset.forms %}
                     <tr class='added-row'>
-                        <td>{{form.template|add_class:"form-control template_id"}}</td>
+                        <td>{{form.template|add_class:"form-control form-control-sm template_id"}}</td>
                         <!-- <td>{{form.charge_category|add_class:"form-control category"}}</td> -->
-                        <td class="delete-line d-none" style="width: 1px;"></td>
+                        <td class="delete-line d-none p-0" style="width: 1px;"></td>
                     </tr>
                     {% endfor %}
                 </tbody>

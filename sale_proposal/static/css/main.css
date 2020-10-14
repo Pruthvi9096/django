@@ -69,3 +69,13 @@
     transition: 0.35s ease-out;
     -webkit-transition: 0.35s ease-out;
   }
+
+  .table td {
+    padding: .5rem !important;
+  }
+
+  .custom-label {
+    font-weight: 800;
+    margin-right: 5px;
+    /* border-right: 1px solid gray; */
+  }

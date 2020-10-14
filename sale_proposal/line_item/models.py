@@ -121,7 +121,7 @@ class SaleProposal(models.Model):
     upfront_deposit_amount = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
     balance_amount = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=7, decimal_places=2, default=0.0)
     balance_distribution = models.BooleanField(default=False)
     balance_distribution_type = models.CharField(max_length=50, choices=[(
         'days', 'Days'), ('weeks', 'Weeks'), ('months', 'Months')], null=True, blank=True)

@@ -1,0 +1,125 @@
+{% extends 'frontend/index.html' %} {% load static %} {% load crispy_forms_tags %} {% block content %} {% load tags %}
+<script src="{% static 'js/sb-admin-2.js' %}"></script>
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    {% block page-heading %}
+    <h1 class="h3 mb-0 text-gray-800">Proposal</h1>
+    <a href="{% url 'proposal-create' %}?new={{sale_id.id}}" class="btn btn-primary shadow rounded"><i
+            class="fa fa-edit text-white-100"></i> Edit</a>
+    {% endblock %}
+</div>
+
+<!-- Content Row -->
+    <input type="hidden" name="name" id="id_name" value="New">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label class="custom-label" for="">For: </label> {{sale_id.contact_for}}
+        </div>
+        <div class="col-md-3">
+            <label class="custom-label" for="">Attention To: </label>
+            {{sale_id.attention_to}}
+        </div>
+        <div class="col-md-3">
+            <label class="custom-label" for="">Valid upto: </label> {{sale_id.valid_upto}}
+        </div>
+    </div>
+
+    <div id="order_line" class="row">
+        {% if order_line %}
+        <div class="col-md-4">
+            <h5>Order Line</h5>
+        </div>
+        <div class="col-md-8">
+            <div  style="display: flex;">
+                <label class="custom-label" for="">Discount Method: </label>
+                {{ sale_id.get_discount_method_display}}
+            </div>
+        </div>
+        <hr />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Line Item</th>
+                    <th>Line Item Type</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Item Discount</th>
+                    <th>Discount</th>
+                    <th>Sub Total</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for charge_category,order_line in result.items %}
+
+                <tr class="col-lg-12" style="border-bottom: 3px solid black;">
+                    <td style="border: none; color: #000;">{{charge_category}}</td>
+                </tr>
+                {% for line in order_line %}
+                <tr class="order-line" data-order-line="{{line.id}}">
+                    <td>{{line.product}}</td>
+                    <td>{{line.product.line_item_type}}</td>
+                    <td>{{line.product.sale_price}}</td>
+                    <td>{{line.qty}}</td>
+                    <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount"
+                                id="id_item_discount" value="{{line.product.discount_allowed}}"><span class="slider round"></span></label></td>
+                    <td>{{line.discount}}</td>
+                    <td>{{line.get_sub_total}}</td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+    <div class="row mt-2">
+        {% if order_line %}
+        <div class="col-md-6">
+            <div class="">
+                <label class="custom-label" for="">Monthlies Amount</label>
+                {{sale_id.monthlies_amount}}
+            </div>
+            <div class="">
+                <label class="custom-label" for="">Setup Amount</label>
+                {{sale_id.setup_amount}}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="">
+                <label for="" class="custom-label">Upfront Deposit: </label>
+                {{sale_id.upfront_deposit}}
+            </div>
+            <div class=" d-none">
+                <label for=""> </label>
+                {{form.upfront_deposit_amount | add_class:"form-control form-control-sm"}}
+            </div>
+            <div class="">
+                <input type="hidden" name="display_upfront_amount" id="id_display_upfront">
+            </div>
+        </div>
+        <div class="col-md-6 mt-2">
+            <div class="">
+                <label for="" class="custom-label">Balance Distribution: </label>
+                <label class="switch mt-2">
+                    {{sale_id.balance_distribution}}
+                    <span class="slider round"></span></label>
+            </div>
+            <div class="">
+                <label for="" class="custom-label">Balance Amount: </label>
+                {{form.balance_amount}}
+            </div>
+            <div class="">
+                <label class="custom-label" for="">Distribution Type: </label>
+                {{sale_id.balance_distribution_type}}
+            </div>
+        </div>
+        <div class="col-md-6 mt-2">
+            <div class="">
+                <label for="" class="custom-label">Amount at Execution of Contract: </label>
+                {{sale_id.amount_at_execution_of_contract}}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

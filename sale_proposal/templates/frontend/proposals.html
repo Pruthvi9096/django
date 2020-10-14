@@ -26,7 +26,7 @@
         </thead>
         <tbody>
             {% for proposal in saleproposal_list %}
-            <tr>
+            <tr onclick="window.parent.location='{% url 'proposal-detail' proposal.id %}'">
                 <td>{{proposal.contact_for.name}}</td>
                 <td>{{proposal.attention_to.name}}</td>
                 <td>{{proposal.created_on}}</td>

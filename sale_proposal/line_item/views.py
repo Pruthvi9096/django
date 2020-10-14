@@ -17,6 +17,7 @@ from django.db.models import Count
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 import json
+from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet, F, Count
 
 
@@ -144,7 +145,7 @@ class ProposalCreate(CreateView):
         context['sale_id'] = new_obj
         return context
 
-
+@login_required(login_url='login')
 def proposal_create(request):
     sale_id = request.GET.get('new', False)
     if sale_id:
@@ -165,12 +166,24 @@ def proposal_create(request):
     if request.method == 'POST':
         form = ProposalForm(request.POST, instance=new_id)
         if form.is_valid():
-            form.save()
-            return redirect(reverse('proposals'))
+            sale = form.save(commit=False)
+            sale.created_by = request.user
+            sale.save()
+            return redirect(reverse('proposal-detail', kwargs={'id':sale.id}))
     return render(request, 'frontend/proposal_create.html', 
         {'form': form, 'sale_id': new_id, 
         'order_line': order_lines, 'result':result})
 
+def proposal_detail_view(request,id):
+    sale_id = SaleProposal.objects.get(id=id)
+    order_lines = sale_id.orderline_set.all()
+    result = {}
+    for line in order_lines:
+        if line.charge_category not in result.keys():
+            result[line.charge_category] = order_lines.filter(charge_category= line.charge_category)
+    return render(request, 'frontend/proposal_detail.html', 
+        {'sale_id': sale_id, 
+        'order_line': order_lines, 'result':result})
 
 def get_related_templates(request, id):
     opportunity = Opportunity.objects.get(id=id)
