@@ -239,3 +239,15 @@ def generate_order_lines(request):
     # order_line_page = render_to_string(
     #     'frontend/generate_order_line.html', context={'order_line': result}, request=request)
     return JsonResponse({'data': True})
+
+def update_order_line(request, id):
+    order_line = OrderLine.objects.get(id=id)
+    print("---------",order_line)
+    data = json.loads(request.body)
+    order_line.price = data.get('sale_price')
+    order_line.qty = data.get('qty')
+    order_line.discount_amount = data.get('discount')
+    order_line.subtotal = data.get('subtotal')
+    order_line.save()
+    print(order_line.price,)
+    return JsonResponse({'updated':True})

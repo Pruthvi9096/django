@@ -17,5 +17,6 @@ urlpatterns = [
     path('proposal/create/',views.proposal_create, name='proposal-create'),
     path('get_related_templates/<int:id>/',views.get_related_templates),
     path('generate_line_items/<int:id>/',views.generate_line_items),
-    path('generate_order_lines/',views.generate_order_lines)
+    path('generate_order_lines/',views.generate_order_lines),
+    path('update_order_line/<int:id>/',views.update_order_line),
 ]
