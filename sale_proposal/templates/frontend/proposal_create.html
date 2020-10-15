@@ -73,18 +73,18 @@
                     <td style="border: none; color: #000;">{{charge_category}}</td>
                 </tr>
                 {% for line in order_line %}
-                <tr class="order-line" data-order-line="{{line.id}}">
+                <tr class="order-line" data-order-line="{{line.id}}" data-charge-category="{{line.charge_category.name}}">
                     <td>{{line.product}}</td>
                     <td>{{line.product.line_item_type}}</td>
-                    <td><input class="form-control form-control-sm" type="number" name="sale_price" id="id_sale_price"
+                    <td><input class="form-control form-control-sm sale-price" type="number" name="sale_price-{{line.id}}" id="id_sale_price-{{line.id}}"
                             value="{{line.product.sale_price}}"></td>
-                    <td><input class="form-control form-control-sm" type="number" name="qty" id="id_qty"
+                    <td><input class="form-control form-control-sm qty" type="number" name="qty-{{line.id}}" id="id_qty-{{line.id}}"
                             value="{{line.qty}}"></td>
-                    <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount"
-                                id="id_item_discount"><span class="slider round"></span></label></td>
-                    <td><input class="form-control form-control-sm" type="number" name="discount" id="id_discount"></td>
-                    <td><input class="form-control form-control-sm" type="number" name="subtotal" id="id_subtotal"
-                            value="{{line.get_sub_total}}"></td>
+                    <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount-{{line.id}}"
+                                id="id_item_discount-{{line.id}}" {% if line.product.discount_allowed %} checked {% endif %}><span class="slider round"></span></label></td>
+                    <td><input class="form-control form-control-sm discount" type="number" name="discount-{{line.id}}" id="id_discount-{{line.id}}"></td>
+                    <td><input class="form-control form-control-sm subtotal" type="number" name="subtotal-{{line.id}}" id="id_subtotal-{{line.id}}"
+                            value="{{line.get_sub_total}}" readonly="readonly"></td>
                 </tr>
                 {% endfor %}
                 {% endfor %}
@@ -128,24 +128,28 @@
         <div class="col-md-6 form-row">
             <div class="col-6">
                 {{form.monthlies_amount.label}}
-                {{form.monthlies_amount | add_class:"form-control form-control-sm"}}
+                <input type="number" class="form-control form-control-sm" name="monthlies_amount"
+                    id="id_monthlies_amount" value="{{sale_id.get_monthlies_amount}}" readonly="readonly">
             </div>
             <div class="col-6">
                 {{form.setup_amount.label}}
-                {{form.setup_amount | add_class:"form-control form-control-sm"}}
+                <input type="number" class="form-control form-control-sm" name="setup_amount"
+                    id="id_setup_amount" value="{{sale_id.get_setup_amount}}" readonly="readonly">
             </div>
         </div>
         <div class="col-md-6 form-row">
             <div class="col-4">
                 {{form.upfront_deposit.label}}
-                {{form.upfront_deposit | add_class:"form-control form-control-sm"}}
+                {{form.upfront_deposit | add_class:"form-control form-control-sm count-balance"}}
+            </div>
+            <div class="col-4 d-none">
+                <label for=""> </label>
+                <input type="number" class="form-control form-control-sm count-balance"
+                    name="display_upfront_amount" id="id_display_upfront">
             </div>
             <div class="col-4 d-none">
                 <label for=""> </label>
                 {{form.upfront_deposit_amount | add_class:"form-control form-control-sm"}}
-            </div>
-            <div class="col-4">
-                <input type="hidden" name="display_upfront_amount" id="id_display_upfront">
             </div>
         </div>
         <div class="col-md-6 form-row mt-2">
@@ -262,7 +266,60 @@
                     }
                 }
             })
-        })
+        });
+
+        $('.sale-price, .qty, .discount').on('keyup change', function(e){
+            var line = $(this).closest('tr')
+            var sale_price = parseFloat($(line).find('.sale-price').val());
+            var qty = parseInt($(line).find('.qty').val());
+            var discount = parseFloat($(line).find('.discount').val());
+            var subtotal = 0.0
+            subtotal = sale_price * qty;
+            if (discount){
+                subtotal = subtotal - discount
+            }
+            $(line).find('.subtotal').val(subtotal);
+            var monthlies_amount = 0.0
+            var setup_amount = 0.0
+            $('.order-line').each( function(index, el){
+                var order_line = $(el).attr('data-order-line');
+                var charge_category = $(el).attr('data-charge-category');
+                if (charge_category == 'Monthlies') {
+                    monthlies_amount += parseFloat($(el).find('.subtotal').val());
+                }
+                else {
+                    setup_amount += parseFloat($(el).find('.subtotal').val());
+                }
+            });
+            $('#id_monthlies_amount').val(monthlies_amount)
+            $('#id_setup_amount').val(setup_amount)
+        });
+
+        $('.count-balance').on('change', function(e) {
+            var upfront_deposit = $('#id_upfront_deposit').val();
+            var setup_amount = parseFloat($('#id_setup_amount').val());
+            var monthlies_amount = parseFloat($('#id_monthlies_amount').val());
+            var total_amount = setup_amount + monthlies_amount
+            var upfront_deposit_amount = 0.0
+            console.log(upfront_deposit)
+            if (['other','amount'].indexOf(upfront_deposit) != -1) {
+                $('#id_display_upfront').closest('div').removeClass('d-none');
+                $('#id_display_upfront').prop({'required':true}).focus();
+                var ufda = parseFloat($('#id_display_upfront').val());
+                if (upfront_deposit == 'other'){
+                    upfront_deposit_amount = setup_amount * (ufda/100)
+                }
+                if (upfront_deposit == 'amount'){
+                    upfront_deposit_amount = ufda;
+                }
+            }
+            else{
+                upfront_deposit_amount = setup_amount * (upfront_deposit/100)
+            }
+            $('#id_upfront_deposit_amount').val(upfront_deposit_amount).closest('div').removeClass('d-none');
+            var balance_amount = setup_amount - upfront_deposit_amount;
+            $('#id_balance_amount').val(balance_amount);
+        });
 
     });
 </script>

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Sum, Count, F
 
 UPFRONT_DEPOSITS = [
     ('25', '25'),
@@ -128,6 +128,21 @@ class SaleProposal(models.Model):
     amount_at_execution_of_contract = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True)
 
+    @property
+    def get_monthlies_amount(self):
+        monthlies_amount = 0.0
+        lines = self.orderline_set.all().filter(charge_category__name='Monthlies')
+        for l in lines:
+            monthlies_amount += float(l.get_sub_total)
+        return monthlies_amount
+
+    @property
+    def get_setup_amount(self):
+        setup_amount = 0.0
+        lines = self.orderline_set.all().filter(~Q(charge_category__name='Monthlies'))
+        for l in lines:
+            setup_amount += float(l.get_sub_total)
+        return setup_amount
 
 class OrderLine(models.Model):
 
@@ -142,7 +157,7 @@ class OrderLine(models.Model):
     discount_amount = models.DecimalField(
         max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
     subtotal = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=7, decimal_places=2, default=0.0)
 
     @property
     def get_sub_total(self):
@@ -150,7 +165,7 @@ class OrderLine(models.Model):
         if self.product.sale_price and self.qty:
             subtotal = self.product.sale_price * self.qty
             if self.discount_amount:
-                subtotal = amount - self.discount_amount
+                subtotal = subtotal - self.discount_amount
         # self.subtotal = subtotal
         return subtotal
 

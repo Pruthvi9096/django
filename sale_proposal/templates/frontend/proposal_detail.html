@@ -62,7 +62,7 @@
                     <td>{{line.product.sale_price}}</td>
                     <td>{{line.qty}}</td>
                     <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount"
-                                id="id_item_discount" value="{{line.product.discount_allowed}}"><span class="slider round"></span></label></td>
+                                id="id_item_discount" {% if line.product.discount_allowed %} checked {% endif %}><span class="slider round"></span></label></td>
                     <td>{{line.discount}}</td>
                     <td>{{line.get_sub_total}}</td>
                 </tr>
