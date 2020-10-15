@@ -17,12 +17,12 @@ $(document).ready(function () {
             url: `/update_order_line/${order_line}/`,
             method: 'POST',
             headers: {'X-CSRFToken':csrftoken},
-            data: JSON.stringify({
-                'sale_price': parseFloat($(line).find('.sale-price').val()),
+            data: {
+                'price': parseFloat($(line).find('.sale-price').val()),
                 'qty': parseFloat($(line).find('.qty').val()),
-                'discount': parseFloat($(line).find('.discount').val()) || 0.00,
+                'discount_amount': parseFloat($(line).find('.discount').val()) || 0.00,
                 'subtotal': parseFloat($(line).find('.subtotal').val())
-            }),
+            },
             success: function(response) {
                 console.log(response);
             }

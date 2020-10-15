@@ -242,12 +242,15 @@ def generate_order_lines(request):
 
 def update_order_line(request, id):
     order_line = OrderLine.objects.get(id=id)
-    print("---------",order_line)
-    data = json.loads(request.body)
-    order_line.price = data.get('sale_price')
-    order_line.qty = data.get('qty')
-    order_line.discount_amount = data.get('discount')
-    order_line.subtotal = data.get('subtotal')
-    order_line.save()
+    print("---------",request.POST)
+    result = False
+    # data = json.loads(request.body)
+    if request.method == 'POST':
+        order_line.price = request.POST.get('price')
+        order_line.qty = request.POST.get('qty')
+        order_line.discount_amount = request.POST.get('discount_amount')
+        order_line.subtotal = request.POST.get('subtotal')
+        order_line.save()
+        result = True
     print(order_line.price,)
-    return JsonResponse({'updated':True})
+    return JsonResponse({'updated': result})
