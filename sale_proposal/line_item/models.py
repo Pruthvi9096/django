@@ -155,15 +155,15 @@ class OrderLine(models.Model):
     item_discount = models.BooleanField(null=True, blank=True)
     qty = models.IntegerField(null=True, blank=True, default=1)
     discount_amount = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True, default=0.00)
+        max_digits=7, decimal_places=2, default=0.00)
     subtotal = models.DecimalField(
         max_digits=7, decimal_places=2, default=0.0)
 
     @property
     def get_sub_total(self):
         subtotal = 0.00
-        if self.product.sale_price and self.qty:
-            subtotal = self.product.sale_price * self.qty
+        if self.price and self.qty:
+            subtotal = self.price * self.qty
             if self.discount_amount:
                 subtotal = subtotal - self.discount_amount
         # self.subtotal = subtotal

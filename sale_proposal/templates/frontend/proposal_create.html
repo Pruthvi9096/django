@@ -78,12 +78,12 @@
                     <td>{{line.product}}</td>
                     <td>{{line.product.line_item_type}}</td>
                     <td><input class="form-control form-control-sm sale-price" type="number" name="sale_price-{{line.id}}" id="id_sale_price-{{line.id}}"
-                            value="{{line.product.sale_price}}"></td>
+                            value="{{line.price}}"></td>
                     <td><input class="form-control form-control-sm qty" type="number" name="qty-{{line.id}}" id="id_qty-{{line.id}}"
                             value="{{line.qty}}"></td>
                     <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount-{{line.id}}"
                                 id="id_item_discount-{{line.id}}" {% if line.product.discount_allowed %} checked {% endif %}><span class="slider round"></span></label></td>
-                    <td><input class="form-control form-control-sm discount" type="number" name="discount-{{line.id}}" id="id_discount-{{line.id}}"></td>
+                    <td><input class="form-control form-control-sm discount" type="number" name="discount-{{line.id}}" id="id_discount-{{line.id}}" value="{{line.discount_amount}}"></td>
                     <td><input class="form-control form-control-sm subtotal" type="number" name="subtotal-{{line.id}}" id="id_subtotal-{{line.id}}"
                             value="{{line.get_sub_total}}" readonly="readonly"></td>
                 </tr>

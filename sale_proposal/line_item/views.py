@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
 from .forms import (
     OpportunityForm, TemplateForm,
-    LineItemForm, ProposalForm,
+    LineItemForm, ProposalForm, OrderLineForm
 )
 from django.forms import inlineformset_factory
 from django.db.models import Count
@@ -153,11 +153,11 @@ def proposal_create(request):
     else:
         new_id = SaleProposal.objects.create(name='New')
     form = ProposalForm(instance=new_id)
-    order_lines = new_id.orderline_set.all()
+    order_lines = new_id.orderline_set.all().order_by('charge_category')
     result = {}
     for line in order_lines:
         if line.charge_category not in result.keys():
-            result[line.charge_category] = order_lines.filter(charge_category= line.charge_category)
+            result[line.charge_category] = order_lines.filter(charge_category= line.charge_category).order_by('-id')
     # FormSet = inlineformset_factory(
     #     SaleProposal, ChargeCategoryDiscount, fields=("charge_category","discount_offer","discount_reason","discount_amount"), extra=len(result)
     # )
@@ -242,9 +242,7 @@ def generate_order_lines(request):
 
 def update_order_line(request, id):
     order_line = OrderLine.objects.get(id=id)
-    print("---------",request.POST)
     result = False
-    # data = json.loads(request.body)
     if request.method == 'POST':
         order_line.price = request.POST.get('price')
         order_line.qty = request.POST.get('qty')
@@ -252,5 +250,4 @@ def update_order_line(request, id):
         order_line.subtotal = request.POST.get('subtotal')
         order_line.save()
         result = True
-    print(order_line.price,)
     return JsonResponse({'updated': result})

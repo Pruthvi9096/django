@@ -1,5 +1,5 @@
 from django import forms
-from .models import Opportunity, Template, LineItem, SaleProposal, OpportunityTemplates
+from .models import Opportunity, Template, LineItem, SaleProposal, OpportunityTemplates, OrderLine
 
 
 class OpportunityForm(forms.ModelForm):
@@ -35,3 +35,8 @@ class ProposalForm(forms.ModelForm):
             'valid_upto': forms.TextInput(attrs={'type': 'date'}),
             # 'balance_distribution':forms.BooleanField()
         }
+
+class OrderLineForm(forms.ModelForm):
+    class Meta:
+        model = OrderLine
+        fields = '__all__'
