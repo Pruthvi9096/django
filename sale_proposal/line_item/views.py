@@ -158,11 +158,6 @@ def proposal_create(request):
     for line in order_lines:
         if line.charge_category not in result.keys():
             result[line.charge_category] = order_lines.filter(charge_category= line.charge_category).order_by('-id')
-    # FormSet = inlineformset_factory(
-    #     SaleProposal, ChargeCategoryDiscount, fields=("charge_category","discount_offer","discount_reason","discount_amount"), extra=len(result)
-    # )
-    # formset = FormSet(
-    #     queryset=ChargeCategoryDiscount.objects.none(), instance=new_id)
     if request.method == 'POST':
         form = ProposalForm(request.POST, instance=new_id)
         if form.is_valid():

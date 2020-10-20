@@ -45,15 +45,6 @@
             </div>
         </div>
         <hr />
-        <!-- {{formset.management_form}}
-            {% for f in formset.forms %}
-            <div class="col-lg-12 bg-dark pt-2" style="color: white; display: inline-flex;">
-                {{f.charge_category}}
-                {{f.discount_offer}}
-                {{f.discount_reason}}
-                {{f.discount_amount}}
-                {% endfor %} -->
-        <!-- </div> -->
         <table class="table">
             <thead>
                 <tr>
@@ -74,18 +65,22 @@
                     <td style="border: none; color: #000;">{{charge_category}}</td>
                 </tr>
                 {% for line in order_line %}
-                <tr class="order-line" data-order-line="{{line.id}}" data-charge-category="{{line.charge_category.name}}">
+                <tr class="order-line" data-order-line="{{line.id}}"
+                    data-charge-category="{{line.charge_category.name}}">
                     <td>{{line.product}}</td>
                     <td>{{line.product.line_item_type}}</td>
-                    <td><input class="form-control form-control-sm sale-price" type="number" name="sale_price-{{line.id}}" id="id_sale_price-{{line.id}}"
-                            value="{{line.price}}"></td>
-                    <td><input class="form-control form-control-sm qty" type="number" name="qty-{{line.id}}" id="id_qty-{{line.id}}"
-                            value="{{line.qty}}"></td>
-                    <td><label class="switch mt-2"><input class="checkbox" type="checkbox" name="item_discount-{{line.id}}"
-                                id="id_item_discount-{{line.id}}" {% if line.product.discount_allowed %} checked {% endif %}><span class="slider round"></span></label></td>
-                    <td><input class="form-control form-control-sm discount" type="number" name="discount-{{line.id}}" id="id_discount-{{line.id}}" value="{{line.discount_amount}}"></td>
-                    <td><input class="form-control form-control-sm subtotal" type="number" name="subtotal-{{line.id}}" id="id_subtotal-{{line.id}}"
-                            value="{{line.get_sub_total}}" readonly="readonly"></td>
+                    <td><input class="form-control form-control-sm sale-price" type="number"
+                            name="sale_price-{{line.id}}" id="id_sale_price-{{line.id}}" value="{{line.price}}"></td>
+                    <td><input class="form-control form-control-sm qty" type="number" name="qty-{{line.id}}"
+                            id="id_qty-{{line.id}}" value="{{line.qty}}"></td>
+                    <td><label class="switch mt-2"><input class="checkbox" type="checkbox"
+                                name="item_discount-{{line.id}}" id="id_item_discount-{{line.id}}"
+                                {% if line.product.discount_allowed %} checked {% endif %}><span
+                                class="slider round"></span></label></td>
+                    <td><input class="form-control form-control-sm discount" type="number" name="discount-{{line.id}}"
+                            id="id_discount-{{line.id}}" value="{{line.discount_amount}}"></td>
+                    <td><input class="form-control form-control-sm subtotal" type="number" name="subtotal-{{line.id}}"
+                            id="id_subtotal-{{line.id}}" value="{{line.get_sub_total}}" readonly="readonly"></td>
                 </tr>
                 {% endfor %}
                 {% endfor %}
@@ -134,8 +129,8 @@
             </div>
             <div class="col-6">
                 {{form.setup_amount.label}}
-                <input type="number" class="form-control form-control-sm" name="setup_amount"
-                    id="id_setup_amount" value="{{sale_id.get_setup_amount}}" readonly="readonly">
+                <input type="number" class="form-control form-control-sm" name="setup_amount" id="id_setup_amount"
+                    value="{{sale_id.get_setup_amount}}" readonly="readonly">
             </div>
         </div>
         <div class="col-md-6 form-row">
@@ -145,8 +140,8 @@
             </div>
             <div class="col-4 d-none">
                 <label for=""> </label>
-                <input type="number" class="form-control form-control-sm count-balance"
-                    name="display_upfront_amount" id="id_display_upfront">
+                <input type="number" class="form-control form-control-sm count-balance" name="display_upfront_amount"
+                    id="id_display_upfront">
             </div>
             <div class="col-4 d-none">
                 <label for=""> </label>
