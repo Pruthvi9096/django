@@ -13,9 +13,9 @@
 <a class="btn btn-light mb-2 mx-1 shadow" href="{% url 'index' %}">Back</a>
 
 <!-- Content Row -->
-<div class="row">
+<div class="col-lg-12">
     <!-- Earnings (Monthly) Card Example -->
-    <table class="table table-stripped">
+    <table id="proposals" class="table table-border col-lg-12">
         <thead>
             <tr>
                 <th>For</th>
@@ -36,5 +36,12 @@
         </tbody>
     </table>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#proposals').DataTable({
+            'autowidth':false,
+        });
+    });
+</script>
 
 {% endblock %}
