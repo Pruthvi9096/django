@@ -4,7 +4,8 @@ from .models import (
     Opportunity, Template,
     LineItem, OpportunityTemplates,
     TemplateLineItems, SaleProposal,
-    OrderLine, Contact, ChargeCategoryDiscount
+    OrderLine, Contact, ChargeCategoryDiscount,
+    ChargeCategory
 )
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
@@ -19,6 +20,7 @@ from django.http import JsonResponse
 import json
 from django.contrib.auth.decorators import login_required
 from django.db.models import QuerySet, F, Count
+from django.core.paginator import Paginator
 
 
 def index(request):
@@ -28,8 +30,9 @@ def index(request):
 class OpportunityView(ListView):
     model = Opportunity
     queryset = Opportunity.objects.annotate(
-        template_count=Count('templates'))
+        template_count=Count('templates')).order_by('id')
     template_name = 'frontend/opportunity.html'
+    paginate_by = 10
 
 
 class OpportunityCreate(CreateView):
@@ -68,6 +71,7 @@ class TemplateView(ListView):
     queryset = Template.objects.annotate(
         line_count=Count('line_items'))
     template_name = 'frontend/template.html'
+    paginate_by = 10
 
 
 class TemplateCreate(CreateView):
@@ -103,8 +107,10 @@ def template_detail_view(request, id):
 
 class LineItemView(ListView):
     model = LineItem
-    queryset = LineItem.objects.all()
+    queryset = LineItem.objects.all().order_by('id')
     template_name = 'frontend/line_item.html'
+    paginate_by = 1
+    paginator_class = Paginator
 
 
 class LineItemCreate(CreateView):
@@ -158,15 +164,23 @@ def proposal_create(request):
     for line in order_lines:
         if line.charge_category not in result.keys():
             result[line.charge_category] = order_lines.filter(charge_category= line.charge_category).order_by('-id')
+    charge_categ_dis_form = inlineformset_factory(
+        SaleProposal,ChargeCategoryDiscount,fields=('charge_category','discount_offer','discount_reason','discount_amount'),extra=len(result))
+    formset = charge_categ_dis_form(queryset=ChargeCategoryDiscount.objects.none(), instance=new_id)
+    result = [{'charge_category': line[0][0], 'order_line': line[0][1], 'discount_form': line[1]} for line in zip(result.items(),formset.forms)]
     if request.method == 'POST':
         form = ProposalForm(request.POST, instance=new_id)
         if form.is_valid():
+            if formset.is_valid():
+                formset.save()
+            else:
+                print("============formset",formset.errors)
             sale = form.save(commit=False)
             sale.created_by = request.user
             sale.save()
             return redirect(reverse('proposal-detail', kwargs={'id':sale.id}))
     return render(request, 'frontend/proposal_create.html', 
-        {'form': form, 'sale_id': new_id, 
+        {'form': form, 'sale_id': new_id, 'formset':formset,
         'order_line': order_lines, 'result':result})
 
 def proposal_detail_view(request,id):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Customer,Order,Product,Category,Tag,Leave,Location,TrackingData,Galaxy,Star
+from .models import Customer,Order,Product,Category,Tag,Leave,Location,TrackingData,Galaxy,Star,Itinerary, Tour
 
 admin.site.register(Customer)
 admin.site.register(Order)
@@ -13,3 +13,6 @@ admin.site.register(TrackingData)
 
 admin.site.register(Galaxy)
 admin.site.register(Star)
+
+admin.site.register(Itinerary)
+admin.site.register(Tour)

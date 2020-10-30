@@ -4,6 +4,7 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from .utils import unique_slug_generator
 from random import shuffle
+from datetime import datetime, timedelta
 
 class Customer(models.Model):
     name = models.CharField(max_length=200,null=True)
@@ -87,3 +88,17 @@ class Galaxy(models.Model):
 class Star(models.Model):
     galaxy = models.ForeignKey(Galaxy, related_name='stars',on_delete=models.CASCADE,null=True)
     type = models.CharField(max_length=200)
+
+class Itinerary(models.Model):
+    days = models.PositiveSmallIntegerField(null=True, blank=True)
+
+
+class Tour(models.Model):
+    itinerary = models.ForeignKey(
+        Itinerary,
+        on_delete=models.CASCADE
+    )
+    start_date = models.DateField( null=True, blank=True)
+
+    def get_end_date(self):
+        return self.start_date + timedelta(days=self.itinerary.days)

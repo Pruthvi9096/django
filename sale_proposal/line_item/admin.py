@@ -8,7 +8,9 @@ from .models import (
     ChargeCategory,
     Contact,
     SaleProposal,
-    OrderLine
+    OrderLine,
+    DiscountOffer,
+    ChargeCategoryDiscount
 )
 
 admin.site.register(Opportunity)
@@ -21,3 +23,5 @@ admin.site.register(ChargeCategory)
 admin.site.register(Contact)
 admin.site.register(SaleProposal)
 admin.site.register(OrderLine)
+admin.site.register(DiscountOffer)
+admin.site.register(ChargeCategoryDiscount)
