@@ -94,8 +94,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'crm_data',
-        'USER': 'meditab',
-        'PASSWORD': '99$inmedi',
+        'USER': 'django_user',
+        'PASSWORD': 'django@123',
     }
 }
 
